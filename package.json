@@ -19,6 +19,7 @@
     "@vueuse/nuxt": "^14.1.0",
     "howler": "^2.2.4",
     "nuxt": "^4.3.0",
+    "prettier": "^3.8.1",
     "sass": "^1.97.3"
   },
   "devDependencies": {

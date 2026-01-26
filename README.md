@@ -1,0 +1,2 @@
+# Pomodorider
+Cozy Pomodoro timer

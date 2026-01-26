@@ -17,13 +17,13 @@
           class="progress-ring-bg"
           cx="150"
           cy="150"
-          r="140"
+          :r="CIRCLE_RADIUS"
         />
         <circle
           class="progress-ring-progress"
           cx="150"
           cy="150"
-          r="140"
+          :r="CIRCLE_RADIUS"
           :style="progressStyle"
         />
       </svg>
@@ -107,6 +107,8 @@ import { useTimerStore, type TimerMode } from '~/stores/timer'
 
 const timerStore = useTimerStore()
 
+const CIRCLE_RADIUS = 140
+
 const modes = [
   { value: 'work' as TimerMode, label: 'Work' },
   { value: 'shortBreak' as TimerMode, label: 'Short Break' },
@@ -114,7 +116,7 @@ const modes = [
 ]
 
 const progressStyle = computed(() => {
-  const circumference = 2 * Math.PI * 140
+  const circumference = 2 * Math.PI * CIRCLE_RADIUS
   const offset = circumference - (timerStore.progress / 100) * circumference
   return {
     strokeDasharray: `${circumference} ${circumference}`,
@@ -265,7 +267,7 @@ const switchMode = (mode: TimerMode) => {
     color: $text-color;
     
     &:hover:not(:disabled) {
-      background: lighten($surface-color, 5%);
+      background: color-mix(in srgb, $surface-color 95%, white);
     }
   }
   

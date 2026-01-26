@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useHead, useTitle } from '#imports'
 import { useTimerStore } from '~/stores/timer'
 import { useDocumentVisibility, usePageLeave } from '@vueuse/core'
@@ -97,7 +97,7 @@ watch(visibility, (current) => {
   box-shadow: $shadow-sm;
 
   &:hover {
-    background: lighten($surface-color, 5%);
+    background: color-mix(in srgb, $surface-color 95%, white);
     box-shadow: $shadow-md;
   }
 

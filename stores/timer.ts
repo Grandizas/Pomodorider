@@ -55,6 +55,7 @@ export const useTimerStore = defineStore('timer', {
     
     progress: (state) => {
       const total = state.getDuration(state.mode) * 60
+      if (total === 0) return 0
       return ((total - state.timeRemaining) / total) * 100
     },
     

@@ -303,7 +303,7 @@ const resetStats = () => {
   font-size: 0.9rem;
 
   &:hover {
-    background: lighten($surface-color, 5%);
+    background: color-mix(in srgb, $surface-color 95%, white);
   }
 }
 

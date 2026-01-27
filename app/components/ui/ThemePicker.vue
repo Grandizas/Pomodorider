@@ -47,10 +47,11 @@ $shadow:
             position: fixed;
             top: 0;
             left: 0;
+            z-index: 5;
             width: 100vw;
             height: 100vh;
-            z-index: 5;
-            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         ul {

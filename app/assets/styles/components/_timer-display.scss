@@ -3,10 +3,11 @@
 
 .timer-display {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     gap: spacing(2);
-    padding: $spacing-xl;
+    padding: spacing(6);
+    align-items: center;
+    min-height:rem(796px);
+    flex-direction: column;
 
     &.timer-work {
         --timer-color: #{var(--color-accent)};

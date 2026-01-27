@@ -34,6 +34,7 @@ const emit = defineEmits<{
 
 .app-header {
     display: flex;
+    position: relative;
     justify-content: space-between;
     padding: spacing(2) $spacing-page;
 

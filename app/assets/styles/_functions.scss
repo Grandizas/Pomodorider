@@ -1,7 +1,9 @@
+@use "sass:math";
+
 @function spacing($multiplier) {
   @return $multiplier * 8px;
 }
 
 @function rem($px) {
-    @return $px / 16px * 1rem;
+    @return math.div($px, 16px) * 1rem;
 }

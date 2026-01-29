@@ -1,0 +1,39 @@
+@use '../../../_variables.scss' as *;
+
+.timer-circle {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  .progress-ring {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    transform: rotate(-90deg);
+  }
+
+  .progress-ring-bg {
+    fill: none;
+    stroke-width: 12;
+    stroke: $surface-color;
+  }
+
+  .progress-ring-progress {
+    fill: none;
+    stroke: red;
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear;
+  }
+
+  .timer-time {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-color;
+    font-variant-numeric: tabular-nums;
+  }
+}

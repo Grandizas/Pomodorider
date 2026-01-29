@@ -3,11 +3,22 @@
 
 .timer-display {
     display: flex;
-    gap: spacing(2);
     padding: spacing(6);
     align-items: center;
     min-height:rem(796px);
-    flex-direction: column;
+    justify-content: center;
+
+    &__inner {
+        display: flex;
+        gap: spacing(2);
+        padding: spacing(4);
+        height: fit-content;
+        align-items: center;
+        flex-direction: column;
+        box-shadow: $shadow-md;
+        border-radius: $border-radius-md;
+        background-color: rgba(255, 255, 255, 0.04);
+    }
 
     &.timer-work {
         --timer-color: #{var(--color-accent)};
@@ -30,13 +41,13 @@
 }
 
 .mode-button {
-    padding: spacing(1) spacing(2);
-    background: var(--color-background);
-    color: var(--color-timerText);
-    border-radius: $border-radius-md;
     font-size: 1rem;
     font-weight: 500;
+    color: var(--color-timerText);
+    padding: spacing(1) spacing(2);
+    border-radius: $border-radius-md;
     transition: all $transition-normal;
+    background: var(--color-background);
 
     &:hover {
         color: $text-color;
@@ -45,97 +56,6 @@
     &.active {
         background: var(--timer-color);
         color: white;
-    }
-}
-
-.timer-circle {
-  width: 150px;
-  height: 150px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-ring {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: absolute;
-  transform: rotate(-90deg);
-}
-
-.progress-ring-bg {
-    fill: none;
-    stroke: $surface-color;
-    stroke-width: 12;
-}
-
-.progress-ring-progress {
-    fill: none;
-    stroke: red;
-    stroke-width: 12;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s linear;
-}
-
-.timer-time {
-    font-size: 2rem;
-    font-weight: 700;
-    color: $text-color;
-    font-variant-numeric: tabular-nums;
-}
-
-.timer-controls {
-    display: flex;
-    gap: $spacing-sm;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.control-button {
-    display: flex;
-    align-items: center;
-    gap: $spacing-xs;
-    padding: spacing(1) spacing(2);
-    border-radius: $border-radius-sm;
-    font-size: 1.1rem;
-    font-weight: 600;
-
-    &.start,
-    &.resume {
-        background: var(--timer-color);
-        color: white;
-        box-shadow: $shadow-md;
-
-        &:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: $shadow-lg;
-        }
-    }
-
-    &.pause {
-        background: #f39c12;
-        color: white;
-        box-shadow: $shadow-md;
-
-        &:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: $shadow-lg;
-        }
-    }
-
-    &.secondary {
-        background: var(--color-accent);
-        color: $text-color;
-
-        &:hover:not(:disabled) {
-            background: color-mix(in srgb, var(--color-accent) 95%, white);
-        }
-    }
-
-    &:active:not(:disabled) {
-        transform: translateY(0);
     }
 }
 
@@ -157,24 +77,14 @@
 
 .stat-label {
     font-size: 0.9rem;
+    letter-spacing: 1px;
     color: $text-secondary;
     text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 @media (max-width: 768px) {
     .timer-display {
         gap: $spacing-lg;
-    }
-
-    .timer-circle {
-        width: 152px;
-        height: 152px;
-    }
-
-    .progress-ring {
-        width: 152px;
-        height: 152px;
     }
 
     .timer-time {
@@ -193,14 +103,14 @@
 }
 
 button {
-    font-family: inherit;
-    cursor: pointer;
     border: none;
     outline: none;
+    cursor: pointer;
+    font-family: inherit;
     transition: all $transition-normal;
 
     &:disabled {
-        cursor: not-allowed;
         opacity: 0.5;
+        cursor: not-allowed;
     }
 }

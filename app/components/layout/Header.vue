@@ -8,6 +8,10 @@
 
         <!-- ----------------- [ Header right ] ----------------- -->
         <div class="app-header__right">
+            <ui-button variant="icon" @click="emit('fullscreen')">
+                <Icon icon="heroicons:arrows-pointing-out" width="24" />
+            </ui-button>
+
             <ui-theme-picker />
 
             <ui-button
@@ -26,6 +30,7 @@ import { Icon } from '@iconify/vue';
 
 const emit = defineEmits<{
     (e: 'open-settings'): void;
+    (e: 'fullscreen'): void;
 }>();
 </script>
 

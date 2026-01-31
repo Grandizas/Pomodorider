@@ -1,9 +1,12 @@
 <template>
     <div class="pomodoro-app">
-        <layout-header @open-settings="settingsOpen = true" />
+        <layout-header
+            @open-settings="settingsOpen = true"
+            @fullscreen="isFullscreen = true"
+        />
 
         <main class="app-main">
-            <ui-video-background />
+            <ui-video-background :is-fullscreen="isFullscreen" />
             <TimerDisplay />
         </main>
 
@@ -23,6 +26,7 @@ import { useDocumentVisibility, usePageLeave } from '@vueuse/core';
 
 const timerStore = useTimerStore();
 const settingsOpen = ref(false);
+const isFullscreen = ref(false);
 
 // Dynamic page title with timer
 const pageTitle = computed(() => {

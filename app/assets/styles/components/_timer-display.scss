@@ -3,21 +3,103 @@
 
 .timer-display {
     display: flex;
+    position: relative;
     padding: spacing(6);
-    align-items: center;
     min-height:rem(796px);
-    justify-content: center;
+
+    &.large {
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.minimal {
+        margin-left: 10%;
+        align-items: flex-start;
+    }
 
     &__inner {
-        display: flex;
-        gap: spacing(2);
         padding: spacing(4);
-        height: fit-content;
-        align-items: center;
-        flex-direction: column;
-        box-shadow: $shadow-md;
-        border-radius: $border-radius-md;
-        background-color: rgba(255, 255, 255, 0.04);
+
+        &.minimal {
+            display: grid;
+            gap: spacing(2);
+            grid-template-columns: 1fr 1fr;
+            border-radius: $border-radius-lg;
+            background-color: rgba(0, 0, 0, 0.7);
+
+            .stat {
+                display: flex;
+                gap: spacing(2);
+            }
+        }
+
+        &.large {
+            display: flex;
+            gap: spacing(2);
+            height: fit-content;
+            align-items: center;
+            flex-direction: column;
+            box-shadow: $shadow-md;
+            border-radius: $border-radius-md;
+            background-color: rgba(0, 0, 0, 0.4);
+
+            .timer-mode {
+                display: flex;
+                gap: $spacing-sm;
+                padding: $spacing-xs;
+                border-radius: $border-radius-lg;
+            }
+
+            .mode-button {
+                outline: none;
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 500;
+                border-radius: 50rem;
+                color: var(--color-timerText);
+                padding: spacing(1) spacing(2);
+                transition: all $transition-normal;
+                background: var(--color-background);
+                border: 2px solid var(--timer-color);
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+
+                &:hover {
+                    color: $text-color;
+                }
+
+                &.active {
+                    background-color: var(--timer-color);
+                }
+            }
+
+            .timer-stats {
+                display: flex;
+                gap: $spacing-xl;
+                margin-top: 20rem;
+            }
+
+            .stat {
+                text-align: center;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--timer-color);
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+                color: $text-secondary;
+                text-transform: uppercase;
+            }
+        }
+
     }
 
     &.timer-work {
@@ -31,55 +113,12 @@
     &.timer-longBreak {
         --timer-color: #{$long-break-color};
     }
-}
 
-.timer-mode {
-    display: flex;
-    gap: $spacing-sm;
-    padding: $spacing-xs;
-    border-radius: $border-radius-lg;
-}
-
-.mode-button {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--color-timerText);
-    padding: spacing(1) spacing(2);
-    border-radius: $border-radius-md;
-    transition: all $transition-normal;
-    background: var(--color-background);
-
-    &:hover {
-        color: $text-color;
+    &__changer {
+        right: 13%;
+        top: spacing(4);
+        position: absolute;
     }
-
-    &.active {
-        background: var(--timer-color);
-        color: white;
-    }
-}
-
-.timer-stats {
-    display: flex;
-    gap: $spacing-xl;
-    margin-top: $spacing-md;
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--timer-color);
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    color: $text-secondary;
-    text-transform: uppercase;
 }
 
 @media (max-width: 768px) {
@@ -99,18 +138,5 @@
     .control-button {
         padding: $spacing-sm $spacing-md;
         font-size: 1rem;
-    }
-}
-
-button {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all $transition-normal;
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
     }
 }

@@ -23,18 +23,28 @@ withDefaults(
     cursor: pointer;
     font-weight: bold;
     transition: transform 0.2s ease-in-out;
-    color: var(--color-buttonText);
-    background: linear-gradient(
-        to right,
-        var(--color-logoGradientStart),
-        var(--color-logoGradientEnd)
-    );
+
+    &:not(&.secondary-btn) {
+        color: var(--color-buttonText);
+        background: linear-gradient(
+            to right,
+            var(--color-logoGradientStart),
+            var(--color-logoGradientEnd)
+        );
+    }
 
     &:hover {
         transform: translateY(-1px);
     }
     &:active {
         transform: translateY(0);
+    }
+
+    &.secondary-btn {
+        padding: spacing(1) spacing(2);
+        border-radius: $border-radius-sm;
+        background-color: var(--color-accent);
+        color: var(--color-text);
     }
 }
 

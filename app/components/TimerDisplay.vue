@@ -1,8 +1,16 @@
 <template>
-    <div class="timer-display" :class="`timer-${timerStore.mode}`">
-        <div class="timer-display__inner">
+    <div class="timer-display" :class="`timer-${timerStore.mode} ${timerView}`">
+        <ui-dropdown
+            class="timer-display__changer"
+            :items="['large', 'minimal']"
+            @selected="(size: string) => (timerView = size)"
+        >
+            Timer size: {{ timerView }}
+        </ui-dropdown>
+
+        <div :class="`timer-display__inner ${timerView}`">
             <!-- ----------------- [ Switch buttons (Work, Break) ] ----------------- -->
-            <div class="timer-mode">
+            <div v-if="timerView === 'large'" class="timer-mode">
                 <button
                     v-for="mode in modes"
                     :key="mode.value"
@@ -17,9 +25,9 @@
             </div>
 
             <!-- ----------------- [ Timer ] ----------------- -->
-            <parts-timer />
+            <parts-timer :class="timerView" />
             <!-- ----------------- [ Controls ] ----------------- -->
-            <parts-timer-controls />
+            <parts-timer-controls :class="timerView" />
 
             <!-- ----------------- [ Sessions, Total time ] ----------------- -->
             <div class="timer-stats">
@@ -46,6 +54,7 @@ import { Icon } from '@iconify/vue';
 
 const timerStore = useTimerStore();
 
+const timerView = ref<string>('large');
 const modes = [
     { value: 'work' as TimerMode, label: 'Work' },
     { value: 'shortBreak' as TimerMode, label: 'Short Break' },

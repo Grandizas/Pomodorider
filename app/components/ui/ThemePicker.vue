@@ -12,7 +12,7 @@
                     :style="{
                         background: `linear-gradient(to right bottom, ${theme.colors.pageBackgroundStart}, ${theme.colors.pageBackgroundEnd})`,
                     }"
-                    @click="applyTheme(themeName as ThemeKey)"
+                    @click="selectTheme(themeName as ThemeKey)"
                 >
                     {{ themeName }}
                 </li>
@@ -22,15 +22,22 @@
 </template>
 
 <script setup lang="ts">
-import { applyTheme } from '~/composable/applyTheme';
 import { type ThemeKey, themes } from '~~/themes/themes';
+import { useThemeStore } from '~~/stores/theme';
 
-const currentTheme = 'ocean';
+const themeStore = useThemeStore();
+
+const currentTheme = ref(themeStore.activeTheme);
 const isDropdownOpen = ref(false);
 
 onMounted(() => {
-    applyTheme(currentTheme);
+    themeStore.applyTheme(currentTheme.value);
 });
+
+function selectTheme(theme: ThemeKey) {
+    themeStore.applyTheme(theme as ThemeKey);
+    isDropdownOpen.value = false;
+}
 </script>
 
 <style scoped lang="scss">

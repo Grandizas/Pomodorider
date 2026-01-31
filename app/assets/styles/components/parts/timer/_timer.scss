@@ -1,0 +1,18 @@
+@use '../../../_variables.scss' as *;
+@use '../../../_functions.scss' as *;
+
+.timer-time {
+  font-weight: 700;
+  color: $text-color;
+  font-variant-numeric: tabular-nums;
+
+  &.large {
+    font-size: 6rem;
+    letter-spacing: spacing(1);
+  }
+
+  &.minimal {
+    font-size: 2rem;
+  }
+}
+

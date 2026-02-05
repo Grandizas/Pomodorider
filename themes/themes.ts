@@ -1,4 +1,4 @@
-export type ThemeKey = 'ocean' | 'trees' | 'grass';
+export type ThemeKey = 'ocean' | 'trees' | 'river';
 
 export const themes = {
     ocean: {
@@ -33,7 +33,7 @@ export const themes = {
             buttonText: '#FFFFFF',
         },
     },
-    grass: {
+    river: {
         name: 'River',
         video: 'River.mp4',
         thumbnail: 'River.webp',

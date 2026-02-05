@@ -82,9 +82,7 @@ export const useTimerStore = defineStore('timer', {
                 // Create a simple beep sound using Web Audio API data URI
                 // This ensures the app works even without external sound files
                 this.notificationSound = new Howl({
-                    src: [
-                        'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBi6Dzv3ajjsIHm7A7+SYTgwRWrLq8KFSEw1JouLyvWwfByyCzv/ZhDcIF2W48+qfTg0PWKjk77NfGAc+mNr1xnMmBSd+zPLekEAJFlyx6+yiUhQNR6Hg8bplIQcwhM7+14c2CBt7xvDglUoNEFWq5vSkUxUOSaLh8bljHwYsgs/+2IU3CBhruO7mnEwNEVmv5/KlUhYOS6Pg8bVjHgYqf8792IU4CBlruO/mnEwMEFSq5fSjVBQNRqHf8bZkHwYuf87/14c3CBhsu+/jnEwMEVOo5PKiVBUOSaHg8LdjIAYuf9D+14U3BxdqvvDim00NEk+m4/GlUhcOSKLg8LdjHwYsftD/2YM3Bxhqv+/im00MEE+l4vGlUhcOR6Hf77ZkHwYsftD+2IQ3Bxdpv+/in00NEE6m4/GkUhgPSKHf77ZiHwYqgNH+14Q4Bxdqv+/im00MEU6m4/KkURgPSKHf77ViHwYrftD+2IQ3Bxdpv/Dim00MEE+m4vKkURgPRqHf8LViHwcqgNH+14M4Bxdqv+/in00MEE+l4vKkUhgPRqHg8LViHwcrftD+2IM3CBdpv/Dhn00NEE6m4vKkURgORaLg8LVkIAYrftD+2IM4Bxdpv/Dhn00NEE6l4/KkURcOR6Hg8LRkIAYrftD+2IM4Bxdqv/Dhn00MEE+m4vKkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8LRkIAYrftD+2IM4Bxdqv/Dhn00NEE6l4/KkURgPRqHg8A==',
-                    ],
+                    src: ['/sounds/beep.mp3'],
                     volume: this.settings.soundVolume,
                 });
             }

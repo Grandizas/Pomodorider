@@ -1,34 +1,40 @@
 .bg {
-  position: fixed;
   inset: 0;
   z-index: -1;
+  position: fixed;
   overflow: hidden;
-}
 
-.bg__video {
-  inset: 0;
-  top: 50%;
-  left: 50%;
-  object-fit: cover;
-  position: absolute;
-  transform: translate(-50%, -50%);
+  &__video {
+    inset: 0;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    object-fit: cover;
+    position: absolute;
+    transition: opacity 0.35s ease;
+    transform: translate(-50%, -50%);
 
-  &.fullscreen {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
+    &.is-ready {
+      opacity: 1;
+    }
+
+    &.fullscreen {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+
+    &:not(.fullscreen) {
+      width: 80%;
+      height: 80%;
+      border-radius: 2rem;
+    }
   }
 
-  &:not(.fullscreen) {
-    width: 80%;
-    height: 80%;
-    border-radius: 2rem;
+  &__overlay {
+    inset: 0;
+    position: absolute;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.2);
   }
-}
-
-.bg__overlay {
-  inset: 0;
-  position: absolute;
-  pointer-events: none;
-  background: rgba(0, 0, 0, 0.2);
 }

@@ -4,6 +4,7 @@ export const themes = {
     ocean: {
         name: 'Ocean',
         video: 'Sunset_Ocean.mp4',
+        thumbnail: 'Sunset_Ocean.webp',
         colors: {
             pageBackgroundStart: '#030117',
             pageBackgroundEnd: '#525E77',
@@ -19,6 +20,7 @@ export const themes = {
     trees: {
         name: 'Trees',
         video: 'Palm_Trees_Skyscrapers.mp4',
+        thumbnail: 'Palm_Trees_Skyscrapers.webp',
         colors: {
             pageBackgroundStart: '#13170C',
             pageBackgroundEnd: '#937736',
@@ -34,6 +36,7 @@ export const themes = {
     grass: {
         name: 'River',
         video: 'River.mp4',
+        thumbnail: 'River.webp',
         colors: {
             pageBackgroundStart: '#5d8ab5',
             pageBackgroundEnd: '#937736',

@@ -79,8 +79,8 @@ export const useTimerStore = defineStore('timer', {
 
         initSound() {
             if (!this.notificationSound) {
-                // Create a simple beep sound using Web Audio API data URI
-                // This ensures the app works even without external sound files
+                // Initialize notification sound using an external audio file
+                // Requires the '/sounds/beep.mp3' asset to be available
                 this.notificationSound = new Howl({
                     src: ['/sounds/beep.mp3'],
                     volume: this.settings.soundVolume,

@@ -7,6 +7,16 @@ export const useThemeVideo = () => {
 
     return computed(() => {
         const video = themes[themeStore.activeTheme].video;
-        return `${config.public.mediaBaseUrl}/videos/${video}`;
+        const rawBaseUrl = config?.public?.mediaBaseUrl;
+
+        const baseUrl =
+            typeof rawBaseUrl === 'string' && rawBaseUrl.length > 0
+                ? rawBaseUrl.replace(/\/+$/, '')
+                : '';
+        if (!baseUrl) {
+            // Fallback to a relative path if mediaBaseUrl is not defined or empty
+            return `/videos/${video}`;
+        }
+        return `${baseUrl}/videos/${video}`;
     });
 };

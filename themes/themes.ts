@@ -3,7 +3,7 @@ export type ThemeKey = 'ocean' | 'trees' | 'grass';
 export const themes = {
     ocean: {
         name: 'Ocean',
-        video: 'Ocean.mp4',
+        video: 'Sunset_Ocean.mp4',
         colors: {
             pageBackgroundStart: '#030117',
             pageBackgroundEnd: '#525E77',
@@ -18,7 +18,7 @@ export const themes = {
     },
     trees: {
         name: 'Trees',
-        video: 'Trees.mp4',
+        video: 'Palm_Trees_Skyscrapers.mp4',
         colors: {
             pageBackgroundStart: '#13170C',
             pageBackgroundEnd: '#937736',
@@ -32,8 +32,8 @@ export const themes = {
         },
     },
     grass: {
-        name: 'Grass',
-        video: 'Grass.mp4',
+        name: 'River',
+        video: 'River.mp4',
         colors: {
             pageBackgroundStart: '#5d8ab5',
             pageBackgroundEnd: '#937736',

@@ -2,7 +2,7 @@
     <div class="pomodoro-app">
         <layout-header
             @open-settings="settingsOpen = true"
-            @fullscreen="isFullscreen = true"
+            @fullscreen="isFullscreen = !isFullscreen"
         />
 
         <main class="app-main">

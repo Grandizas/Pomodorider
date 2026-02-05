@@ -1,0 +1,34 @@
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg__video {
+  inset: 0;
+  top: 50%;
+  left: 50%;
+  object-fit: cover;
+  position: absolute;
+  transform: translate(-50%, -50%);
+
+  &.fullscreen {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  &:not(.fullscreen) {
+    width: 80%;
+    height: 80%;
+    border-radius: 2rem;
+  }
+}
+
+.bg__overlay {
+  inset: 0;
+  position: absolute;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.2);
+}

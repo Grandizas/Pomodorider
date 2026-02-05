@@ -1,6 +1,6 @@
 <template>
     <div class="bg">
-        <img class="bg__poster" :src="thumbnailSrc" alt="" />
+        <img class="bg__poster bg__video" :src="thumbnailSrc" alt="" />
 
         <video
             ref="videoRef"
@@ -36,23 +36,32 @@ const thumbnailSrc = useThemeThumbnail();
 const isReady = ref(false);
 const videoRef = ref<HTMLVideoElement | null>(null);
 
-watch(videoSrc, async () => {
+async function loadAndPlayVideo() {
     isReady.value = false;
+    await nextTick();
     const v = videoRef.value;
     if (!v) return;
-
-    // helps on some browsers to start buffering immediately after src change
     v.load();
     try {
         await v.play();
     } catch {}
+}
+
+onMounted(() => {
+    loadAndPlayVideo();
+});
+
+watch(videoSrc, async () => {
+    await loadAndPlayVideo();
 });
 
 function onLoaded() {
+    console.log('Loaded');
     isReady.value = true;
 }
 
 function onError() {
+    console.log('Error');
     isReady.value = false;
 }
 </script>

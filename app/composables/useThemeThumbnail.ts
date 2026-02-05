@@ -17,6 +17,6 @@ export const useThemeThumbnail = () => {
             // Fallback to a relative path if mediaBaseUrl is not defined or empty
             return `/thumbnails/${thumbnail}`;
         }
-        return `${baseUrl}/thumbnails/${thumbnail}`;
+        return `${baseUrl}/Thumbnails/${thumbnail}`;
     });
 };

@@ -5,11 +5,11 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, var(--color-pageBackgroundStart), var(--color-pageBackgroundEnd));
   color: $text-color;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #000000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html {

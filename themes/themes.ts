@@ -1,52 +1,49 @@
-export type ThemeKey = 'ocean' | 'trees' | 'river';
+export type ThemeKey = 'white' | 'red' | 'blue' | 'yellow';
+export type Theme = {
+    name: ThemeKey;
+    colors: {
+        timerBg: string;
+        timerText: string;
+        buttonBackground: string;
+        buttonText: string;
+    };
+};
 
 export const themes = {
-    ocean: {
-        name: 'Ocean',
-        video: 'Sunset_Ocean.mp4',
-        thumbnail: 'Sunset_Ocean.webp',
+    white: {
+        name: 'white',
         colors: {
-            pageBackgroundStart: '#030117',
-            pageBackgroundEnd: '#525E77',
-            timerBg: '#22222266',
+            timerBg: '#FFFFFF',
             timerText: '#FFFFFF',
-            accent: '#57637D',
-            logoGradientStart: '#FFFFFF',
-            logoGradientEnd: '#57637D',
-            buttonBackground: '#FFFFFF',
-            buttonText: '#222222',
-        },
-    },
-    trees: {
-        name: 'Trees',
-        video: 'Palm_Trees_Skyscrapers.mp4',
-        thumbnail: 'Palm_Trees_Skyscrapers.webp',
-        colors: {
-            pageBackgroundStart: '#13170C',
-            pageBackgroundEnd: '#937736',
-            timerBg: '#22222266',
-            timerText: '#FFFFFF',
-            accent: '#937736',
-            logoGradientStart: '#937736',
-            logoGradientEnd: '#13170C',
-            buttonBackground: '#FFFFFF',
+            buttonBackground: '#646464',
             buttonText: '#FFFFFF',
         },
     },
-    river: {
-        name: 'River',
-        video: 'River.mp4',
-        thumbnail: 'River.webp',
+    red: {
+        name: 'red',
         colors: {
-            pageBackgroundStart: '#5d8ab5',
-            pageBackgroundEnd: '#937736',
-            timerBg: '#22222266',
-            timerText: '#FFFFFF',
-            accent: '#937736',
-            logoGradientStart: '#937736',
-            logoGradientEnd: '#5d8ab5',
-            buttonBackground: '#FFFFFF',
+            timerBg: '#9E3E44',
+            timerText: '#9E3E44',
+            buttonBackground: '#613a3c',
             buttonText: '#FFFFFF',
         },
     },
-} satisfies Record<ThemeKey, any>;
+    blue: {
+        name: 'blue',
+        colors: {
+            timerBg: '#2372B8',
+            timerText: '#2372B8',
+            buttonBackground: '#2d4e6c',
+            buttonText: '#FFFFFF',
+        },
+    },
+    yellow: {
+        name: 'yellow',
+        colors: {
+            timerBg: '#9F9141',
+            timerText: '#9F9141',
+            buttonBackground: '#605934',
+            buttonText: '#FFFFFF',
+        },
+    },
+} satisfies Record<ThemeKey, Theme>;

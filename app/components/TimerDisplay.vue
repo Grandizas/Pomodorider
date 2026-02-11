@@ -8,21 +8,26 @@
             Timer size: {{ timerView }}
         </ui-dropdown>
 
+        <div class="timer-display__header">
+            <ui-svg-logo width="32" height="32" />
+            <h1>Pomodorider</h1>
+        </div>
+
         <div :class="`timer-display__inner ${timerView}`">
             <!-- ----------------- [ Switch buttons (Work, Break) ] ----------------- -->
-            <div v-if="timerView === 'large'" class="timer-mode">
-                <button
-                    v-for="mode in modes"
-                    :key="mode.value"
-                    :class="[
-                        'mode-button',
-                        { active: timerStore.mode === mode.value },
-                    ]"
-                    @click="switchMode(mode.value)"
-                >
-                    {{ mode.label }}
-                </button>
-            </div>
+            <!--            <div v-if="timerView === 'large'" class="timer-mode">-->
+            <!--                <button-->
+            <!--                    v-for="mode in modes"-->
+            <!--                    :key="mode.value"-->
+            <!--                    :class="[-->
+            <!--                        'mode-button',-->
+            <!--                        { active: timerStore.mode === mode.value },-->
+            <!--                    ]"-->
+            <!--                    @click="switchMode(mode.value)"-->
+            <!--                >-->
+            <!--                    {{ mode.label }}-->
+            <!--                </button>-->
+            <!--            </div>-->
 
             <!-- ----------------- [ Timer ] ----------------- -->
             <parts-timer :class="timerView" />

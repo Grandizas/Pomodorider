@@ -3,7 +3,7 @@ import { type ThemeKey, themes } from '../themes/themes';
 
 export const useThemeStore = defineStore('theme', {
     state: () => ({
-        activeTheme: 'trees' as ThemeKey,
+        activeTheme: 'white' as ThemeKey,
     }),
     actions: {
         applyTheme(themeKey: ThemeKey) {

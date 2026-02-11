@@ -6,7 +6,6 @@
         />
 
         <main class="app-main">
-            <ui-video-background :is-fullscreen="isFullscreen" />
             <TimerDisplay />
         </main>
 
@@ -50,10 +49,9 @@ useHead({
 const visibility = useDocumentVisibility();
 const isLeavingPage = usePageLeave();
 
-// Keep timer accurate even when tab is not visible
 watch(visibility, (current) => {
     if (current === 'visible' && timerStore.isRunning) {
-        // Timer continues running in background
+        // Timer continues running in the background
         console.log('Tab is visible again');
     }
 });

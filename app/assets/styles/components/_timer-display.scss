@@ -6,6 +6,13 @@
     position: relative;
     padding: spacing(6);
     min-height:rem(796px);
+    flex-direction: column;
+
+    &__header {
+        display: flex;
+        gap: spacing(2);
+        align-items: center;
+    }
 
     &.large {
         align-items: center;
@@ -39,9 +46,7 @@
             height: fit-content;
             align-items: center;
             flex-direction: column;
-            box-shadow: $shadow-md;
             border-radius: $border-radius-md;
-            background-color: rgba(0, 0, 0, 0.4);
 
             .timer-mode {
                 display: flex;

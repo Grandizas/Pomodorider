@@ -1,11 +1,5 @@
 <template>
     <header class="app-header">
-        <!-- ----------------- [ Header left ] ----------------- -->
-        <div class="app-header__left">
-            <h1>Pomodorider</h1>
-            <p class="subtitle">Your cozy Pomodoro companion</p>
-        </div>
-
         <!-- ----------------- [ Header right ] ----------------- -->
         <div class="app-header__right">
             <ui-button variant="icon" @click="emit('fullscreen')">

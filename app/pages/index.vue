@@ -59,7 +59,6 @@ watch(visibility, (current) => {
 
 <style scoped lang="scss">
 .pomodoro-app {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }

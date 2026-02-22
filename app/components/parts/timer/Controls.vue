@@ -1,5 +1,17 @@
 <template>
     <div class="timer-controls">
+        <!-- ----------------- [ Reset ] ----------------- -->
+        <button
+            class="control-button secondary"
+            @click="timerStore.reset()"
+            :disabled="
+                timerStore.timeRemaining ===
+                timerStore.getDuration(timerStore.mode) * 60
+            "
+        >
+            <Icon icon="ri:reset-left-fill" width="24" />
+        </button>
+
         <!-- ----------------- [ Play ] ----------------- -->
         <button
             v-if="!timerStore.isRunning && !timerStore.isPaused"
@@ -25,18 +37,6 @@
             @click="timerStore.resume()"
         >
             <Icon icon="mdi:play" width="24" />
-        </button>
-
-        <!-- ----------------- [ Reset ] ----------------- -->
-        <button
-            class="control-button secondary"
-            @click="timerStore.reset()"
-            :disabled="
-                timerStore.timeRemaining ===
-                timerStore.getDuration(timerStore.mode) * 60
-            "
-        >
-            <Icon icon="ri:reset-left-fill" width="24" />
         </button>
 
         <!-- ----------------- [ Skip ] ----------------- -->

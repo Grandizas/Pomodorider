@@ -5,7 +5,6 @@
     display: flex;
     position: relative;
     padding: spacing(6);
-    min-height: rem(796px);
     flex-direction: column;
 
     &__header {
@@ -25,10 +24,10 @@
     }
 
     &__inner {
-        padding: spacing(4);
         display: flex;
-        gap: spacing(2);
+        gap: spacing(3);
         height: fit-content;
+        padding: spacing(4);
         align-items: center;
         flex-direction: column;
         border-radius: $border-radius-md;
@@ -69,7 +68,7 @@
         .timer-stats {
             display: flex;
             gap: $spacing-xl;
-            margin-top: 20rem;
+            margin-top: 5rem;
         }
 
         .stat {

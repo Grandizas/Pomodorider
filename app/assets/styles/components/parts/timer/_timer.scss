@@ -24,8 +24,8 @@
 
     --rim: #5a5a5a;
 
-    --liquid-top: #f4f4f4;
-    --liquid-mid: #e9e9e9;
+    --liquid-top: #ffffff;
+    --liquid-mid: #ffffff;
     --liquid-bottom: #cfcfcf;
 
     --text: #f2f2f2;
@@ -68,9 +68,9 @@
         position: absolute;
         transform: translate(-50%, -50%);
         background: radial-gradient(
-            circle at 50% 15%,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0.8) 100%
+            circle at 50% 12%,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0.9) 100%
         );
         box-shadow:
             inset 0 10px 40px rgba(255, 255, 255, 0.4),
@@ -137,10 +137,11 @@
 }
 
 .timer-orb__time {
-    position: relative;
     z-index: 3;
     font-weight: 500;
+    position: relative;
     color: var(--text);
+    filter: blur(0.4px);
     letter-spacing: 5px;
     font-size: rem(67px);
     text-shadow: 6px 6px 4px rgba(0, 0, 0, 1);
@@ -167,26 +168,23 @@
 
     /* Crisp separation line like in the screenshot */
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.55),
-        0 -1px 0 rgba(0, 0, 0, 0.35);
+        rgba(255, 255, 255, 0.45) 0 54px 55px,
+        rgba(255, 255, 255, 0.07) 0 -12px 30px,
+        rgba(255, 255, 255, 0.15) 0 4px 6px,
+        rgba(255, 255, 255, 0.27) 0 12px 13px,
+        rgba(255, 255, 255, 0.19) 0 -3px 5px;
 
-    /* Slight blur sheen in the middle of the liquid */
-    &::before {
-        content: '';
+    &--bg {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         position: absolute;
-        left: 10%;
-        right: 10%;
-        top: 18%;
-        height: 70%;
         background: radial-gradient(
-            circle at 50% 50%,
-            rgba(255, 255, 255, 0.55) 0%,
-            rgba(255, 255, 255, 0.18) 35%,
-            rgba(255, 255, 255, 0) 70%
+            circle,
+            transparent 0%,
+            rgba(0, 0, 0, 0.6) 85%
         );
-        filter: blur(2px);
-        opacity: 0.85;
-        pointer-events: none;
     }
 }
 

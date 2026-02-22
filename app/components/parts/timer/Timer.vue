@@ -4,7 +4,9 @@
 
         <div class="timer-orb" style="--fill-pct: 28%">
             <div class="timer-orb__bg" />
-            <div class="timer-orb__liquid" aria-hidden="true"></div>
+            <div class="timer-orb__liquid" aria-hidden="true">
+                <div class="timer-orb__liquid--bg" />
+            </div>
             <div class="timer-orb__time">{{ timerStore.formattedTime }}</div>
         </div>
     </div>

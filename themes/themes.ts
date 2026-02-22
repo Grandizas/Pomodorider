@@ -18,7 +18,7 @@ export const themes = {
             timerText: '255, 255, 255',
             buttonBackground: '100, 100, 100',
             buttonText: '255, 255, 255',
-            timerLightStrength: '0.1',
+            timerLightStrength: '0.05',
         },
     },
     red: {
@@ -28,7 +28,7 @@ export const themes = {
             timerText: '221, 167, 170',
             buttonBackground: '97, 58, 60',
             buttonText: '255, 255, 255',
-            timerLightStrength: '0.15',
+            timerLightStrength: '0.05',
         },
     },
     blue: {
@@ -38,7 +38,7 @@ export const themes = {
             timerText: '134, 187, 233',
             buttonBackground: '45, 78, 108',
             buttonText: '255, 255, 255',
-            timerLightStrength: '0.15',
+            timerLightStrength: '0.05',
         },
     },
     yellow: {
@@ -48,7 +48,7 @@ export const themes = {
             timerText: '194, 181, 107',
             buttonBackground: '96, 89, 52',
             buttonText: '255, 255, 255',
-            timerLightStrength: '0.15',
+            timerLightStrength: '0.05',
         },
     },
 } satisfies Record<ThemeKey, Theme>;

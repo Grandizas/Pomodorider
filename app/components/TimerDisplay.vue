@@ -1,21 +1,13 @@
 <template>
-    <div class="timer-display" :class="`timer-${timerStore.mode} ${timerView}`">
-        <ui-dropdown
-            class="timer-display__changer"
-            :items="['large', 'minimal']"
-            @selected="(size: string) => (timerView = size)"
-        >
-            Timer size: {{ timerView }}
-        </ui-dropdown>
-
+    <div class="timer-display" :class="`timer-${timerStore.mode}`">
         <div class="timer-display__header">
             <ui-svg-logo width="32" height="32" />
             <h1>Pomodorider</h1>
         </div>
 
-        <div :class="`timer-display__inner ${timerView}`">
+        <div class="timer-display__inner">
             <!-- ----------------- [ Switch buttons (Work, Break) ] ----------------- -->
-            <!--            <div v-if="timerView === 'large'" class="timer-mode">-->
+            <!--            <div class="timer-mode">-->
             <!--                <button-->
             <!--                    v-for="mode in modes"-->
             <!--                    :key="mode.value"-->
@@ -30,9 +22,9 @@
             <!--            </div>-->
 
             <!-- ----------------- [ Timer ] ----------------- -->
-            <parts-timer :class="timerView" />
+            <parts-timer />
             <!-- ----------------- [ Controls ] ----------------- -->
-            <parts-timer-controls :class="timerView" />
+            <parts-timer-controls />
 
             <!-- ----------------- [ Sessions, Total time ] ----------------- -->
             <div class="timer-stats">
@@ -54,17 +46,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useTimerStore, type TimerMode } from '~~/stores/timer';
-import { Icon } from '@iconify/vue';
+import { useTimerStore } from '~~/stores/timer';
 
 const timerStore = useTimerStore();
 
-const timerView = ref<string>('large');
-const modes = [
-    { value: 'work' as TimerMode, label: 'Work' },
-    { value: 'shortBreak' as TimerMode, label: 'Short Break' },
-    { value: 'longBreak' as TimerMode, label: 'Long Break' },
-];
+// const modes = [
+//     { value: 'work' as TimerMode, label: 'Work' },
+//     { value: 'shortBreak' as TimerMode, label: 'Short Break' },
+//     { value: 'longBreak' as TimerMode, label: 'Long Break' },
+// ];
 
 const formattedWorkTime = computed(() => {
     const hours = Math.floor(timerStore.totalWorkTime / 3600);
@@ -75,11 +65,11 @@ const formattedWorkTime = computed(() => {
     return `${minutes}m`;
 });
 
-const switchMode = (mode: TimerMode) => {
-    if (!timerStore.isRunning) {
-        timerStore.switchMode(mode);
-    }
-};
+// const switchMode = (mode: TimerMode) => {
+//     if (!timerStore.isRunning) {
+//         timerStore.switchMode(mode);
+//     }
+// };
 </script>
 
 <style scoped lang="scss">

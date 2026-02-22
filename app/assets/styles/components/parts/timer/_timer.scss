@@ -109,7 +109,7 @@
         background: radial-gradient(
             circle,
             transparent,
-            rgba(var(--color-timerBg), 0.1),
+            rgba(var(--color-timerBg), var(--color-timerLightStrength)),
             transparent,
             transparent
         );

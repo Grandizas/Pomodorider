@@ -11,8 +11,6 @@ export const useThemeStore = defineStore('theme', {
 
             this.activeTheme = themeKey;
 
-            console.log('Theme', themeKey);
-
             Object.entries(theme.colors).forEach(([key, value]) => {
                 document.documentElement.style.setProperty(
                     `--color-${key}`,

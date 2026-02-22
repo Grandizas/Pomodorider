@@ -12,12 +12,13 @@
 </template>
 
 <script setup lang="ts">
-import { type ThemeKey, themes } from '~~/themes/themes';
+import { themes, type ThemeKey } from '~~/themes/themes';
 import { useThemeStore } from '~~/stores/theme';
+import { storeToRefs } from 'pinia';
 
 const themeStore = useThemeStore();
+const { activeTheme: currentTheme } = storeToRefs(themeStore);
 
-const currentTheme = ref(themeStore.activeTheme);
 const isDropdownOpen = ref(false);
 
 onMounted(() => {
@@ -25,7 +26,7 @@ onMounted(() => {
 });
 
 function selectTheme(theme: ThemeKey) {
-    themeStore.applyTheme(theme as ThemeKey);
+    themeStore.applyTheme(theme);
     isDropdownOpen.value = false;
 }
 </script>

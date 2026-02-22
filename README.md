@@ -82,10 +82,6 @@ npm run preview
 └── nuxt.config.ts         # Nuxt configuration
 ```
 
-## License
-
-ISC
-
 ## Author
 
 Created with ❤️ using Nuxt.js, Pinia, SCSS, VueUse, and Howler.js

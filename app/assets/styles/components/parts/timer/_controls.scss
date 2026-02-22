@@ -46,7 +46,7 @@
                 background: radial-gradient(
                     circle,
                     transparent 0%,
-                    var(--color-timerBg) 95%
+                    rgb(var(--color-timerBg)) 95%
                 );
             }
 
@@ -72,8 +72,13 @@
 
         &.pause {
             color: white;
-            background: #f39c12;
             box-shadow: $shadow-md;
+            background: rgb(var(--color-timerBg));
+
+            svg {
+                color: #ffffff;
+                mix-blend-mode: difference;
+            }
 
             &:hover:not(:disabled) {
                 box-shadow: $shadow-lg;

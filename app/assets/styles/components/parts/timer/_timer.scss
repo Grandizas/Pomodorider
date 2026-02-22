@@ -24,11 +24,11 @@
 
     --rim: #5a5a5a;
 
-    --liquid-top: rgba(var(--color-timerBg), 1);
-    --liquid-mid: rgba(var(--color-timerBg), 1);
-    --liquid-bottom: rgba(var(--color-timerBg), 0.6);
+    --liquid-center: rgba(var(--color-timerBg), 0.8);
+    --liquid-center-mid: rgba(var(--color-timerBg), 0.9);
+    --liquid-outer: rgba(var(--color-timerBg), 1);
 
-    --text: #f2f2f2;
+    --text: rgb(var(--color-timerText));
 
     /* Main “glass” body */
 
@@ -60,7 +60,7 @@
     &__bg {
         top: 50%;
         left: 50%;
-        z-index: 4;
+        z-index: 3;
         width: 100%;
         height: 100%;
         opacity: 0.4;
@@ -138,19 +138,19 @@
 
 .timer-orb__time {
     z-index: 3;
-    font-weight: 500;
+    opacity: 0.6;
+    font-weight: 700;
     position: relative;
     color: var(--text);
     filter: blur(0.4px);
     letter-spacing: 5px;
     font-size: rem(67px);
-    text-shadow: 6px 6px 4px rgba(0, 0, 0, 1);
+    mix-blend-mode: difference;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
 }
 
 .timer-orb__liquid {
     /* For later animation you’ll just change --fill-pct */
-    --fill-pct: 28%;
-
     left: 0;
     right: 0;
     bottom: 0;
@@ -159,11 +159,11 @@
     height: var(--fill-pct);
 
     /* Bright “liquid” */
-    background: linear-gradient(
-        to bottom,
-        var(--liquid-top) 0%,
-        var(--liquid-mid) 55%,
-        var(--liquid-bottom) 100%
+    background: radial-gradient(
+        circle,
+        var(--liquid-center) 0%,
+        var(--liquid-center-mid) 55%,
+        var(--liquid-outer) 100%
     );
 
     /* Crisp separation line like in the screenshot */

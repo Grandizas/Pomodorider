@@ -1,87 +1,90 @@
 # Pomodorider 🍅
-Cozy Pomodoro timer built with modern web technologies
 
-## Features
+A cozy, themeable Pomodoro timer designed for focus, simplicity, and beautiful UI.
 
-- ⏱️ **Classic Pomodoro Technique**: 25-minute work sessions with 5-minute short breaks and 15-minute long breaks
-- 🎨 **Beautiful UI**: Dark theme with smooth animations and color-coded timer modes
-- 🔊 **Sound Notifications**: Customizable audio alerts when sessions complete
-- ⚙️ **Flexible Settings**: Adjust timer durations, auto-start behavior, and sound preferences
-- 📊 **Session Tracking**: Keep track of completed sessions and total work time
-- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
-- 🚀 **Modern Stack**: Built with Nuxt.js 4, Pinia, SCSS, VueUse, and Howler.js
+> Built with Nuxt 4, TypeScript, and modern Vue ecosystem tools.
 
-## Tech Stack
+---
 
-- **[Nuxt.js 4](https://nuxt.com/)** - Latest version of the Vue.js framework
-- **[Pinia](https://pinia.vuejs.org/)** - State management
-- **[SCSS](https://sass-lang.com/)** - CSS preprocessing
-- **[VueUse](https://vueuse.org/)** - Collection of Vue composition utilities
-- **[Howler.js](https://howlerjs.com/)** - Audio library
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
+## ✨ Overview
 
-## Getting Started
+Pomodorider is a distraction-free productivity timer based on the classic Pomodoro Technique.  
+It focuses on smooth UX, elegant visuals, and customizable session control — without unnecessary complexity.
 
-### Prerequisites
+---
 
-- Node.js 18 or later
-- npm, yarn, or pnpm
+## 🚀 Features
 
-### Installation
+- ⏱️ **Classic Pomodoro Flow**
+  - 25-minute work sessions
+  - 5-minute short breaks
+  - 15-minute long breaks
+
+- 🎨 **Theme System**
+  - Dark-focused UI
+  - Smooth gradients & animations
+  - Mode-based visual feedback
+
+- 🔊 **Audio Notifications**
+  - Session completion sounds
+  - Adjustable sound preferences
+
+- ⚙️ **Flexible Settings**
+  - Custom session durations
+  - Auto-start controls
+  - Sound toggle options
+
+- 📊 **Session Tracking**
+  - Completed sessions counter
+  - Total focus time tracking
+
+- ⌨️ **Keyboard Shortcuts**
+  - `Space` — Start / Pause
+  - `R` — Reset
+  - `S` — Skip session
+
+- 📱 **Responsive**
+  - Works smoothly on desktop and mobile
+
+---
+
+## 🛠 Tech Stack
+
+- **Nuxt 4**
+- **Vue 3**
+- **Pinia**
+- **TypeScript**
+- **SCSS**
+- **VueUse**
+- **Howler.js**
+
+---
+
+## 📦 Installation
+
+### Requirements
+
+- Node.js 18+
+- npm / yarn / pnpm
+
+### Setup
 
 ```bash
-# Clone the repository
 git clone https://github.com/Grandizas/Pomodorider.git
 cd Pomodorider
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Building for Production
 
-```bash
-# Build the application
-npm run build
+🎯 Project Goals
 
-# Preview the production build
-npm run preview
-```
+- Keep v1 simple and focused
+- Prioritize smooth UX and design clarity
+- Avoid feature bloat
+- Ship a complete, usable product
 
-## Usage
+📄 License
 
-1. **Start a Work Session**: Click the "Start" button to begin a 25-minute work session
-2. **Take Breaks**: The timer automatically switches to break mode after each work session
-3. **Customize Settings**: Click the settings icon to adjust timer durations, sound preferences, and auto-start behavior
-4. **Track Progress**: View your completed sessions and total work time at the bottom of the timer
-
-## Keyboard Shortcuts
-
-- `Space`: Start/Pause timer
-- `R`: Reset timer
-- `S`: Skip to next session
-
-## Project Structure
-
-```
-├── app.vue                 # Root component
-├── pages/
-│   └── index.vue          # Main page
-├── components/
-│   ├── TimerDisplay.vue   # Timer component
-│   └── SettingsPanel.vue  # Settings modal
-├── stores/
-│   └── timer.ts           # Pinia store
-├── assets/
-│   └── styles/            # SCSS styles
-└── nuxt.config.ts         # Nuxt configuration
-```
-
-## Author
-
-Created with ❤️ using Nuxt.js, Pinia, SCSS, VueUse, and Howler.js
+© 2026 Gražvydas Žilius
+All rights reserved.

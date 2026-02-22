@@ -2,15 +2,18 @@
 @use '../_functions.scss' as *;
 
 .timer-display {
+    flex: 1;
     display: flex;
     position: relative;
     padding: spacing(6);
     flex-direction: column;
 
     &__header {
+        opacity: 0.8;
         display: flex;
         gap: spacing(2);
         align-items: center;
+        justify-content: center;
     }
 
     &.large {

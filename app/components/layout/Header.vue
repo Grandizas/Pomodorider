@@ -1,65 +1,7 @@
 <template>
-    <header class="app-header">
-        <!-- ----------------- [ Header right ] ----------------- -->
-        <div class="app-header__right">
-            <ui-button variant="icon" @click="emit('fullscreen')">
-                <Icon icon="heroicons:arrows-pointing-out" width="24" />
-            </ui-button>
-
-            <ui-theme-picker />
-
-            <ui-button
-                variant="icon"
-                title="Settings"
-                @click="emit('open-settings')"
-            >
-                <Icon icon="heroicons:cog-6-tooth" width="24" />
-            </ui-button>
-        </div>
-    </header>
+    <header class="app-header"></header>
 </template>
 
-<script setup lang="ts">
-import { Icon } from '@iconify/vue';
+<script setup lang="ts"></script>
 
-const emit = defineEmits<{
-    (e: 'open-settings'): void;
-    (e: 'fullscreen'): void;
-}>();
-</script>
-
-<style scoped lang="scss">
-@use '@@/app/assets/styles/_functions.scss' as *;
-
-.app-header {
-    display: flex;
-    position: relative;
-    justify-content: space-between;
-    padding: spacing(2) $spacing-page;
-
-    h1 {
-        font-size: 1.6rem;
-        font-weight: 700;
-
-        background: linear-gradient(
-            to right,
-            var(--color-logoGradientStart),
-            var(--color-logoGradientEnd)
-        );
-
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    p {
-        font-size: 0.7rem;
-    }
-
-    &__right {
-        display: flex;
-        gap: spacing(1);
-        align-items: center;
-    }
-}
-</style>
+<style scoped lang="scss"></style>

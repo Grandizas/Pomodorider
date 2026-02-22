@@ -1,11 +1,9 @@
 <template>
     <div class="pomodoro-app">
-        <layout-header
-            @open-settings="settingsOpen = true"
-            @fullscreen="isFullscreen = !isFullscreen"
-        />
+        <layout-header />
 
         <main class="app-main">
+            <PickList @open-settings="settingsOpen = true" />
             <TimerDisplay />
         </main>
 
@@ -25,7 +23,6 @@ import { useDocumentVisibility, usePageLeave } from '@vueuse/core';
 
 const timerStore = useTimerStore();
 const settingsOpen = ref(false);
-const isFullscreen = ref(false);
 
 // Dynamic page title with timer
 const pageTitle = computed(() => {
@@ -61,6 +58,10 @@ watch(visibility, (current) => {
 .pomodoro-app {
     display: flex;
     flex-direction: column;
+
+    .app-main {
+        display: flex;
+    }
 }
 
 .app-footer {

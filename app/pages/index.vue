@@ -65,10 +65,11 @@ watch(visibility, (current) => {
 }
 
 .app-footer {
+    font-size: 0.9rem;
     text-align: center;
     padding: $spacing-lg;
     color: $text-secondary;
-    font-size: 0.9rem;
+    margin-left: $picker-width;
 }
 
 @media (max-width: 768px) {

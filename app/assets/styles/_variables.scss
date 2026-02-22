@@ -1,3 +1,5 @@
+@use './functions' as *;
+
 // Color palette
 $primary-color: #ff6b6b;
 $secondary-color: #4ecdc4;
@@ -34,3 +36,6 @@ $transition-slow: 0.5s ease;
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
 $shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
 $shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+// Sizes
+$picker-width: rem(85px);

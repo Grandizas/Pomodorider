@@ -13,37 +13,37 @@ export const themes = {
     white: {
         name: 'white',
         colors: {
-            timerBg: '#FFFFFF',
-            timerText: '#FFFFFF',
-            buttonBackground: '#646464',
-            buttonText: '#FFFFFF',
+            timerBg: '255, 255, 255',
+            timerText: '255, 255, 255',
+            buttonBackground: '100, 100, 100',
+            buttonText: '255, 255, 255',
         },
     },
     red: {
         name: 'red',
         colors: {
-            timerBg: '#9E3E44',
-            timerText: '#9E3E44',
-            buttonBackground: '#613a3c',
-            buttonText: '#FFFFFF',
+            timerBg: '158, 62, 68',
+            timerText: '158, 62, 68',
+            buttonBackground: '97, 58, 60',
+            buttonText: '255, 255, 255',
         },
     },
     blue: {
         name: 'blue',
         colors: {
-            timerBg: '#2372B8',
-            timerText: '#2372B8',
-            buttonBackground: '#2d4e6c',
-            buttonText: '#FFFFFF',
+            timerBg: '35, 114, 184',
+            timerText: '35, 114, 184',
+            buttonBackground: '45, 78, 108',
+            buttonText: '255, 255, 255',
         },
     },
     yellow: {
         name: 'yellow',
         colors: {
-            timerBg: '#9F9141',
-            timerText: '#9F9141',
-            buttonBackground: '#605934',
-            buttonText: '#FFFFFF',
+            timerBg: '159, 145, 65',
+            timerText: '159, 145, 65',
+            buttonBackground: '96, 89, 52',
+            buttonText: '255, 255, 255',
         },
     },
 } satisfies Record<ThemeKey, Theme>;

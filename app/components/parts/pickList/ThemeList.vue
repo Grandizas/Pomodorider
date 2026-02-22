@@ -3,7 +3,7 @@
         <li
             v-for="[themeName, theme] in Object.entries(themes)"
             :style="{
-                background: `radial-gradient(circle at 50% 30%, transparent, ${theme.colors.timerBg})`,
+                background: `radial-gradient(circle at 50% 30%, transparent, rgb(${theme.colors.timerBg}))`,
             }"
             :class="{ active: themeName === currentTheme }"
             @click="selectTheme(themeName as ThemeKey)"

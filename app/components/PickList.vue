@@ -28,6 +28,7 @@ const emit = defineEmits<{
     gap: spacing(2);
     align-items: center;
     padding: spacing(2);
+    width: $picker-width;
     flex-direction: column;
     justify-content: center;
 }

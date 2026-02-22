@@ -13,7 +13,7 @@
     aspect-ratio: 1 / 1;
 
     /* Theme-friendly HEX palette (swap later) */
-    --glow: #ffffff;
+    --glow: rgb(var(--color-timerBg));
     --glow-opacity: 0.2; // overall strength
     --glow-spread: 46px; // how far it extends outside orb
     --glow-blur: 26px; // softness
@@ -24,9 +24,9 @@
 
     --rim: #5a5a5a;
 
-    --liquid-top: #ffffff;
-    --liquid-mid: #ffffff;
-    --liquid-bottom: #cfcfcf;
+    --liquid-top: rgba(var(--color-timerBg), 1);
+    --liquid-mid: rgba(var(--color-timerBg), 1);
+    --liquid-bottom: rgba(var(--color-timerBg), 0.6);
 
     --text: #f2f2f2;
 
@@ -41,7 +41,7 @@
         rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
     /* Subtle rim */
-    outline: 1px solid rgba(255, 255, 255, 0.04);
+    outline: 1px solid rgba(var(--color-timerBg), 0.04);
 
     &__wrapper {
         position: relative;
@@ -69,11 +69,11 @@
         transform: translate(-50%, -50%);
         background: radial-gradient(
             circle at 50% 12%,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0.9) 100%
+            rgba(var(--color-timerBg), 0.15) 0%,
+            rgba(var(--color-timerBg), 0.9) 100%
         );
         box-shadow:
-            inset 0 10px 40px rgba(255, 255, 255, 0.4),
+            inset 0 10px 40px rgba(var(--color-timerBg), 0.4),
             inset 0 -20px 60px rgba(0, 0, 0, 0.15);
 
         &:before {
@@ -88,7 +88,7 @@
                 circle at 50% 15%,
                 transparent,
                 transparent,
-                rgba(255, 255, 255, 1) 100%
+                rgba(var(--color-timerBg), 1) 100%
             );
         }
     }
@@ -105,11 +105,11 @@
         border-radius: 50%;
 
         /* radial halo — strongest near orb edge, fades out */
-        background: #ffffff;
+        background: rgb(var(--color-timerBg));
         background: radial-gradient(
             circle,
             transparent,
-            rgba(255, 255, 255, 0.1),
+            rgba(var(--color-timerBg), 0.1),
             transparent,
             transparent
         );
@@ -127,9 +127,9 @@
         border-radius: 50%;
         background: radial-gradient(
             circle at 50% 10%,
-            rgba(255, 255, 255, 0.16) 0%,
-            rgba(255, 255, 255, 0.06) 28%,
-            rgba(255, 255, 255, 0) 55%
+            rgba(var(--color-timerBg), 0.16) 0%,
+            rgba(var(--color-timerBg), 0.06) 28%,
+            rgba(var(--color-timerBg), 0) 55%
         );
         filter: blur(0.2px);
         pointer-events: none;
@@ -168,11 +168,11 @@
 
     /* Crisp separation line like in the screenshot */
     box-shadow:
-        rgba(255, 255, 255, 0.45) 0 54px 55px,
-        rgba(255, 255, 255, 0.07) 0 -12px 30px,
-        rgba(255, 255, 255, 0.15) 0 4px 6px,
-        rgba(255, 255, 255, 0.27) 0 12px 13px,
-        rgba(255, 255, 255, 0.19) 0 -3px 5px;
+        rgba(var(--color-timerBg), 0.45) 0 54px 55px,
+        rgba(var(--color-timerBg), 0.07) 0 -12px 30px,
+        rgba(var(--color-timerBg), 0.15) 0 4px 6px,
+        rgba(var(--color-timerBg), 0.27) 0 12px 13px,
+        rgba(var(--color-timerBg), 0.19) 0 -3px 5px;
 
     &--bg {
         top: 0;

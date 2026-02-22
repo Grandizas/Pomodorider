@@ -25,7 +25,7 @@ withDefaults(
     transition: transform 0.2s ease-in-out;
 
     &:not(&.secondary-btn) {
-        color: var(--color-buttonText);
+        color: rgb(var(--color-buttonText));
         background-color: $background-color;
         transition:
             background-color 0.2s ease-in-out,
@@ -46,7 +46,7 @@ withDefaults(
     &.secondary-btn {
         padding: spacing(1) spacing(2);
         border-radius: $border-radius-sm;
-        background-color: var(--color-accent);
+        background-color: $background-color;
         color: var(--color-text);
     }
 }

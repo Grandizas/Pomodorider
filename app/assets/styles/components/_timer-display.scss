@@ -48,10 +48,10 @@
             font-size: 1rem;
             font-weight: 500;
             border-radius: 50rem;
-            color: var(--color-timerText);
+            background: $background-color;
             padding: spacing(1) spacing(2);
+            color: rgb(var(--color-timerText));
             transition: all $transition-normal;
-            background: var(--color-background);
             border: 2px solid var(--timer-color);
 
             &:disabled {
@@ -93,7 +93,7 @@
     }
 
     &.timer-work {
-        --timer-color: #{var(--color-accent)};
+        --timer-color: $background-color;
     }
 
     &.timer-shortBreak {

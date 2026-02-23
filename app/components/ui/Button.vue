@@ -21,12 +21,10 @@ withDefaults(
 .btn {
     border: none;
     cursor: pointer;
-    font-weight: bold;
     transition: transform 0.2s ease-in-out;
 
     &:not(&.secondary-btn) {
         color: rgb(var(--color-buttonText));
-        background-color: $background-color;
         transition:
             background-color 0.2s ease-in-out,
             transform 0.2s ease-in-out;
@@ -44,16 +42,17 @@ withDefaults(
     }
 
     &.secondary-btn {
+        color: var(--color-text);
         padding: spacing(1) spacing(2);
         border-radius: $border-radius-sm;
         background-color: $background-color;
-        color: var(--color-text);
     }
 }
 
 .primary-btn {
     border-radius: 5rem;
     padding: spacing(1) spacing(3);
+    background-color: $button-background-color;
 }
 
 .icon-btn {
@@ -64,5 +63,6 @@ withDefaults(
     padding: spacing(1);
     align-items: center;
     justify-content: center;
+    background-color: $background-color;
 }
 </style>

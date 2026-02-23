@@ -82,7 +82,7 @@ export const useTimerStore = defineStore('timer', {
                 // Initialize notification sound using an external audio file
                 // Requires the '/sounds/beep.mp3' asset to be available
                 this.notificationSound = new Howl({
-                    src: ['/sounds/beep.mp3'],
+                    src: ['/sounds/start.mp3'],
                     volume: this.settings.soundVolume,
                 });
             }

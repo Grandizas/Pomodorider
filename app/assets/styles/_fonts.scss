@@ -113,3 +113,26 @@
     font-style: italic;
     font-display: swap;
 }
+
+/* ---------------------------------
+              Open Sans
+---------------------------------- */
+/* Regular variable font */
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/fonts/OpenSans/OpenSans-VariableFont_wdth,wght.woff2')
+        format('woff2');
+    font-weight: 100 900; // variable range
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Italic variable font */
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/fonts/OpenSans/OpenSans-Italic-VariableFont_wdth,wght.woff2')
+        format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}

@@ -9,7 +9,7 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         public: {
-            mediaBaseUrl: process.env.NUXT_PUBLIC_MEDIA_BASE_URL,
+            // mediaBaseUrl: process.env.NUXT_PUBLIC_MEDIA_BASE_URL,
         },
     },
 

@@ -8,6 +8,7 @@ export type Theme = {
         buttonText: string;
         timerLightStrength: string;
     };
+    ariaLabel: string;
 };
 
 export const themes = {
@@ -20,6 +21,7 @@ export const themes = {
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
         },
+        ariaLabel: 'White theme for Pomodoro Timer',
     },
     red: {
         name: 'red',
@@ -30,6 +32,7 @@ export const themes = {
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
         },
+        ariaLabel: 'Red theme for Pomodoro Timer',
     },
     blue: {
         name: 'blue',
@@ -40,6 +43,7 @@ export const themes = {
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
         },
+        ariaLabel: 'Blue theme for Pomodoro Timer',
     },
     yellow: {
         name: 'yellow',
@@ -50,5 +54,6 @@ export const themes = {
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
         },
+        ariaLabel: 'Yellow theme for Pomodoro Timer',
     },
 } satisfies Record<ThemeKey, Theme>;

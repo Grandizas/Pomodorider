@@ -5,6 +5,7 @@
             :style="{
                 background: `radial-gradient(circle at 50% 30%, transparent, rgb(${theme.colors.timerBg}))`,
             }"
+            :aria-label="theme.ariaLabel"
             :class="{ active: themeName === currentTheme }"
             @click="selectTheme(themeName as ThemeKey)"
         />

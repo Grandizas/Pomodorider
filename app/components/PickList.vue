@@ -24,8 +24,10 @@ const emit = defineEmits<{
 
 <style scoped lang="scss">
 .pick-list {
+    z-index: 2;
     display: flex;
     gap: spacing(2);
+    position: relative;
     align-items: center;
     padding: spacing(2);
     width: $picker-width;

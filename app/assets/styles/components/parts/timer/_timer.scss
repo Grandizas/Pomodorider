@@ -3,10 +3,9 @@
 
 .timer-orb {
     /* Sizing */
-    --size: 400px;
+    width: 400px;
     display: grid;
     overflow: hidden;
-    width: var(--size);
     position: relative;
     border-radius: 50%;
     place-items: center;
@@ -119,21 +118,6 @@
         z-index: -1;
         pointer-events: none;
     }
-
-    /* Top “glass highlight” */
-    &::after {
-        position: absolute;
-        inset: 10px;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle at 50% 10%,
-            rgba(var(--color-timerBg), 0.16) 0%,
-            rgba(var(--color-timerBg), 0.06) 28%,
-            rgba(var(--color-timerBg), 0) 55%
-        );
-        filter: blur(0.2px);
-        pointer-events: none;
-    }
 }
 
 .timer-orb__time {
@@ -186,12 +170,4 @@
             rgba(0, 0, 0, 0.6) 85%
         );
     }
-}
-
-/* Optional: quick size presets */
-.timer-orb.is-sm {
-    --size: 220px;
-}
-.timer-orb.is-lg {
-    --size: 360px;
 }

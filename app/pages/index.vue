@@ -69,7 +69,6 @@ watch(visibility, (current) => {
     text-align: center;
     padding: $spacing-lg;
     color: $text-secondary;
-    margin-left: $picker-width;
 }
 
 @media (max-width: 768px) {

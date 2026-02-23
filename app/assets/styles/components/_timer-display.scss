@@ -7,6 +7,7 @@
     position: relative;
     padding: spacing(6);
     flex-direction: column;
+    margin-left: -$picker-width;
 
     &__header {
         opacity: 0.8;
@@ -52,7 +53,6 @@
             padding: spacing(1) spacing(2);
             color: rgb(var(--color-timerText));
             transition: all $transition-normal;
-            border: 2px solid var(--timer-color);
 
             &:disabled {
                 opacity: 0.5;
@@ -61,10 +61,6 @@
 
             &:hover {
                 color: $text-color;
-            }
-
-            &.active {
-                background-color: var(--timer-color);
             }
         }
 
@@ -81,7 +77,6 @@
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--timer-color);
         }
 
         .stat-label {
@@ -90,18 +85,6 @@
             color: $text-secondary;
             text-transform: uppercase;
         }
-    }
-
-    &.timer-work {
-        --timer-color: $background-color;
-    }
-
-    &.timer-shortBreak {
-        --timer-color: #{$short-break-color};
-    }
-
-    &.timer-longBreak {
-        --timer-color: #{$long-break-color};
     }
 
     &__changer {

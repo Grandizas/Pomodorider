@@ -4,14 +4,14 @@
 .timer-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: spacing(rem(4));
+    gap: spacing(2);
     justify-content: center;
 
     .control-button {
         display: flex;
         border: unset;
         gap: $spacing-xs;
-        font-weight: 600;
+        font-weight: 700;
         font-size: 1.1rem;
         border-radius: 50%;
         align-items: center;
@@ -31,7 +31,6 @@
             position: relative;
             padding: spacing(2);
             margin-top: spacing(1);
-            transition: transform 250ms ease-in-out;
 
             &::after {
                 content: '';

@@ -337,7 +337,7 @@ const resetStats = () => {
     padding: $spacing-md;
     border-radius: $border-radius-md;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     box-shadow: $shadow-md;
 
     &:hover {

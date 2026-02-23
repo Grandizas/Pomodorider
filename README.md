@@ -74,7 +74,7 @@ git clone https://github.com/Grandizas/Pomodorider.git
 cd Pomodorider
 npm install
 npm run dev
-
+```
 
 
 🎯 Project Goals

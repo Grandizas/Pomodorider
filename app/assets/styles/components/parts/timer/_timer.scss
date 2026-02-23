@@ -1,18 +1,156 @@
 @use '../../../_variables.scss' as *;
 @use '../../../_functions.scss' as *;
 
-.timer-time {
-  font-weight: 700;
-  color: $text-color;
-  font-variant-numeric: tabular-nums;
+.timer-orb {
+    /* Sizing */
+    width: 400px;
+    display: grid;
+    overflow: hidden;
+    position: relative;
+    border-radius: 50%;
+    place-items: center;
+    aspect-ratio: 1 / 1;
 
-  &.large {
-    font-size: 6rem;
-    letter-spacing: spacing(1);
-  }
+    /* Theme-friendly HEX palette (swap later) */
+    --glow: rgb(var(--color-timerBg));
+    --glow-opacity: 0.2; // overall strength
+    --glow-spread: 46px; // how far it extends outside orb
+    --glow-blur: 26px; // softness
 
-  &.minimal {
-    font-size: 2rem;
-  }
+    --orb-top: #4b4b4b;
+    --orb-mid: #3a3a3a;
+    --orb-bottom: #232323;
+
+    --rim: #5a5a5a;
+
+    --liquid-center: rgba(var(--color-timerBg), 0.8);
+    --liquid-center-mid: rgba(var(--color-timerBg), 0.9);
+    --liquid-outer: rgba(var(--color-timerBg), 1);
+
+    --text: rgb(var(--color-timerText));
+
+    /* Main “glass” body */
+
+    /* Outer depth + inner glass */
+    box-shadow:
+        rgba(0, 0, 0, 0.25) 0 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px,
+        rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px,
+        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
+    /* Subtle rim */
+    outline: 1px solid rgba(var(--color-timerBg), 0.04);
+
+    &__wrapper {
+        position: relative;
+    }
+
+    &::after {
+        inset: 0;
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+    }
+
+    &__bg {
+        top: 50%;
+        left: 50%;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+        opacity: 0.4;
+        filter: blur(4px);
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+            circle at 50% 12%,
+            rgba(var(--color-timerBg), 0.15) 0%,
+            rgba(var(--color-timerBg), 0.9) 100%
+        );
+        box-shadow:
+            inset 0 10px 40px rgba(var(--color-timerBg), 0.4),
+            inset 0 -20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Vignette + soft edge darkening (makes it “orb-y”) */
+    &__light {
+        top: 50%;
+        left: 50%;
+        width: 250%;
+        height: 250%;
+        position: absolute;
+
+        /* bigger than the orb so it spills outside */
+        border-radius: 50%;
+
+        /* radial halo — strongest near orb edge, fades out */
+        background: radial-gradient(
+            circle,
+            transparent,
+            rgba(var(--color-timerBg), var(--color-timerLightStrength)),
+            transparent,
+            transparent
+        );
+
+        filter: blur(var(--glow-blur));
+        transform: translateZ(0) translate(-50%, -50%); // avoids some blur jitter
+        z-index: -1;
+        pointer-events: none;
+    }
 }
 
+.timer-orb__time {
+    z-index: 3;
+    opacity: 0.6;
+    font-weight: 700;
+    position: relative;
+    color: var(--text);
+    filter: blur(0.4px);
+    letter-spacing: 5px;
+    font-size: rem(67px);
+    mix-blend-mode: difference;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.timer-orb__liquid {
+    /* For later animation you’ll just change --fill-pct */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    position: absolute;
+    height: var(--fill-pct);
+
+    /* Bright “liquid” */
+    background: radial-gradient(
+        circle,
+        var(--liquid-center) 0%,
+        var(--liquid-center-mid) 55%,
+        var(--liquid-outer) 100%
+    );
+
+    /* Crisp separation line like in the screenshot */
+    box-shadow:
+        rgba(var(--color-timerBg), 0.45) 0 54px 55px,
+        rgba(var(--color-timerBg), 0.07) 0 -12px 30px,
+        rgba(var(--color-timerBg), 0.15) 0 4px 6px,
+        rgba(var(--color-timerBg), 0.27) 0 12px 13px,
+        rgba(var(--color-timerBg), 0.19) 0 -3px 5px;
+
+    &--bg {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: radial-gradient(
+            circle,
+            transparent 0%,
+            rgba(0, 0, 0, 0.6) 85%
+        );
+    }
+}

@@ -1,15 +1,18 @@
+@use './functions' as *;
+
 // Color palette
-$primary-color: #FF6B6B;
-$secondary-color: #4ECDC4;
+$primary-color: #ff6b6b;
+$secondary-color: #4ecdc4;
 $background-color: #222222;
-$surface-color: #4A5A6A;
+$button-background-color: #333333;
+$surface-color: #4a5a6a;
 $text-color: #eaeaea;
 $text-secondary: #a0a0a0;
 
 // Timer states
-$work-color: #A66F3D;
-$short-break-color: #4ECDC4;
-$long-break-color: #95E1D3;
+$work-color: #a66f3d;
+$short-break-color: #4ecdc4;
+$long-break-color: #95e1d3;
 
 // Spacing
 $spacing-xs: 0.5rem;
@@ -33,3 +36,6 @@ $transition-slow: 0.5s ease;
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
 $shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
 $shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+// Sizes
+$picker-width: rem(85px);

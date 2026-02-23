@@ -1,36 +1,41 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, var(--color-pageBackgroundStart), var(--color-pageBackgroundEnd));
-  color: $text-color;
-  min-height: 100vh;
-  overflow-x: hidden;
+    color: $text-color;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: #000000;
+    font-family: 'Helvetica Neue', sans-serif;
 }
 
 html {
-  font-size: 100%;
+    font-size: 100%;
 }
 
 input {
-  font-family: inherit;
+    font-family: inherit;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
 }
 
 // Utility classes
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 $spacing-md;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
 }
 
 .text-center {
-  text-align: center;
+    text-align: center;
 }

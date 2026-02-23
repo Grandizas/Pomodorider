@@ -1,52 +1,59 @@
-export type ThemeKey = 'ocean' | 'trees' | 'river';
+export type ThemeKey = 'white' | 'red' | 'blue' | 'yellow';
+export type Theme = {
+    name: ThemeKey;
+    colors: {
+        timerBg: string;
+        timerText: string;
+        buttonBackground: string;
+        buttonText: string;
+        timerLightStrength: string;
+    };
+    ariaLabel: string;
+};
 
 export const themes = {
-    ocean: {
-        name: 'Ocean',
-        video: 'Sunset_Ocean.mp4',
-        thumbnail: 'Sunset_Ocean.webp',
+    white: {
+        name: 'white',
         colors: {
-            pageBackgroundStart: '#030117',
-            pageBackgroundEnd: '#525E77',
-            timerBg: '#22222266',
-            timerText: '#FFFFFF',
-            accent: '#57637D',
-            logoGradientStart: '#FFFFFF',
-            logoGradientEnd: '#57637D',
-            buttonBackground: '#FFFFFF',
-            buttonText: '#222222',
+            timerBg: '255, 255, 255',
+            timerText: '255, 255, 255',
+            buttonBackground: '100, 100, 100',
+            buttonText: '255, 255, 255',
+            timerLightStrength: '0.05',
         },
+        ariaLabel: 'White theme for Pomodoro Timer',
     },
-    trees: {
-        name: 'Trees',
-        video: 'Palm_Trees_Skyscrapers.mp4',
-        thumbnail: 'Palm_Trees_Skyscrapers.webp',
+    red: {
+        name: 'red',
         colors: {
-            pageBackgroundStart: '#13170C',
-            pageBackgroundEnd: '#937736',
-            timerBg: '#22222266',
-            timerText: '#FFFFFF',
-            accent: '#937736',
-            logoGradientStart: '#937736',
-            logoGradientEnd: '#13170C',
-            buttonBackground: '#FFFFFF',
-            buttonText: '#FFFFFF',
+            timerBg: '221, 167, 170',
+            timerText: '221, 167, 170',
+            buttonBackground: '97, 58, 60',
+            buttonText: '255, 255, 255',
+            timerLightStrength: '0.05',
         },
+        ariaLabel: 'Red theme for Pomodoro Timer',
     },
-    river: {
-        name: 'River',
-        video: 'River.mp4',
-        thumbnail: 'River.webp',
+    blue: {
+        name: 'blue',
         colors: {
-            pageBackgroundStart: '#5d8ab5',
-            pageBackgroundEnd: '#937736',
-            timerBg: '#22222266',
-            timerText: '#FFFFFF',
-            accent: '#937736',
-            logoGradientStart: '#937736',
-            logoGradientEnd: '#5d8ab5',
-            buttonBackground: '#FFFFFF',
-            buttonText: '#FFFFFF',
+            timerBg: '134, 187, 233',
+            timerText: '134, 187, 233',
+            buttonBackground: '45, 78, 108',
+            buttonText: '255, 255, 255',
+            timerLightStrength: '0.05',
         },
+        ariaLabel: 'Blue theme for Pomodoro Timer',
     },
-} satisfies Record<ThemeKey, any>;
+    yellow: {
+        name: 'yellow',
+        colors: {
+            timerBg: '194, 181, 107',
+            timerText: '194, 181, 107',
+            buttonBackground: '96, 89, 52',
+            buttonText: '255, 255, 255',
+            timerLightStrength: '0.05',
+        },
+        ariaLabel: 'Yellow theme for Pomodoro Timer',
+    },
+} satisfies Record<ThemeKey, Theme>;

@@ -25,12 +25,15 @@ withDefaults(
     transition: transform 0.2s ease-in-out;
 
     &:not(&.secondary-btn) {
-        color: var(--color-buttonText);
-        background: linear-gradient(
-            to right,
-            var(--color-logoGradientStart),
-            var(--color-logoGradientEnd)
-        );
+        color: rgb(var(--color-buttonText));
+        background-color: $background-color;
+        transition:
+            background-color 0.2s ease-in-out,
+            transform 0.2s ease-in-out;
+
+        &:hover {
+            background-color: $button-background-color;
+        }
     }
 
     &:hover {
@@ -43,7 +46,7 @@ withDefaults(
     &.secondary-btn {
         padding: spacing(1) spacing(2);
         border-radius: $border-radius-sm;
-        background-color: var(--color-accent);
+        background-color: $background-color;
         color: var(--color-text);
     }
 }
@@ -55,6 +58,8 @@ withDefaults(
 
 .icon-btn {
     display: flex;
+    width: rem(40px);
+    height: rem(40px);
     border-radius: 50%;
     padding: spacing(1);
     align-items: center;

@@ -2,10 +2,20 @@
 @use '../_functions.scss' as *;
 
 .timer-display {
+    flex: 1;
     display: flex;
     position: relative;
     padding: spacing(6);
-    min-height:rem(796px);
+    flex-direction: column;
+    margin-left: -$picker-width;
+
+    &__header {
+        opacity: 0.8;
+        display: flex;
+        gap: spacing(2);
+        align-items: center;
+        justify-content: center;
+    }
 
     &.large {
         align-items: center;
@@ -18,100 +28,63 @@
     }
 
     &__inner {
+        display: flex;
+        gap: spacing(3);
+        height: fit-content;
         padding: spacing(4);
+        align-items: center;
+        flex-direction: column;
+        border-radius: $border-radius-md;
 
-        &.minimal {
-            display: grid;
-            gap: spacing(2);
-            grid-template-columns: 1fr 1fr;
-            border-radius: $border-radius-lg;
-            background-color: rgba(0, 0, 0, 0.7);
-
-            .stat {
-                display: flex;
-                gap: spacing(2);
-            }
-        }
-
-        &.large {
+        .timer-mode {
             display: flex;
-            gap: spacing(2);
-            height: fit-content;
-            align-items: center;
-            flex-direction: column;
-            box-shadow: $shadow-md;
-            border-radius: $border-radius-md;
-            background-color: rgba(0, 0, 0, 0.4);
+            gap: $spacing-sm;
+            padding: $spacing-xs;
+            border-radius: $border-radius-lg;
+        }
 
-            .timer-mode {
-                display: flex;
-                gap: $spacing-sm;
-                padding: $spacing-xs;
-                border-radius: $border-radius-lg;
+        .mode-button {
+            outline: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 50rem;
+            background: $background-color;
+            padding: spacing(1) spacing(2);
+            color: rgb(var(--color-timerText));
+            transition: all $transition-normal;
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
             }
 
-            .mode-button {
-                outline: none;
-                cursor: pointer;
-                font-size: 1rem;
-                font-weight: 500;
-                border-radius: 50rem;
-                color: var(--color-timerText);
-                padding: spacing(1) spacing(2);
-                transition: all $transition-normal;
-                background: var(--color-background);
-                border: 2px solid var(--timer-color);
-
-                &:disabled {
-                    opacity: 0.5;
-                    cursor: not-allowed;
-                }
-
-                &:hover {
-                    color: $text-color;
-                }
-
-                &.active {
-                    background-color: var(--timer-color);
-                }
-            }
-
-            .timer-stats {
-                display: flex;
-                gap: $spacing-xl;
-                margin-top: 20rem;
-            }
-
-            .stat {
-                text-align: center;
-            }
-
-            .stat-value {
-                font-size: 2rem;
-                font-weight: 700;
-                color: var(--timer-color);
-            }
-
-            .stat-label {
-                font-size: 0.9rem;
-                letter-spacing: 1px;
-                color: $text-secondary;
-                text-transform: uppercase;
+            &:hover {
+                color: $text-color;
             }
         }
 
-    }
+        .timer-stats {
+            display: flex;
+            gap: $spacing-xl;
+            margin-top: 5rem;
+        }
 
-    &.timer-work {
-        --timer-color: #{var(--color-accent)};
-    }
+        .stat {
+            text-align: center;
+        }
 
-    &.timer-shortBreak {
-        --timer-color: #{$short-break-color};
-    }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
 
-    &.timer-longBreak {
-        --timer-color: #{$long-break-color};
+        .stat-label {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: $text-secondary;
+            text-transform: uppercase;
+        }
     }
 
     &__changer {

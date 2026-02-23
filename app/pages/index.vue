@@ -1,12 +1,9 @@
 <template>
     <div class="pomodoro-app">
-        <layout-header
-            @open-settings="settingsOpen = true"
-            @fullscreen="isFullscreen = !isFullscreen"
-        />
+        <layout-header />
 
         <main class="app-main">
-            <ui-video-background :is-fullscreen="isFullscreen" />
+            <PickList @open-settings="settingsOpen = true" />
             <TimerDisplay />
         </main>
 
@@ -26,7 +23,6 @@ import { useDocumentVisibility, usePageLeave } from '@vueuse/core';
 
 const timerStore = useTimerStore();
 const settingsOpen = ref(false);
-const isFullscreen = ref(false);
 
 // Dynamic page title with timer
 const pageTitle = computed(() => {
@@ -50,10 +46,9 @@ useHead({
 const visibility = useDocumentVisibility();
 const isLeavingPage = usePageLeave();
 
-// Keep timer accurate even when tab is not visible
 watch(visibility, (current) => {
     if (current === 'visible' && timerStore.isRunning) {
-        // Timer continues running in background
+        // Timer continues running in the background
         console.log('Tab is visible again');
     }
 });
@@ -61,16 +56,19 @@ watch(visibility, (current) => {
 
 <style scoped lang="scss">
 .pomodoro-app {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+    .app-main {
+        display: flex;
+    }
 }
 
 .app-footer {
+    font-size: 0.9rem;
     text-align: center;
     padding: $spacing-lg;
     color: $text-secondary;
-    font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {

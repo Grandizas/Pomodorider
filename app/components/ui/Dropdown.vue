@@ -58,7 +58,7 @@ onClickOutside(dropdownRef, () => {
             text-transform: capitalize;
 
             &:hover {
-                background-color: var(--color-accent);
+                background-color: $button-background-color;
             }
         }
     }

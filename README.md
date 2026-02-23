@@ -11,6 +11,8 @@ A cozy, themeable Pomodoro timer designed for focus, simplicity, and beautiful U
 Pomodorider is a distraction-free productivity timer based on the classic Pomodoro Technique.  
 It focuses on smooth UX, elegant visuals, and customizable session control — without unnecessary complexity.
 
+<img width="1904" height="840" alt="Screenshot 2026-02-23 at 19-47-10 20 40 - Pomodorider" src="https://github.com/user-attachments/assets/317e43e1-1172-4109-905c-73ddc10bdffd" />
+
 ---
 
 ## 🚀 Features

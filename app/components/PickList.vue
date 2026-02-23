@@ -7,6 +7,7 @@
         <ui-button
             variant="icon"
             title="Settings"
+            aria-label="Settings"
             @click="emit('open-settings')"
         >
             <Icon icon="heroicons:cog-6-tooth" width="20" />

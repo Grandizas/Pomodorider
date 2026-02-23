@@ -104,7 +104,6 @@
         border-radius: 50%;
 
         /* radial halo — strongest near orb edge, fades out */
-        background: rgb(var(--color-timerBg));
         background: radial-gradient(
             circle,
             transparent,

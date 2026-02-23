@@ -1,4 +1,5 @@
 @use '../_variables.scss' as *;
+@use '../_functions.scss' as *;
 
 .settings-panel {
     inset: 0;
@@ -7,6 +8,29 @@
     position: fixed;
     align-items: center;
     justify-content: center;
+
+    :deep(.dropdown__toggle) {
+        display: flex;
+        gap: spacing(1);
+        align-items: center;
+        justify-content: center;
+        padding: spacing(1) spacing(1) spacing(1) spacing(2);
+
+        svg path {
+            color: rgb(var(--color-text));
+        }
+    }
+
+    li {
+        cursor: pointer;
+        padding: spacing(2);
+        text-transform: capitalize;
+        border-radius: $border-radius-sm;
+
+        &:hover {
+            background-color: $background-color;
+        }
+    }
 }
 
 .settings-overlay {
@@ -111,6 +135,7 @@
     width: 100%;
     border: unset;
     outline: unset;
+    cursor: pointer;
     font-size: 1rem;
     padding: $spacing-md;
     box-shadow: $shadow-md;

@@ -12,6 +12,11 @@ export interface TimerSettings {
     autoStartWork: boolean;
     soundEnabled: boolean;
     soundVolume: number;
+    sounds: {
+        start: string;
+        pause: string;
+        end: string;
+    };
 }
 
 export const useTimerStore = defineStore('timer', {
@@ -36,6 +41,11 @@ export const useTimerStore = defineStore('timer', {
             autoStartWork: false,
             soundEnabled: true,
             soundVolume: 0.5,
+            sounds: {
+                start: '/sounds/start.mp3',
+                pause: '/sounds/pause.mp3',
+                end: '/sounds/end.mp3',
+            },
         } as TimerSettings,
 
         // Internal

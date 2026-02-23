@@ -120,6 +120,24 @@
                         >
                     </div>
 
+                    <p>Start sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ startSounds[0]?.label }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in startSounds"
+                                :key="index"
+                                class="dropdown-item"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
+
                     <div class="setting-item" v-if="localSettings.soundEnabled">
                         <ui-button @click="testSound">Test Sound</ui-button>
                     </div>
@@ -144,6 +162,7 @@
 import { ref, watch } from 'vue';
 import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
+import { startSounds, pauseSounds, finishSounds } from '~~/constants/sounds';
 
 const props = defineProps<{
     isOpen: boolean;

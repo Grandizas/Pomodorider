@@ -44,7 +44,7 @@ export const useTimerStore = defineStore('timer', {
             sounds: {
                 start: '/sounds/start.mp3',
                 pause: '/sounds/pause.mp3',
-                end: '/sounds/end.mp3',
+                end: '/sounds/alarm-1.mp3',
             },
         } as TimerSettings,
 
@@ -112,6 +112,8 @@ export const useTimerStore = defineStore('timer', {
                     src: [forceFile],
                     volume: this.settings.soundVolume,
                 });
+                tempSound.once('end', () => tempSound.unload());
+                tempSound.once('loaderror', () => tempSound.unload());
                 tempSound.play();
                 return;
             }

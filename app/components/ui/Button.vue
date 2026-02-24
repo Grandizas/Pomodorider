@@ -42,7 +42,7 @@ withDefaults(
     }
 
     &.secondary-btn {
-        color: var(--color-text);
+        color: var(--color-timerText);
         padding: spacing(1) spacing(2);
         border-radius: $border-radius-sm;
         background-color: $background-color;

@@ -1,35 +1,24 @@
 <template>
     <div ref="dropdownRef" class="dropdown">
-        <ui-button
+        <button
+            type="button"
             class="dropdown__toggle"
-            variant="secondary"
             @click="openDropdown = !openDropdown"
         >
-            <slot />
-        </ui-button>
-        <ul v-if="openDropdown" class="dropdown-menu">
-            <li
-                v-for="(item, index) in items"
-                :key="index"
-                class="dropdown-item"
-                @click="emit('selected', item)"
-            >
-                {{ item }}
-            </li>
+            <slot name="toggle" />
+        </button>
+        <ul
+            v-if="openDropdown"
+            class="dropdown-menu"
+            @click="openDropdown = false"
+        >
+            <slot name="menu" />
         </ul>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
-
-defineProps<{
-    items: string[];
-}>();
-
-const emit = defineEmits<{
-    (e: 'selected', item: string): void;
-}>();
 
 const openDropdown = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
@@ -41,6 +30,18 @@ onClickOutside(dropdownRef, () => {
 
 <style scoped lang="scss">
 .dropdown {
+    position: relative;
+    margin: spacing(2) 0;
+
+    &__toggle {
+        cursor: pointer;
+        color: rgb(var(--color-text));
+        background-color: transparent;
+        padding: spacing(1) spacing(2);
+        border-radius: $border-radius-sm;
+        border: 2px solid $button-background-color;
+    }
+
     &-menu {
         right: 0;
         z-index: 1000;
@@ -48,19 +49,10 @@ onClickOutside(dropdownRef, () => {
         list-style: none;
         position: absolute;
         width: max-content;
+        padding: spacing(1);
         max-width: rem(300px);
         border-radius: $border-radius-sm;
-        background-color: rgba(0, 0, 0, 0.4);
-
-        li {
-            cursor: pointer;
-            padding: spacing(2);
-            text-transform: capitalize;
-
-            &:hover {
-                background-color: $button-background-color;
-            }
-        }
+        background-color: $button-background-color;
     }
 }
 </style>

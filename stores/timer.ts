@@ -12,6 +12,11 @@ export interface TimerSettings {
     autoStartWork: boolean;
     soundEnabled: boolean;
     soundVolume: number;
+    sounds: {
+        start: string;
+        pause: string;
+        end: string;
+    };
 }
 
 export const useTimerStore = defineStore('timer', {
@@ -36,11 +41,23 @@ export const useTimerStore = defineStore('timer', {
             autoStartWork: false,
             soundEnabled: true,
             soundVolume: 0.5,
+            sounds: {
+                start: '/sounds/start.mp3',
+                pause: '/sounds/pause.mp3',
+                end: '/sounds/alarm-1.mp3',
+            },
         } as TimerSettings,
 
         // Internal
         intervalId: null as number | null,
-        notificationSound: null as Howl | null,
+        startSound: null as Howl | null,
+        pauseSound: null as Howl | null,
+        endSound: null as Howl | null,
+        soundSources: {
+            start: '',
+            pause: '',
+            end: '',
+        },
     }),
 
     getters: {
@@ -77,21 +94,46 @@ export const useTimerStore = defineStore('timer', {
             }
         },
 
-        initSound() {
-            if (!this.notificationSound) {
-                // Initialize notification sound using an external audio file
-                // Requires the '/sounds/beep.mp3' asset to be available
-                this.notificationSound = new Howl({
-                    src: ['/sounds/beep.mp3'],
+        playSound(type: 'start' | 'pause' | 'end', forceFile?: string) {
+            if (!this.settings.soundEnabled && !forceFile) return;
+
+            const soundFile = forceFile || this.settings.sounds[type];
+            if (!soundFile) return;
+
+            // Use a specific property based on type
+            const soundProp = `${type}Sound` as
+                | 'startSound'
+                | 'pauseSound'
+                | 'endSound';
+
+            // If we're forcing a file (preview), we might want to create a new one or reuse
+            if (forceFile) {
+                const tempSound = new Howl({
+                    src: [forceFile],
                     volume: this.settings.soundVolume,
                 });
+                tempSound.once('end', () => tempSound.unload());
+                tempSound.once('loaderror', () => tempSound.unload());
+                tempSound.play();
+                return;
             }
+
+            if (!this[soundProp] || this.soundSources[type] !== soundFile) {
+                this[soundProp] = new Howl({
+                    src: [soundFile],
+                    volume: this.settings.soundVolume,
+                });
+                this.soundSources[type] = soundFile;
+            }
+
+            this[soundProp]?.play();
         },
 
         start() {
             if (!this.isRunning) {
                 this.isRunning = true;
                 this.isPaused = false;
+                this.playSound('start');
                 this.tick();
             }
         },
@@ -99,6 +141,7 @@ export const useTimerStore = defineStore('timer', {
         pause() {
             this.isPaused = true;
             this.isRunning = false;
+            this.playSound('pause');
             if (this.intervalId !== null) {
                 clearInterval(this.intervalId);
                 this.intervalId = null;
@@ -109,6 +152,7 @@ export const useTimerStore = defineStore('timer', {
             if (this.isPaused) {
                 this.isPaused = false;
                 this.isRunning = true;
+                this.playSound('start');
                 this.tick();
             }
         },
@@ -119,7 +163,7 @@ export const useTimerStore = defineStore('timer', {
         },
 
         skip() {
-            this.completeSession();
+            this.completeSession(true);
         },
 
         tick() {
@@ -142,13 +186,12 @@ export const useTimerStore = defineStore('timer', {
             }, 1000);
         },
 
-        completeSession() {
+        completeSession(silent: boolean = false) {
             this.pause();
 
             // Play notification sound
-            if (this.settings.soundEnabled) {
-                this.initSound();
-                this.notificationSound?.play();
+            if (!silent) {
+                this.playSound('end');
             }
 
             // Update session count
@@ -181,11 +224,10 @@ export const useTimerStore = defineStore('timer', {
             this.settings = { ...this.settings, ...newSettings };
 
             // Update sound volume if changed
-            if (
-                newSettings.soundVolume !== undefined &&
-                this.notificationSound
-            ) {
-                this.notificationSound.volume(newSettings.soundVolume);
+            if (newSettings.soundVolume !== undefined) {
+                this.startSound?.volume(newSettings.soundVolume);
+                this.pauseSound?.volume(newSettings.soundVolume);
+                this.endSound?.volume(newSettings.soundVolume);
             }
 
             // Reset timer if duration changed

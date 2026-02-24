@@ -7,6 +7,7 @@ export type Theme = {
         buttonBackground: string;
         buttonText: string;
         timerLightStrength: string;
+        primaryButtonTextColor: string;
     };
     ariaLabel: string;
 };
@@ -20,6 +21,7 @@ export const themes = {
             buttonBackground: '100, 100, 100',
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
+            primaryButtonTextColor: '0, 0, 0',
         },
         ariaLabel: 'White theme for Pomodoro Timer',
     },
@@ -31,6 +33,7 @@ export const themes = {
             buttonBackground: '97, 58, 60',
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
+            primaryButtonTextColor: '255, 255, 255',
         },
         ariaLabel: 'Red theme for Pomodoro Timer',
     },
@@ -42,6 +45,7 @@ export const themes = {
             buttonBackground: '45, 78, 108',
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
+            primaryButtonTextColor: '255, 255, 255',
         },
         ariaLabel: 'Blue theme for Pomodoro Timer',
     },
@@ -53,6 +57,7 @@ export const themes = {
             buttonBackground: '96, 89, 52',
             buttonText: '255, 255, 255',
             timerLightStrength: '0.05',
+            primaryButtonTextColor: '255, 255, 255',
         },
         ariaLabel: 'Yellow theme for Pomodoro Timer',
     },

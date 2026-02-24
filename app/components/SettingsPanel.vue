@@ -4,24 +4,16 @@
         <div class="settings-content">
             <div class="settings-header">
                 <h2>Settings</h2>
-                <button class="close-button" @click="close">
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                    >
-                        <path
-                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                        />
-                    </svg>
-                </button>
+                <ui-button variant="icon" @click="close">
+                    <Icon icon="heroicons:x-mark" width="24" />
+                </ui-button>
             </div>
 
             <div class="settings-body">
                 <div class="setting-group">
                     <h3>Timer Durations (minutes)</h3>
 
+                    <!-- ----------------- [ Work duration ] ----------------- -->
                     <div class="setting-item">
                         <label for="work-duration">Work Duration</label>
                         <input
@@ -33,6 +25,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Short break ] ----------------- -->
                     <div class="setting-item">
                         <label for="short-break">Short Break</label>
                         <input
@@ -44,6 +37,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Long break ] ----------------- -->
                     <div class="setting-item">
                         <label for="long-break">Long Break</label>
                         <input
@@ -55,6 +49,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Long break interval ] ----------------- -->
                     <div class="setting-item">
                         <label for="long-break-interval"
                             >Long Break Interval</label
@@ -72,6 +67,7 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Auto start ] ----------------- -->
                 <div class="setting-group">
                     <h3>Auto Start</h3>
 
@@ -98,6 +94,7 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Sound ] ----------------- -->
                 <div class="setting-group">
                     <h3>Sound</h3>
 
@@ -129,23 +126,77 @@
                         >
                     </div>
 
-                    <div class="setting-item" v-if="localSettings.soundEnabled">
-                        <button class="test-sound-button" @click="testSound">
-                            Test Sound
-                        </button>
-                    </div>
+                    <!-- ----- * Start sounds * ----- -->
+                    <p>Start sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ getSoundLabel('start') }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in startSounds"
+                                :key="index"
+                                class="dropdown-item"
+                                @click="updateSound('start', item)"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
+
+                    <!-- ----- * Pause sounds * ----- -->
+                    <p>Pause sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ getSoundLabel('pause') }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in pauseSounds"
+                                :key="index"
+                                class="dropdown-item"
+                                @click="updateSound('pause', item)"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
+
+                    <!-- ----- * Finish sounds * ----- -->
+                    <p>Finish sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ getSoundLabel('end') }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in finishSounds"
+                                :key="index"
+                                class="dropdown-item"
+                                @click="updateSound('end', item)"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
                 </div>
 
                 <div class="setting-group">
                     <h3>Statistics</h3>
-                    <button class="reset-button" @click="resetStats">
-                        Reset Statistics
-                    </button>
+                    <ui-button @click="resetStats">Reset Statistics</ui-button>
                 </div>
             </div>
 
             <div class="settings-footer">
-                <button class="save-button" @click="save">Save Settings</button>
+                <button class="save-button" @click="save">
+                    <span>Save Settings</span>
+                </button>
             </div>
         </div>
     </div>
@@ -153,7 +204,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
+import { startSounds, pauseSounds, finishSounds } from '~~/constants/sounds';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -185,9 +238,25 @@ const save = () => {
     close();
 };
 
-const testSound = () => {
-    timerStore.initSound();
-    timerStore.notificationSound?.play();
+const getSoundLabel = (type: 'start' | 'pause' | 'end') => {
+    const value = localSettings.value.sounds[type];
+    const fileName = value.split('/').pop();
+
+    let options: any[] = [];
+    if (type === 'start') options = startSounds;
+    else if (type === 'pause') options = pauseSounds;
+    else if (type === 'end') options = finishSounds;
+
+    const option = options.find((o) => o.fileName === fileName);
+    return option ? option.label : 'Select sound';
+};
+
+const updateSound = (type: 'start' | 'pause' | 'end', item: any) => {
+    const path = `/sounds/${item.fileName}`;
+    localSettings.value.sounds[type] = path;
+
+    // Preview sound
+    timerStore.playSound(type, path);
 };
 
 const resetStats = () => {
@@ -198,168 +267,5 @@ const resetStats = () => {
 </script>
 
 <style scoped lang="scss">
-.settings-panel {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.settings-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
-}
-
-.settings-content {
-    position: relative;
-    background: $surface-color;
-    border-radius: $border-radius-lg;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: $shadow-lg;
-}
-
-.settings-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: $spacing-lg;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
-    h2 {
-        margin: 0;
-        font-size: 1.5rem;
-    }
-}
-
-.close-button {
-    background: transparent;
-    color: $text-color;
-    padding: $spacing-xs;
-    border-radius: $border-radius-sm;
-
-    &:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-}
-
-.settings-body {
-    padding: $spacing-lg;
-    overflow-y: auto;
-    flex: 1;
-}
-
-.setting-group {
-    margin-bottom: $spacing-xl;
-
-    h3 {
-        font-size: 1.1rem;
-        margin-bottom: $spacing-md;
-        color: $text-color;
-    }
-}
-
-.setting-item {
-    margin-bottom: $spacing-md;
-
-    label {
-        display: block;
-        margin-bottom: $spacing-xs;
-        color: $text-secondary;
-        font-size: 0.9rem;
-    }
-
-    input[type='number'],
-    input[type='range'] {
-        width: 100%;
-        padding: $spacing-sm;
-        background: $background-color;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: $border-radius-sm;
-        color: $text-color;
-        font-size: 1rem;
-    }
-
-    input[type='checkbox'] {
-        margin-right: $spacing-xs;
-        width: auto;
-    }
-
-    input[type='range'] {
-        padding: 0;
-    }
-}
-
-.setting-hint {
-    display: block;
-    font-size: 0.8rem;
-    color: $text-secondary;
-    margin-top: $spacing-xs;
-}
-
-.volume-value {
-    display: inline-block;
-    margin-left: $spacing-sm;
-    color: $text-color;
-    font-weight: 600;
-}
-
-.test-sound-button,
-.reset-button {
-    background: $surface-color;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: $text-color;
-    padding: $spacing-sm $spacing-md;
-    border-radius: $border-radius-sm;
-    font-size: 0.9rem;
-
-    &:hover {
-        background: color-mix(in srgb, $surface-color 95%, white);
-    }
-}
-
-.settings-footer {
-    padding: $spacing-lg;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.save-button {
-    width: 100%;
-    background: $primary-color;
-    color: white;
-    padding: $spacing-md;
-    border-radius: $border-radius-md;
-    font-size: 1rem;
-    font-weight: 700;
-    box-shadow: $shadow-md;
-
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: $shadow-lg;
-    }
-
-    &:active {
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .settings-content {
-        width: 95%;
-        max-height: 95vh;
-    }
-
-    .settings-header,
-    .settings-body,
-    .settings-footer {
-        padding: $spacing-md;
-    }
-}
+@use '@@/app/assets/styles/components/_settings-modal.scss';
 </style>

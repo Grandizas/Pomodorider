@@ -161,7 +161,7 @@ export const useTimerStore = defineStore('timer', {
         },
 
         skip() {
-            this.completeSession();
+            this.completeSession(true);
         },
 
         tick() {
@@ -184,11 +184,13 @@ export const useTimerStore = defineStore('timer', {
             }, 1000);
         },
 
-        completeSession() {
+        completeSession(silent: boolean = false) {
             this.pause();
 
             // Play notification sound
-            this.playSound('end');
+            if (!silent) {
+                this.playSound('end');
+            }
 
             // Update session count
             if (this.mode === 'work') {

@@ -56,12 +56,10 @@ watch(videoSrc, async () => {
 });
 
 function onLoaded() {
-    console.log('Loaded');
     isReady.value = true;
 }
 
 function onError() {
-    console.log('Error');
     isReady.value = false;
 }
 </script>

@@ -49,7 +49,6 @@ const isLeavingPage = usePageLeave();
 watch(visibility, (current) => {
     if (current === 'visible' && timerStore.isRunning) {
         // Timer continues running in the background
-        console.log('Tab is visible again');
     }
 });
 </script>

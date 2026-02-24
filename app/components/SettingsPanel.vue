@@ -13,6 +13,7 @@
                 <div class="setting-group">
                     <h3>Timer Durations (minutes)</h3>
 
+                    <!-- ----------------- [ Work duration ] ----------------- -->
                     <div class="setting-item">
                         <label for="work-duration">Work Duration</label>
                         <input
@@ -24,6 +25,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Short break ] ----------------- -->
                     <div class="setting-item">
                         <label for="short-break">Short Break</label>
                         <input
@@ -35,6 +37,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Long break ] ----------------- -->
                     <div class="setting-item">
                         <label for="long-break">Long Break</label>
                         <input
@@ -46,6 +49,7 @@
                         />
                     </div>
 
+                    <!-- ----------------- [ Long break interval ] ----------------- -->
                     <div class="setting-item">
                         <label for="long-break-interval"
                             >Long Break Interval</label
@@ -63,6 +67,7 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Auto start ] ----------------- -->
                 <div class="setting-group">
                     <h3>Auto Start</h3>
 
@@ -89,6 +94,7 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Sound ] ----------------- -->
                 <div class="setting-group">
                     <h3>Sound</h3>
 
@@ -120,10 +126,11 @@
                         >
                     </div>
 
+                    <!-- ----- * Start sounds * ----- -->
                     <p>Start sound</p>
                     <ui-dropdown>
                         <template #toggle>
-                            <span>{{ startSounds[0]?.label }}</span>
+                            <span>{{ getSoundLabel('start') }}</span>
                             <Icon icon="heroicons:chevron-down" width="16" />
                         </template>
 
@@ -132,15 +139,52 @@
                                 v-for="(item, index) in startSounds"
                                 :key="index"
                                 class="dropdown-item"
+                                @click="updateSound('start', item)"
                             >
                                 {{ item.label }}
                             </li>
                         </template>
                     </ui-dropdown>
 
-                    <div class="setting-item" v-if="localSettings.soundEnabled">
-                        <ui-button @click="testSound">Test Sound</ui-button>
-                    </div>
+                    <!-- ----- * Pause sounds * ----- -->
+                    <p>Pause sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ getSoundLabel('pause') }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in pauseSounds"
+                                :key="index"
+                                class="dropdown-item"
+                                @click="updateSound('pause', item)"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
+
+                    <!-- ----- * Finish sounds * ----- -->
+                    <p>Finish sound</p>
+                    <ui-dropdown>
+                        <template #toggle>
+                            <span>{{ getSoundLabel('end') }}</span>
+                            <Icon icon="heroicons:chevron-down" width="16" />
+                        </template>
+
+                        <template #menu>
+                            <li
+                                v-for="(item, index) in finishSounds"
+                                :key="index"
+                                class="dropdown-item"
+                                @click="updateSound('end', item)"
+                            >
+                                {{ item.label }}
+                            </li>
+                        </template>
+                    </ui-dropdown>
                 </div>
 
                 <div class="setting-group">
@@ -194,9 +238,25 @@ const save = () => {
     close();
 };
 
-const testSound = () => {
-    timerStore.initSound();
-    timerStore.notificationSound?.play();
+const getSoundLabel = (type: 'start' | 'pause' | 'end') => {
+    const value = localSettings.value.sounds[type];
+    const fileName = value.split('/').pop();
+
+    let options: any[] = [];
+    if (type === 'start') options = startSounds;
+    else if (type === 'pause') options = pauseSounds;
+    else if (type === 'end') options = finishSounds;
+
+    const option = options.find((o) => o.fileName === fileName);
+    return option ? option.label : 'Select sound';
+};
+
+const updateSound = (type: 'start' | 'pause' | 'end', item: any) => {
+    const path = `/sounds/${item.fileName}`;
+    localSettings.value.sounds[type] = path;
+
+    // Preview sound
+    timerStore.playSound(type, path);
 };
 
 const resetStats = () => {

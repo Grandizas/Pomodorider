@@ -21,6 +21,13 @@
         }
     }
 
+    p {
+        color: $text-secondary;
+        font-size: 0.9rem;
+        margin-bottom: spacing(1);
+        margin-top: spacing(2);
+    }
+
     li {
         cursor: pointer;
         padding: spacing(2);

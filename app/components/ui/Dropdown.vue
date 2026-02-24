@@ -7,7 +7,11 @@
         >
             <slot name="toggle" />
         </button>
-        <ul v-if="openDropdown" class="dropdown-menu">
+        <ul
+            v-if="openDropdown"
+            class="dropdown-menu"
+            @click="openDropdown = false"
+        >
             <slot name="menu" />
         </ul>
     </div>

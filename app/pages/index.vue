@@ -54,12 +54,18 @@ watch(visibility, (current) => {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/styles/breakpoints' as *;
+
 .pomodoro-app {
     display: flex;
     flex-direction: column;
 
     .app-main {
         display: flex;
+
+        @include tablet {
+            flex-direction: column;
+        }
     }
 }
 

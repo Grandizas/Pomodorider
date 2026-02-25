@@ -33,6 +33,8 @@ function selectTheme(theme: ThemeKey) {
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/styles/breakpoints' as *;
+
 .theme-list {
     margin: 0;
     padding: 0;
@@ -41,6 +43,10 @@ function selectTheme(theme: ThemeKey) {
     list-style: none;
     align-items: center;
     flex-direction: column;
+
+    @include tablet {
+        flex-direction: row;
+    }
 
     li {
         cursor: pointer;

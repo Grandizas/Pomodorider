@@ -1,5 +1,6 @@
 @use '../_variables.scss' as *;
 @use '../_functions.scss' as *;
+@use '../breakpoints' as *;
 
 .timer-display {
     flex: 1;
@@ -94,9 +95,15 @@
     }
 }
 
-@media (max-width: 768px) {
+@include tablet {
     .timer-display {
+        padding-right: 0;
         gap: $spacing-lg;
+
+        &__inner {
+            padding-top: 0;
+            padding-right: 0;
+        }
     }
 
     .timer-time {

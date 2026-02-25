@@ -24,6 +24,8 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
+@use '~/assets/styles/breakpoints' as *;
+
 .pick-list {
     z-index: 2;
     display: flex;
@@ -34,5 +36,11 @@ const emit = defineEmits<{
     width: $picker-width;
     flex-direction: column;
     justify-content: center;
+
+    @include tablet {
+        width: 100%;
+        flex-direction: row;
+        margin-top: spacing(6);
+    }
 }
 </style>

@@ -1,3 +1,5 @@
+https://pomodorider.vercel.app/
+
 # Pomodorider 🍅
 
 A cozy, themeable Pomodoro timer designed for focus, simplicity, and beautiful UI.

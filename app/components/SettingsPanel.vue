@@ -109,6 +109,7 @@
                         </label>
                     </div>
 
+                    <!-- ----- * Set volume * ----- -->
                     <div class="setting-item" v-if="localSettings.soundEnabled">
                         <label for="sound-volume">Volume</label>
                         <input

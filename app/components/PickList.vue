@@ -12,15 +12,37 @@
         >
             <Icon icon="heroicons:cog-6-tooth" width="20" />
         </ui-button>
+
+        <!-- ----------------- [ Mute ] ----------------- -->
+        <ui-button
+            variant="icon"
+            title="Mute"
+            aria-label="Mute"
+            @click="onMute()"
+        >
+            <Icon
+                :icon="`heroicons:${timerStore.settings.soundEnabled ? 'speaker-wave' : 'speaker-x-mark'}`"
+                width="20"
+            />
+        </ui-button>
     </aside>
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { useTimerStore } from '~~/stores/timer';
+
+const timerStore = useTimerStore();
 
 const emit = defineEmits<{
     (e: 'open-settings'): void;
 }>();
+
+function onMute() {
+    timerStore.updateSettings({
+        soundEnabled: !timerStore.settings.soundEnabled,
+    });
+}
 </script>
 
 <style scoped lang="scss">

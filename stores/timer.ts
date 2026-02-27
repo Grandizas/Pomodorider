@@ -138,10 +138,10 @@ export const useTimerStore = defineStore('timer', {
             }
         },
 
-        pause() {
+        pause(silent: boolean = false) {
             this.isPaused = true;
             this.isRunning = false;
-            this.playSound('pause');
+            if (!silent) this.playSound('pause');
             if (this.intervalId !== null) {
                 clearInterval(this.intervalId);
                 this.intervalId = null;
@@ -157,8 +157,8 @@ export const useTimerStore = defineStore('timer', {
             }
         },
 
-        reset() {
-            this.pause();
+        reset(silent: boolean = false) {
+            this.pause(silent);
             this.timeRemaining = this.getDuration(this.mode) * 60;
         },
 
@@ -237,7 +237,7 @@ export const useTimerStore = defineStore('timer', {
                 newSettings.longBreakDuration !== undefined
             ) {
                 if (!this.isRunning) {
-                    this.reset();
+                    this.reset(true);
                 }
             }
         },

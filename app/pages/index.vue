@@ -9,6 +9,7 @@
 
         <footer class="app-footer">
             <p>Built with Nuxt.js, Pinia, SCSS, VueUse, and Howler.js</p>
+            <NuxtLink to="/privacy">Privacy Policy</NuxtLink>
         </footer>
 
         <SettingsPanel :is-open="settingsOpen" @close="settingsOpen = false" />
@@ -74,6 +75,10 @@ watch(visibility, (current) => {
     text-align: center;
     padding: $spacing-lg;
     color: $text-secondary;
+
+    a {
+        color: $text-secondary;
+    }
 }
 
 @media (max-width: 768px) {

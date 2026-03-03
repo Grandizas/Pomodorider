@@ -1,0 +1,20 @@
+@use '../variables' as *;
+@use '../functions' as *;
+
+@for $i from 0 through $space-max {
+    .mb-#{$i} {
+        margin-bottom: rem($i * $space-step);
+    }
+
+    .mt-#{$i} {
+        margin-top: rem($i * $space-step);
+    }
+
+    .p-#{$i} {
+        padding: rem($i * $space-step);
+    }
+
+    .pt-#{$i} {
+        padding-top: rem($i * $space-step);
+    }
+}

@@ -21,7 +21,11 @@ export default defineNuxtConfig({
         },
     },
 
-    modules: ['@pinia/nuxt', '@vueuse/nuxt'],
+    modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/supabase'],
+
+    supabase: {
+        redirect: false,
+    },
 
     css: ['~/assets/styles/main.scss', '~/assets/styles/_fonts.scss'],
 

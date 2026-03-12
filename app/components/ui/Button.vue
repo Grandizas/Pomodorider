@@ -1,68 +1,33 @@
 <template>
-    <button :class="`${variant}-btn btn`" type="button">
+    <component :is="element" :class="`${variant}-btn btn`" v-bind="attrs">
         <slot />
-    </button>
+    </component>
 </template>
 
 <script setup lang="ts">
-withDefaults(
+const props = withDefaults(
     defineProps<{
+        to?: string;
         variant?: 'primary' | 'secondary' | 'icon';
     }>(),
     {
         variant: 'primary',
     },
 );
+
+const element = computed(() =>
+    props.to ? resolveComponent('NuxtLink') : 'button',
+);
+const attrs = computed(() => {
+    if (props.to) {
+        return { to: props.to };
+    }
+    return {
+        type: 'button',
+    };
+});
 </script>
 
 <style scoped lang="scss">
-@use '@@/app/assets/styles/_functions.scss' as *;
-
-.btn {
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-
-    &:not(&.secondary-btn) {
-        color: rgb(var(--color-buttonText));
-        transition:
-            background-color 0.2s ease-in-out,
-            transform 0.2s ease-in-out;
-
-        &:hover {
-            background-color: $button-background-color;
-        }
-    }
-
-    &:hover {
-        transform: translateY(-1px);
-    }
-    &:active {
-        transform: translateY(0);
-    }
-
-    &.secondary-btn {
-        color: var(--color-timerText);
-        padding: spacing(1) spacing(2);
-        border-radius: $border-radius-sm;
-        background-color: $background-color;
-    }
-}
-
-.primary-btn {
-    border-radius: 5rem;
-    padding: spacing(1) spacing(3);
-    background-color: $button-background-color;
-}
-
-.icon-btn {
-    display: flex;
-    width: rem(40px);
-    height: rem(40px);
-    border-radius: 50%;
-    padding: spacing(1);
-    align-items: center;
-    justify-content: center;
-    background-color: $background-color;
-}
+@use '@@/app/assets/styles/components/ui/_button.scss';
 </style>

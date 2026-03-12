@@ -15,7 +15,7 @@
                 </button>
             </template>
 
-            <NuxtLink v-else to="/login">Login</NuxtLink>
+            <ui-button v-else to="/login">Login</ui-button>
         </div>
     </header>
 </template>

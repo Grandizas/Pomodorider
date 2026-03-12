@@ -1,9 +1,6 @@
 <template>
     <div class="timer-display" :class="`timer-${timerStore.mode}`">
-        <div class="timer-display__header">
-            <ui-svg-logo width="32" height="32" />
-            <h1>Pomodorider</h1>
-        </div>
+        <ui-logo-text />
 
         <div class="timer-display__inner">
             <!-- ----------------- [ Switch buttons (Work, Break) ] ----------------- -->

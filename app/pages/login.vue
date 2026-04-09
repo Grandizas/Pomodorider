@@ -1,13 +1,8 @@
 <template>
-    <div class="auth-page">
-        <!-- ----------------- [ Background ] ----------------- -->
-        <ui-background />
-
+    <main class="auth-page">
         <div class="auth-card">
             <!-- ----------------- [ Left side ] ----------------- -->
             <div class="auth-card__left">
-                <div class="gradient-fade" />
-
                 <NuxtLink to="/" class="auth-logo">
                     <ui-logo-text />
                 </NuxtLink>
@@ -52,10 +47,10 @@
 
             <!-- ----------------- [ Right side ] ----------------- -->
             <div class="auth-card__right">
-                <img src="@@/public/images/hourglass.png" alt="Hourglass" />
+                <img src="@@/public/images/login_image.png" alt="Hourglass" />
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <script setup lang="ts">

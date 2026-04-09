@@ -46,7 +46,7 @@ function onMute() {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/breakpoints' as *;
+@use '@/assets/styles/abstracts/breakpoints' as *;
 
 .pick-list {
     z-index: 2;

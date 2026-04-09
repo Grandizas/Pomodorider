@@ -55,7 +55,7 @@ watch(visibility, (current) => {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/breakpoints' as *;
+@use '@/assets/styles/abstracts/breakpoints' as *;
 
 .pomodoro-app {
     display: flex;

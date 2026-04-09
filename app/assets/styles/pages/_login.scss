@@ -1,5 +1,5 @@
-@use '../variables' as *;
-@use '../functions' as *;
+@use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
 
 .auth-page {
     display: flex;
@@ -26,7 +26,7 @@
             position: relative;
             padding: spacing(4);
             background: rgba(255, 255, 255, 0.15);
-            border-radius: $border-radius-md 0 0 $border-radius-md;
+            border-radius: $radius-md 0 0 $radius-md;
 
             .gradient-fade {
                 right: 0;
@@ -49,14 +49,14 @@
             padding: spacing(4);
             justify-content: center;
             background-color: $background-color;
-            border-radius: 0 $border-radius-md $border-radius-md 0;
+            border-radius: 0 $radius-md $radius-md 0;
 
             img {
                 opacity: 0.4;
                 height: 100%;
                 transform: scale(1.2);
                 box-shadow: $shadow-box-small;
-                border-radius: $border-radius-md;
+                border-radius: $radius-md;
             }
         }
 

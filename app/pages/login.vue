@@ -8,29 +8,27 @@
                 </NuxtLink>
 
                 <form @submit.prevent="handleLogin">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input
-                            id="email"
-                            v-model="email"
-                            type="email"
-                            placeholder="you@example.com"
-                            required
-                            :disabled="loading"
-                        />
-                    </div>
+                    <ui-input
+                        id="login_email"
+                        v-model="email"
+                        label="Email"
+                        required
+                        type="email"
+                        :disabled="loading"
+                        placeholder="you@example.com"
+                        :leftIcon="['far', 'envelope']"
+                    />
 
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input
-                            id="password"
-                            v-model="password"
-                            type="password"
-                            placeholder="••••••••"
-                            required
-                            :disabled="loading"
-                        />
-                    </div>
+                    <ui-input
+                        id="login_password"
+                        v-model="password"
+                        label="Password"
+                        required
+                        type="password"
+                        :disabled="loading"
+                        placeholder="••••••••"
+                        :leftIcon="['far', 'shield-keyhole']"
+                    />
 
                     <p v-if="error" class="auth-error">{{ error }}</p>
 
@@ -47,6 +45,13 @@
 
             <!-- ----------------- [ Right side ] ----------------- -->
             <div class="auth-card__right">
+                <p class="auth-card__right--title">
+                    Stay <span>focused.</span>
+                </p>
+                <p class="auth-card__right--description">
+                    Track your time with precision. Build better habits every
+                    day.
+                </p>
                 <img src="@@/public/images/login_image.png" alt="Hourglass" />
             </div>
         </div>

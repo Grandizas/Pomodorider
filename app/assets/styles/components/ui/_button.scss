@@ -1,9 +1,11 @@
 @use '../../abstracts/variables' as *;
 @use '../../abstracts/functions' as *;
+@use '../../abstracts/typography' as *;
 
 .btn {
     border: none;
     cursor: pointer;
+    font-size: $text-md;
     text-decoration: none;
     transition: transform 0.2s ease-in-out;
 
@@ -35,7 +37,7 @@
 
 .primary-btn {
     border-radius: 5rem;
-    padding: spacing(1) spacing(3);
+    padding: spacing(1) spacing(2);
     background-color: $button-background-color;
 }
 

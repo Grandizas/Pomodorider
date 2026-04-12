@@ -15,6 +15,7 @@
                 </NuxtLink>
 
                 <form @submit.prevent="handleLogin">
+                    <!-- ----- * Email * ----- -->
                     <ui-input
                         id="login_email"
                         v-model="email"
@@ -26,6 +27,7 @@
                         :leftIcon="['far', 'envelope']"
                     />
 
+                    <!-- ----- * Password * ----- -->
                     <ui-input
                         id="login_password"
                         v-model="password"
@@ -39,6 +41,19 @@
 
                     <p v-if="error" class="auth-error">{{ error }}</p>
 
+                    <!-- ----- * Remember me, Forgot password * ----- -->
+                    <div class="checkbox-group">
+                        <ui-checkbox
+                            id="login_remember"
+                            text="Remember for 30 days"
+                        />
+
+                        <nuxt-link to="/" class="auth-link">
+                            Forgot password?
+                        </nuxt-link>
+                    </div>
+
+                    <!-- ----- * Submit * ----- -->
                     <ui-button
                         type="submit"
                         class="auth-btn"
@@ -57,11 +72,9 @@
             <!-- ----------------- [ Right side ] ----------------- -->
             <div class="auth-card__right">
                 <p class="auth-card__right--title">
-                    Stay <span>focused.</span>
-                </p>
-                <p class="auth-card__right--description">
-                    Track your time with precision. Build better habits every
-                    day.
+                    Stay <span>focused</span>. Track your time with
+                    <span>precision</span>. Build better
+                    <span>habits</span> every day.
                 </p>
                 <img src="@@/public/images/login_image.png" alt="Hourglass" />
             </div>

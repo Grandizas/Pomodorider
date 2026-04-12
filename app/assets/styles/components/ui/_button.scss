@@ -7,16 +7,17 @@
 .btn {
     border: none;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
     font-size: $text-md;
     text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
     transition: background-color 0.1s ease-in-out;
 
     &:not(&.secondary-btn) {
         color: map.get(map.get($colors, neutral), 100);
 
         &:hover {
-            background-color: map.get(map.get($colors, brand), 700);
+            background-color: map.get(map.get($colors, brand), 800);
         }
     }
 
@@ -31,7 +32,7 @@
 .primary-btn {
     border-radius: $radius-md;
     padding: spacing(1) spacing(2);
-    background-color: map.get(map.get($colors, brand), 600);
+    background-color: map.get(map.get($colors, brand), 700);
 }
 
 .icon-btn {

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faUser } from '@fortawesome/pro-solid-svg-icons';
 import {
     faEye,
+    faArrowLeft,
     faEnvelope,
     faShieldKeyhole,
 } from '@fortawesome/pro-regular-svg-icons';
@@ -13,7 +14,7 @@ import {
 // Prevent auto-adding CSS since Nuxt handles it
 config.autoAddCss = false;
 
-library.add(faUser, faEye, faEnvelope, faShieldKeyhole);
+library.add(faUser, faEye, faArrowLeft, faEnvelope, faShieldKeyhole);
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon);

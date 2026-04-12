@@ -107,7 +107,7 @@ const modelValue = defineModel<string>('modelValue', { required: true });
             color: map.get(map.get($colors, neutral), 100);
             box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
             border: 1px solid map.get(map.get($colors, neutral), 700);
-            padding: 8px $horizontal-padding 8px
+            padding: 10px $horizontal-padding 10px
                 rem(calc($icon-width + 12px * 1.6)); // 12 is padding
 
             &:focus {

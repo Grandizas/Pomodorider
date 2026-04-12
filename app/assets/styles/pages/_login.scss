@@ -33,6 +33,12 @@
             padding: spacing(4);
             background: rgb(255, 255, 255, 0.075);
             border-radius: $radius-md 0 0 $radius-md;
+
+            .button-back {
+                top: spacing(2);
+                left: spacing(2);
+                position: absolute;
+            }
         }
 
         &__right {
@@ -52,7 +58,7 @@
                 text-transform: uppercase;
 
                 span {
-                    color: map.get(map.get($colors, neutral), 500);
+                    color: map.get(map.get($colors, brand), 600);
                 }
             }
 
@@ -84,8 +90,8 @@
 
         form {
             display: flex;
+            gap: rem(20px);
             flex-direction: column;
-            gap: spacing(3);
         }
 
         .form-group {
@@ -123,28 +129,6 @@
             margin: 0;
             font-size: 0.875rem;
             color: #e53e3e;
-        }
-
-        .auth-btn {
-            border: unset;
-            font-size: 1rem;
-            cursor: pointer;
-            font-weight: 500;
-            border-radius: 6px;
-            font-family: inherit;
-            padding: 0.65rem 1rem;
-            margin-top: spacing(1);
-            background: $text-color;
-            color: $background-color;
-
-            &:hover:not(:disabled) {
-                opacity: 0.8;
-            }
-
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
         }
 
         .auth-switch {

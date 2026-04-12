@@ -3,6 +3,13 @@
         <div class="auth-card">
             <!-- ----------------- [ Left side ] ----------------- -->
             <div class="auth-card__left">
+                <ui-button to="/" variant="icon" class="button-back">
+                    <FontAwesomeIcon
+                        :icon="['far', 'arrow-left']"
+                        class="icon-small"
+                    />
+                </ui-button>
+
                 <NuxtLink to="/" class="auth-logo">
                     <ui-logo-text />
                 </NuxtLink>
@@ -32,9 +39,13 @@
 
                     <p v-if="error" class="auth-error">{{ error }}</p>
 
-                    <button type="submit" class="auth-btn" :disabled="loading">
+                    <ui-button
+                        type="submit"
+                        class="auth-btn"
+                        :disabled="loading"
+                    >
                         {{ loading ? 'Signing in…' : 'Sign in' }}
-                    </button>
+                    </ui-button>
                 </form>
 
                 <p class="auth-switch">
@@ -59,6 +70,8 @@
 </template>
 
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 definePageMeta({ layout: false });
 
 const supabase = useSupabaseClient();

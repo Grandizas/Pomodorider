@@ -2,6 +2,7 @@
 @use '../abstracts/variables' as *;
 @use '../abstracts/functions' as *;
 @use '../abstracts/mixins' as *;
+@use '../abstracts/breakpoints' as *;
 @use '../abstracts/typography' as *;
 @use 'sass:map';
 
@@ -143,6 +144,20 @@
 
             a {
                 font-weight: 500;
+            }
+        }
+    }
+}
+
+@include respond-to(tablet) {
+    .auth-page {
+        .auth-card {
+            & > div {
+                width: 100%;
+            }
+
+            & > .auth-card__right {
+                display: none;
             }
         }
     }

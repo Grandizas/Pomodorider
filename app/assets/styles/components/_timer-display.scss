@@ -87,7 +87,7 @@
     }
 }
 
-@include tablet {
+@include respond-to(tablet) {
     .timer-display {
         padding-right: 0;
         gap: $spacing-lg;

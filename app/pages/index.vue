@@ -63,10 +63,6 @@ watch(visibility, (current) => {
 
     .app-main {
         display: flex;
-
-        @include tablet {
-            flex-direction: column;
-        }
     }
 }
 
@@ -81,7 +77,11 @@ watch(visibility, (current) => {
     }
 }
 
-@media (max-width: 768px) {
+@include respond-to(tablet) {
+    .pomodoro-app .app-main {
+        flex-direction: column;
+    }
+
     .app-header {
         h1 {
             font-size: 2rem;

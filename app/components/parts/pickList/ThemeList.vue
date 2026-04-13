@@ -44,7 +44,7 @@ function selectTheme(theme: ThemeKey) {
     align-items: center;
     flex-direction: column;
 
-    @include tablet {
+    @include respond-to(tablet) {
         flex-direction: row;
     }
 

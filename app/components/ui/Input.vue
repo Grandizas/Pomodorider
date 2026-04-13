@@ -17,6 +17,7 @@
                 :type="type"
                 :required="required"
                 :disabled="disabled"
+                :minlength="minLength"
                 :placeholder="placeholder"
                 class="input"
             />
@@ -43,6 +44,7 @@ withDefaults(
         type?: string;
         label?: string;
         required?: boolean;
+        minLength?: number;
         disabled?: boolean;
         placeholder?: string;
         leftIcon?: [string, string]; // ['far', 'eye']
@@ -50,6 +52,7 @@ withDefaults(
     }>(),
     {
         type: 'text',
+        minLength: 0,
         placeholder: '',
     },
 );

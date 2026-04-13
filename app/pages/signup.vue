@@ -1,75 +1,101 @@
 <template>
     <div class="auth-page">
         <div class="auth-card">
-            <NuxtLink to="/" class="auth-logo">
-                <ui-svg-logo />
-            </NuxtLink>
+            <!-- ----------------- [ Left side ] ----------------- -->
+            <div class="auth-card__left">
+                <ui-button to="/login" variant="icon" class="button-back">
+                    <FontAwesomeIcon
+                        :icon="['far', 'arrow-left']"
+                        class="icon-small"
+                    />
+                </ui-button>
 
-            <h1>Create an account</h1>
+                <NuxtLink to="/" class="auth-logo">
+                    <ui-logo-text />
+                </NuxtLink>
 
-            <form v-if="!confirmed" @submit.prevent="handleSignup">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
+                <form v-if="!confirmed" @submit.prevent="handleSignup">
+                    <!-- ----- * Email * ----- -->
+                    <ui-input
+                        id="signup_email"
                         v-model="email"
+                        label="Email"
+                        required
                         type="email"
+                        :disabled="loading"
                         placeholder="you@example.com"
-                        required
-                        :disabled="loading"
+                        :leftIcon="['far', 'envelope']"
                     />
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                        id="password"
+                    <!-- ----- * Password * ----- -->
+                    <ui-input
+                        id="signup_password"
                         v-model="password"
-                        type="password"
-                        placeholder="••••••••"
+                        label="Password"
                         required
+                        type="password"
+                        :min-length="8"
                         :disabled="loading"
-                        minlength="8"
+                        placeholder="••••••••"
+                        :leftIcon="['far', 'shield-keyhole']"
                     />
-                </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm password</label>
-                    <input
-                        id="confirmPassword"
+                    <!-- ----- * Confirm password * ----- -->
+                    <ui-input
+                        id="signup_confirm_password"
                         v-model="confirmPassword"
-                        type="password"
-                        placeholder="••••••••"
+                        label="Confirm password"
                         required
+                        type="password"
+                        :min-length="8"
                         :disabled="loading"
+                        placeholder="••••••••"
+                        :leftIcon="['far', 'shield-keyhole']"
                     />
+
+                    <p v-if="error" class="auth-error">{{ error }}</p>
+
+                    <!-- ----- * Submit * ----- -->
+                    <ui-button
+                        type="submit"
+                        class="auth-btn"
+                        :disabled="loading"
+                    >
+                        {{ loading ? 'Creating account…' : 'Sign up' }}
+                    </ui-button>
+                </form>
+
+                <div v-else class="auth-success">
+                    <p>
+                        Check your email — we sent a confirmation link to
+                        <strong>{{ email }}</strong
+                        >.
+                    </p>
+                    <NuxtLink to="/login">Go to login</NuxtLink>
                 </div>
 
-                <p v-if="error" class="auth-error">{{ error }}</p>
-
-                <button type="submit" class="auth-btn" :disabled="loading">
-                    {{ loading ? 'Creating account…' : 'Sign up' }}
-                </button>
-            </form>
-
-            <div v-else class="auth-success">
-                <p>
-                    Check your email — we sent a confirmation link to
-                    <strong>{{ email }}</strong
-                    >.
+                <p v-if="!confirmed" class="auth-switch">
+                    Already have an account?
+                    <NuxtLink to="/login">Sign in</NuxtLink>
                 </p>
-                <NuxtLink to="/login">Go to login</NuxtLink>
             </div>
 
-            <p v-if="!confirmed" class="auth-switch">
-                Already have an account?
-                <NuxtLink to="/login">Sign in</NuxtLink>
-            </p>
+            <!-- ----------------- [ Right side ] ----------------- -->
+            <div class="auth-card__right">
+                <p class="auth-card__right--title">
+                    Stay <span>focused</span>. Track your time with
+                    <span>precision</span>. Build better
+                    <span>habits</span> every day.
+                </p>
+                <img src="@@/public/images/login_image.png" alt="Hourglass" />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 definePageMeta({ layout: false });
 
 const supabase = useSupabaseClient();

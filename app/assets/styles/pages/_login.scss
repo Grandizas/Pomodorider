@@ -147,6 +147,10 @@
             }
         }
     }
+
+    .auth-success p {
+        margin-bottom: spacing(1);
+    }
 }
 
 @include respond-to(tablet) {

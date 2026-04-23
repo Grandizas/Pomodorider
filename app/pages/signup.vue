@@ -25,6 +25,7 @@
                         :disabled="loading"
                         placeholder="you@example.com"
                         :leftIcon="['far', 'envelope']"
+                        :error="errors.email"
                     />
 
                     <!-- ----- * Password * ----- -->
@@ -38,6 +39,7 @@
                         :disabled="loading"
                         placeholder="••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
+                        :error="errors.password"
                     />
 
                     <!-- ----- * Confirm password * ----- -->
@@ -51,9 +53,8 @@
                         :disabled="loading"
                         placeholder="••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
+                        :error="errors.confirmPassword"
                     />
-
-                    <p v-if="error" class="auth-error">{{ error }}</p>
 
                     <!-- ----- * Submit * ----- -->
                     <ui-button
@@ -104,20 +105,23 @@ const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const loading = ref(false);
-const error = ref('');
 const confirmed = ref(false);
 
+const errors = reactive({ email: '', password: '', confirmPassword: '' });
+
 async function handleSignup() {
-    error.value = '';
+    errors.email = '';
+    errors.password = '';
+    errors.confirmPassword = '';
 
     if (password.value !== confirmPassword.value) {
-        error.value = 'Passwords do not match.';
+        errors.confirmPassword = 'Passwords do not match.';
         return;
     }
 
     loading.value = true;
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
         email: email.value,
         password: password.value,
     });
@@ -125,7 +129,18 @@ async function handleSignup() {
     loading.value = false;
 
     if (authError) {
-        error.value = authError.message;
+        const msg = authError.message.toLowerCase();
+        if (msg.includes('password')) {
+            errors.password = authError.message;
+        } else {
+            errors.email = authError.message;
+        }
+        return;
+    }
+
+    // Supabase silently "succeeds" for existing emails — identities will be empty
+    if (data.user && data.user.identities?.length === 0) {
+        errors.email = 'An account with this email already exists.';
         return;
     }
 

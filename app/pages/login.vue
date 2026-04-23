@@ -25,6 +25,7 @@
                         :disabled="loading"
                         placeholder="you@example.com"
                         :leftIcon="['far', 'envelope']"
+                        :error="errors.email"
                     />
 
                     <!-- ----- * Password * ----- -->
@@ -37,9 +38,8 @@
                         :disabled="loading"
                         placeholder="••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
+                        :error="errors.password"
                     />
-
-                    <p v-if="error" class="auth-error">{{ error }}</p>
 
                     <!-- ----- * Remember me, Forgot password * ----- -->
                     <div class="checkbox-group">
@@ -93,10 +93,12 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
-const error = ref('');
+
+const errors = reactive({ email: '', password: '' });
 
 async function handleLogin() {
-    error.value = '';
+    errors.email = '';
+    errors.password = '';
     loading.value = true;
 
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -107,7 +109,7 @@ async function handleLogin() {
     loading.value = false;
 
     if (authError) {
-        error.value = authError.message;
+        errors.password = authError.message;
         return;
     }
 

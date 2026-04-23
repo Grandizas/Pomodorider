@@ -20,6 +20,7 @@
                 :minlength="minLength"
                 :placeholder="placeholder"
                 class="input"
+                :class="{ 'input--error': error }"
             />
 
             <!-- ----- * Right icons * ----- -->
@@ -32,6 +33,8 @@
                 />
             </div>
         </div>
+
+        <p v-if="error" class="input-field__error">{{ error }}</p>
     </div>
 </template>
 
@@ -47,6 +50,7 @@ withDefaults(
         minLength?: number;
         disabled?: boolean;
         placeholder?: string;
+        error?: string;
         leftIcon?: [string, string]; // ['far', 'eye']
         rightIcons?: [string, string][]; // ['far', 'eye'][]
     }>(),
@@ -117,7 +121,20 @@ const modelValue = defineModel<string>('modelValue', { required: true });
                 outline: none;
                 border-color: map.get(map.get($colors, brand), 500);
             }
+
+            &--error {
+                border-color: map.get(map.get($colors, red), 500);
+
+                &:focus {
+                    border-color: map.get(map.get($colors, red), 500);
+                }
+            }
         }
+    }
+
+    &__error {
+        font-size: $text-sm;
+        color: map.get(map.get($colors, red), 400);
     }
 }
 </style>

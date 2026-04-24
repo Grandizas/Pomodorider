@@ -1,5 +1,5 @@
 <template>
-    <div class="auth-page">
+    <main class="auth-page">
         <div class="auth-card">
             <!-- ----------------- [ Left side ] ----------------- -->
             <div class="auth-card__left">
@@ -91,7 +91,7 @@
                 <img src="@@/public/images/login_image.png" alt="Hourglass" />
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <script setup lang="ts">

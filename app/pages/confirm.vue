@@ -11,21 +11,24 @@
 definePageMeta({ layout: false });
 
 const router = useRouter();
+const user = useSupabaseUser();
 const error = ref('');
 
-// @nuxtjs/supabase handles the token exchange automatically via the callback route.
-// This page is just shown briefly while the module redirects the user.
-// If something goes wrong, show the error from the hash.
+// Parse any error from the confirmation link hash.
 onMounted(() => {
     const hash = window.location.hash;
     if (hash.includes('error_description')) {
         const params = new URLSearchParams(hash.slice(1));
         error.value = params.get('error_description') ?? 'Something went wrong. Please try again.';
-    } else {
-        // Redirect home after a short delay; the supabase module will have set the session.
-        setTimeout(() => router.push('/'), 1500);
     }
 });
+
+// Redirect once @nuxtjs/supabase sets the session — no arbitrary delay needed.
+watch(user, (newUser) => {
+    if (newUser && !error.value) {
+        router.push('/');
+    }
+}, { immediate: true });
 </script>
 
 <style scoped lang="scss">

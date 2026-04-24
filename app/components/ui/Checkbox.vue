@@ -1,6 +1,6 @@
 <template>
     <label :for="id" class="checkbox-wrapper">
-        <input :id="id" type="checkbox" class="checkbox" />
+        <input v-model="modelValue" :id="id" type="checkbox" class="checkbox" />
         <span class="checkbox-label">{{ text }}</span>
     </label>
 </template>
@@ -10,6 +10,8 @@ defineProps<{
     id: string;
     text: string;
 }>();
+
+const modelValue = defineModel<boolean>('modelValue', { default: false });
 </script>
 
 <style scoped lang="scss">
@@ -46,6 +48,6 @@ input[type='checkbox'] {
 .checkbox-label {
     font-size: 14px;
     user-select: none;
-    color: 1.5px solid map.get(map.get($colors, neutral), 100);
+    color: map.get(map.get($colors, neutral), 100);
 }
 </style>

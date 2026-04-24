@@ -61,7 +61,7 @@ withDefaults(
     },
 );
 
-const modelValue = defineModel<string>('modelValue', { required: true });
+const modelValue = defineModel<string>({ required: true });
 </script>
 
 <style scoped lang="scss">

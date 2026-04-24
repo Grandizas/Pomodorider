@@ -18,7 +18,7 @@
         display: flex;
         max-width: rem(1010px);
         border-radius: $radius-md;
-        @include focus-ring(rgb(255, 255, 255, 0.15));
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 
         & > div {
             width: 50%;
@@ -85,7 +85,7 @@
 
         h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: $display-sm;
         }
 
         .auth-logo {
@@ -100,47 +100,16 @@
             flex-direction: column;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-
-            label {
-                font-size: 0.875rem;
-                font-weight: 500;
-            }
-
-            input {
-                padding: 0.6rem 0.75rem;
-                border: 1px solid currentColor;
-                border-radius: 6px;
-                background: transparent;
-                color: inherit;
-                font-size: 1rem;
-                font-family: inherit;
-                outline: none;
-
-                &:focus {
-                    outline: 2px solid currentColor;
-                    outline-offset: 1px;
-                }
-
-                &:disabled {
-                    opacity: 0.5;
-                }
-            }
-        }
-
         .auth-error {
             margin: 0;
-            font-size: 0.875rem;
-            color: #e53e3e;
+            font-size: $text-md;
+            color: map.get($colors, red, 500);
         }
 
         .auth-switch {
             margin: 0;
             text-align: center;
-            font-size: 0.875rem;
+            font-size: $text-md;
 
             a {
                 font-weight: 500;

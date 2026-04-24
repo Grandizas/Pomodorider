@@ -8,10 +8,12 @@
 const props = withDefaults(
     defineProps<{
         to?: string;
+        type?: 'button' | 'submit' | 'reset';
         variant?: 'primary' | 'secondary' | 'icon';
     }>(),
     {
         variant: 'primary',
+        type: 'button',
     },
 );
 
@@ -23,7 +25,7 @@ const attrs = computed(() => {
         return { to: props.to };
     }
     return {
-        type: 'button',
+        type: props.type,
     };
 });
 </script>

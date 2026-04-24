@@ -1,10 +1,12 @@
-$text-sm: 12px;
-$text-md: 14px;
-$text-lg: 16px;
-$text-xl: 18px;
+@use '../abstracts/functions' as *;
 
-$display-xs: 20px;
-$display-sm: 24px;
-$display-md: 30px;
-$display-lg: 44px;
-$display-xl: 48px;
+$text-sm: rem(12px);
+$text-md: rem(14px);
+$text-lg: rem(16px);
+$text-xl: rem(18px);
+
+$display-xs: rem(20px);
+$display-sm: rem(24px);
+$display-md: rem(30px);
+$display-lg: rem(44px);
+$display-xl: rem(48px);

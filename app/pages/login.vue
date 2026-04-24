@@ -48,7 +48,7 @@
                             text="Remember for 30 days"
                         />
 
-                        <nuxt-link to="/" class="auth-link">
+                        <nuxt-link to="/forgot-password" class="auth-link">
                             Forgot password?
                         </nuxt-link>
                     </div>

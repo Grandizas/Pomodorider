@@ -88,7 +88,7 @@
                     <span>precision</span>. Build better
                     <span>habits</span> every day.
                 </p>
-                <img src="@@/public/images/login_image.png" alt="Hourglass" />
+                <img src="@@/public/images/login_image_2.png" alt="Hourglass" />
             </div>
         </div>
     </main>

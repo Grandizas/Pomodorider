@@ -15,7 +15,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     background-color: #000000;
-    font-family: 'Helvetica Neue', sans-serif;
+    font-family: 'Geist', 'Helvetica Neue', sans-serif;
 }
 
 html {
@@ -37,7 +37,7 @@ h6 {
 
 a {
     text-decoration: none;
-    color: map.get(map.get($colors, brand), 600);
+    color: map.get(map.get($colors, neutral), 600);
 }
 
 // Utility classes

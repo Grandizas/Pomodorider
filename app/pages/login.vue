@@ -76,7 +76,7 @@
                     <span>precision</span>. Build better
                     <span>habits</span> every day.
                 </p>
-                <img src="@@/public/images/login_image.png" alt="Hourglass" />
+                <img src="@@/public/images/login_image_1.png" alt="Dark sphere under the white light" />
             </div>
         </div>
     </main>

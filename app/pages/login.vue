@@ -28,29 +28,26 @@
                         :error="errors.email"
                     />
 
-                    <!-- ----- * Password * ----- -->
-                    <ui-input
-                        id="login_password"
-                        v-model="password"
-                        label="Password"
-                        required
-                        type="password"
-                        :disabled="loading"
-                        placeholder="••••••••"
-                        :leftIcon="['far', 'shield-keyhole']"
-                        :error="errors.password"
-                    />
-
-                    <!-- ----- * Remember me, Forgot password * ----- -->
-                    <div class="checkbox-group">
-                        <ui-checkbox
-                            id="login_remember"
-                            text="Remember for 30 days"
+                    <div>
+                        <!-- ----- * Password * ----- -->
+                        <ui-input
+                            id="login_password"
+                            v-model="password"
+                            label="Password"
+                            required
+                            type="password"
+                            :disabled="loading"
+                            placeholder="••••••••••••••••"
+                            :leftIcon="['far', 'shield-keyhole']"
+                            :error="errors.password"
                         />
 
-                        <nuxt-link to="/forgot-password" class="auth-link">
-                            Forgot password?
-                        </nuxt-link>
+                        <!-- ----- * Remember me, Forgot password * ----- -->
+                        <div class="checkbox-group">
+                            <nuxt-link to="/forgot-password" class="auth-link">
+                                Forgot password?
+                            </nuxt-link>
+                        </div>
                     </div>
 
                     <!-- ----- * Submit * ----- -->

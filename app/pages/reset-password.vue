@@ -118,10 +118,15 @@ onMounted(() => {
         return;
     }
 
-    // We may have mounted before supabase-js stripped the hash.
-    // `type=recovery` is recovery-specific; `access_token` alone also appears in
-    // magic-link / OAuth flows, so don't treat that as a recovery signal.
-    if (hash.includes('type=recovery')) {
+    // Fallback if the plugin missed the arrival pattern. Two cases:
+    //   - Implicit flow: `type=recovery` in the hash.
+    //   - PKCE flow: `?code=…` in the query, before supabase-js strips it.
+    // We're on /reset-password, so a code here can only have come from a
+    // recovery email's redirect_to.
+    if (
+        hash.includes('type=recovery') ||
+        window.location.search.includes('code=')
+    ) {
         isRecovery.value = true;
         return;
     }

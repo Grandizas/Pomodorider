@@ -14,8 +14,9 @@ const router = useRouter();
 const user = useSupabaseUser();
 const error = ref('');
 
-// Parse any error from the confirmation link hash.
-onMounted(() => {
+// Parse the hash synchronously during setup so the immediate watch below
+// doesn't redirect a logged-in user before we read the link's error state.
+if (import.meta.client) {
     const hash = window.location.hash;
     if (hash.includes('error_description')) {
         const params = new URLSearchParams(hash.slice(1));
@@ -23,7 +24,7 @@ onMounted(() => {
             params.get('error_description') ??
             'Something went wrong. Please try again.';
     }
-});
+}
 
 // Redirect once @nuxtjs/supabase sets the session — no arbitrary delay needed.
 watch(
@@ -35,6 +36,16 @@ watch(
     },
     { immediate: true },
 );
+
+// Stuck-state fallback: if there's no session and no error after a few seconds,
+// the link is stale or invalid — send the user to login rather than spin forever.
+onMounted(() => {
+    setTimeout(() => {
+        if (!user.value && !error.value) {
+            router.push('/login');
+        }
+    }, 5000);
+});
 </script>
 
 <style scoped lang="scss">

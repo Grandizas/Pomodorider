@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, middleware: 'guest' });
 
 const supabase = useSupabaseClient();
 

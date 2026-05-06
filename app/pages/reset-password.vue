@@ -119,7 +119,9 @@ onMounted(() => {
     }
 
     // We may have mounted before supabase-js stripped the hash.
-    if (hash.includes('type=recovery') || hash.includes('access_token')) {
+    // `type=recovery` is recovery-specific; `access_token` alone also appears in
+    // magic-link / OAuth flows, so don't treat that as a recovery signal.
+    if (hash.includes('type=recovery')) {
         isRecovery.value = true;
         return;
     }
@@ -133,13 +135,14 @@ onMounted(() => {
     unsubscribe = () => data.subscription.unsubscribe();
 
     // If nothing has signalled a recovery shortly after mount, the user
-    // arrived here without a valid recovery link.
+    // arrived here without a valid recovery link. 3s gives the PKCE code-exchange
+    // round-trip enough headroom on slow networks before we declare the link dead.
     setTimeout(() => {
         if (!isRecovery.value) {
             linkError.value =
                 'This password reset link is invalid or has expired.';
         }
-    }, 500);
+    }, 3000);
 });
 
 onUnmounted(() => unsubscribe?.());

@@ -25,8 +25,9 @@
                         :disabled="loading"
                         placeholder="you@example.com"
                         :leftIcon="['far', 'envelope']"
-                        :error="errors.email"
                     />
+
+                    <p v-if="formError" class="auth-error">{{ formError }}</p>
 
                     <!-- ----- * Submit * ----- -->
                     <ui-button
@@ -72,7 +73,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, middleware: 'guest' });
 
 const supabase = useSupabaseClient();
 const config = useRuntimeConfig();
@@ -80,11 +81,10 @@ const config = useRuntimeConfig();
 const email = ref('');
 const loading = ref(false);
 const sent = ref(false);
-
-const errors = reactive({ email: '' });
+const formError = ref('');
 
 async function handleSubmit() {
-    errors.email = '';
+    formError.value = '';
     loading.value = true;
 
     const { error: authError } = await supabase.auth.resetPasswordForEmail(
@@ -95,7 +95,7 @@ async function handleSubmit() {
     loading.value = false;
 
     if (authError) {
-        errors.email = authError.message;
+        formError.value = authError.message;
         return;
     }
 

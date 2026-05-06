@@ -38,7 +38,7 @@
                         type="password"
                         :min-length="8"
                         :disabled="loading"
-                        placeholder="••••••••"
+                        placeholder="••••••••••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
                         :error="errors.confirmPassword"
                     />
@@ -71,7 +71,7 @@
                     <span>habits</span> every day.
                 </p>
                 <img
-                    src="@@/public/images/login_image_1.png"
+                    src="@@/public/images/login_image_1.webp"
                     alt="Dark sphere under the white light"
                 />
             </div>

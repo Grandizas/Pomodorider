@@ -37,7 +37,7 @@
                         type="password"
                         :min-length="8"
                         :disabled="loading"
-                        placeholder="••••••••"
+                        placeholder="••••••••••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
                         :error="errors.password"
                     />
@@ -51,7 +51,7 @@
                         type="password"
                         :min-length="8"
                         :disabled="loading"
-                        placeholder="••••••••"
+                        placeholder="••••••••••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
                         :error="errors.confirmPassword"
                     />
@@ -88,7 +88,10 @@
                     <span>precision</span>. Build better
                     <span>habits</span> every day.
                 </p>
-                <img src="@@/public/images/login_image_2.png" alt="Hourglass" />
+                <img
+                    src="@@/public/images/login_image_2.webp"
+                    alt="Dark sphere under the white light"
+                />
             </div>
         </div>
     </main>

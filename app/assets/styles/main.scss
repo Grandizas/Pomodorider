@@ -35,9 +35,13 @@ h6 {
     font-weight: 700;
 }
 
-a {
+a:not(.custom) {
     text-decoration: none;
     color: map.get(map.get($colors, neutral), 600);
+
+    &:hover {
+        color: map.get(map.get($colors, neutral), 500);
+    }
 }
 
 // Utility classes

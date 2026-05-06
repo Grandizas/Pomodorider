@@ -14,18 +14,33 @@
                     <ui-logo-text />
                 </NuxtLink>
 
-                <form v-if="!sent" @submit.prevent="handleSubmit">
-                    <!-- ----- * Email * ----- -->
+                <form @submit.prevent="handleSubmit">
+                    <!-- ----- * Password * ----- -->
                     <ui-input
-                        id="forgot_email"
-                        v-model="email"
-                        label="Email"
+                        id="reset_password"
+                        v-model="password"
+                        label="New password"
                         required
-                        type="email"
+                        type="password"
+                        :min-length="8"
                         :disabled="loading"
-                        placeholder="you@example.com"
-                        :leftIcon="['far', 'envelope']"
-                        :error="errors.email"
+                        placeholder="••••••••"
+                        :leftIcon="['far', 'shield-keyhole']"
+                        :error="errors.password"
+                    />
+
+                    <!-- ----- * Confirm password * ----- -->
+                    <ui-input
+                        id="reset_confirm_password"
+                        v-model="confirmPassword"
+                        label="Confirm new password"
+                        required
+                        type="password"
+                        :min-length="8"
+                        :disabled="loading"
+                        placeholder="••••••••"
+                        :leftIcon="['far', 'shield-keyhole']"
+                        :error="errors.confirmPassword"
                     />
 
                     <!-- ----- * Submit * ----- -->
@@ -34,23 +49,9 @@
                         class="auth-btn"
                         :disabled="loading"
                     >
-                        {{ loading ? 'Sending…' : 'Send reset link' }}
+                        {{ loading ? 'Updating…' : 'Update password' }}
                     </ui-button>
                 </form>
-
-                <div v-else class="auth-success">
-                    <p>
-                        If an account exists for
-                        <strong>{{ email }}</strong
-                        >, we've sent a password reset link.
-                    </p>
-                    <NuxtLink to="/login">Back to login</NuxtLink>
-                </div>
-
-                <p v-if="!sent" class="auth-switch">
-                    Remembered your password?
-                    <NuxtLink to="/login">Sign in</NuxtLink>
-                </p>
             </div>
 
             <!-- ----------------- [ Right side ] ----------------- -->
@@ -75,31 +76,37 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 definePageMeta({ layout: false });
 
 const supabase = useSupabaseClient();
-const config = useRuntimeConfig();
+const router = useRouter();
 
-const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
 const loading = ref(false);
-const sent = ref(false);
 
-const errors = reactive({ email: '' });
+const errors = reactive({ password: '', confirmPassword: '' });
 
 async function handleSubmit() {
-    errors.email = '';
+    errors.password = '';
+    errors.confirmPassword = '';
+
+    if (password.value !== confirmPassword.value) {
+        errors.confirmPassword = 'Passwords do not match.';
+        return;
+    }
+
     loading.value = true;
 
-    const { error: authError } = await supabase.auth.resetPasswordForEmail(
-        email.value,
-        { redirectTo: `${config.public.appUrl}/reset-password` },
-    );
+    const { error: authError } = await supabase.auth.updateUser({
+        password: password.value,
+    });
 
     loading.value = false;
 
     if (authError) {
-        errors.email = authError.message;
+        errors.password = authError.message;
         return;
     }
 
-    sent.value = true;
+    await router.push('/');
 }
 </script>
 

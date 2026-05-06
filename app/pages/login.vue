@@ -42,13 +42,15 @@
                             :error="errors.password"
                         />
 
-                        <!-- ----- * Remember me, Forgot password * ----- -->
+                        <!-- ----- * Forgot password * ----- -->
                         <div class="checkbox-group">
                             <nuxt-link to="/forgot-password" class="auth-link">
                                 Forgot password?
                             </nuxt-link>
                         </div>
                     </div>
+
+                    <p v-if="formError" class="auth-error">{{ formError }}</p>
 
                     <!-- ----- * Submit * ----- -->
                     <ui-button
@@ -90,12 +92,14 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
+const formError = ref('');
 
 const errors = reactive({ email: '', password: '' });
 
 async function handleLogin() {
     errors.email = '';
     errors.password = '';
+    formError.value = '';
     loading.value = true;
 
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -106,7 +110,7 @@ async function handleLogin() {
     loading.value = false;
 
     if (authError) {
-        errors.password = authError.message;
+        formError.value = authError.message;
         return;
     }
 

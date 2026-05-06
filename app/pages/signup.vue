@@ -138,7 +138,9 @@ async function handleSignup() {
         return;
     }
 
-    // Supabase silently "succeeds" for existing emails — identities will be empty
+    // Supabase silently "succeeds" for existing emails — identities will be empty.
+    // NOTE: this only works while "Confirm email" is enabled in Supabase Auth settings.
+    // If that's disabled, signUp() will sign the user into the existing account instead.
     if (data.user && data.user.identities?.length === 0) {
         errors.email = 'An account with this email already exists.';
         return;

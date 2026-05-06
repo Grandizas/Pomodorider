@@ -29,9 +29,12 @@ const loggingOut = ref(false);
 
 async function handleLogout() {
     loggingOut.value = true;
-    await supabase.auth.signOut();
-    await router.push('/login');
-    loggingOut.value = false;
+    try {
+        await supabase.auth.signOut();
+        await router.push('/');
+    } finally {
+        loggingOut.value = false;
+    }
 }
 </script>
 

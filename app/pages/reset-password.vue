@@ -14,7 +14,7 @@
                     <ui-logo-text />
                 </NuxtLink>
 
-                <form @submit.prevent="handleSubmit">
+                <form v-if="isRecovery" @submit.prevent="handleSubmit">
                     <!-- ----- * Password * ----- -->
                     <ui-input
                         id="reset_password"
@@ -43,6 +43,8 @@
                         :error="errors.confirmPassword"
                     />
 
+                    <p v-if="formError" class="auth-error">{{ formError }}</p>
+
                     <!-- ----- * Submit * ----- -->
                     <ui-button
                         type="submit"
@@ -52,6 +54,13 @@
                         {{ loading ? 'Updating…' : 'Update password' }}
                     </ui-button>
                 </form>
+
+                <div v-else-if="linkError" class="auth-success">
+                    <p>{{ linkError }}</p>
+                    <NuxtLink to="/forgot-password">
+                        Request a new reset link
+                    </NuxtLink>
+                </div>
             </div>
 
             <!-- ----------------- [ Right side ] ----------------- -->
@@ -75,18 +84,70 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 definePageMeta({ layout: false });
 
+const RECOVERY_FLAG = 'supabase:password_recovery';
+
 const supabase = useSupabaseClient();
 const router = useRouter();
 
 const password = ref('');
 const confirmPassword = ref('');
 const loading = ref(false);
+const isRecovery = ref(false);
+const linkError = ref('');
+const formError = ref('');
 
 const errors = reactive({ password: '', confirmPassword: '' });
+
+let unsubscribe: (() => void) | undefined;
+
+onMounted(() => {
+    const hash = window.location.hash;
+
+    // Surface error from the recovery link (expired, malformed, etc.).
+    if (hash.includes('error_description')) {
+        const params = new URLSearchParams(hash.slice(1));
+        linkError.value =
+            params.get('error_description')?.replace(/\+/g, ' ') ??
+            'This password reset link is invalid or has expired.';
+        return;
+    }
+
+    // Plugin set the flag when PASSWORD_RECOVERY fired.
+    if (sessionStorage.getItem(RECOVERY_FLAG) === '1') {
+        isRecovery.value = true;
+        return;
+    }
+
+    // We may have mounted before supabase-js stripped the hash.
+    if (hash.includes('type=recovery') || hash.includes('access_token')) {
+        isRecovery.value = true;
+        return;
+    }
+
+    // Subscribe in case PASSWORD_RECOVERY fires during this page's lifetime.
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY') {
+            isRecovery.value = true;
+        }
+    });
+    unsubscribe = () => data.subscription.unsubscribe();
+
+    // If nothing has signalled a recovery shortly after mount, the user
+    // arrived here without a valid recovery link.
+    setTimeout(() => {
+        if (!isRecovery.value) {
+            linkError.value =
+                'This password reset link is invalid or has expired.';
+        }
+    }, 500);
+});
+
+onUnmounted(() => unsubscribe?.());
 
 async function handleSubmit() {
     errors.password = '';
     errors.confirmPassword = '';
+    formError.value = '';
 
     if (password.value !== confirmPassword.value) {
         errors.confirmPassword = 'Passwords do not match.';
@@ -102,10 +163,11 @@ async function handleSubmit() {
     loading.value = false;
 
     if (authError) {
-        errors.password = authError.message;
+        formError.value = authError.message;
         return;
     }
 
+    sessionStorage.removeItem(RECOVERY_FLAG);
     await router.push('/');
 }
 </script>

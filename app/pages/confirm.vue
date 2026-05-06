@@ -19,25 +19,33 @@ onMounted(() => {
     const hash = window.location.hash;
     if (hash.includes('error_description')) {
         const params = new URLSearchParams(hash.slice(1));
-        error.value = params.get('error_description') ?? 'Something went wrong. Please try again.';
+        error.value =
+            params.get('error_description') ??
+            'Something went wrong. Please try again.';
     }
 });
 
 // Redirect once @nuxtjs/supabase sets the session — no arbitrary delay needed.
-watch(user, (newUser) => {
-    if (newUser && !error.value) {
-        router.push('/');
-    }
-}, { immediate: true });
+watch(
+    user,
+    (newUser) => {
+        if (newUser && !error.value) {
+            router.push('/');
+        }
+    },
+    { immediate: true },
+);
 </script>
 
 <style scoped lang="scss">
+@use 'sass:map';
+
 .auth-page {
-    min-height: 100vh;
     display: flex;
+    min-height: 100vh;
+    padding: spacing(2);
     align-items: center;
     justify-content: center;
-    padding: 1rem;
 }
 
 .auth-card {
@@ -45,7 +53,7 @@ watch(user, (newUser) => {
 }
 
 .auth-error {
-    color: #e53e3e;
-    font-size: 0.95rem;
+    color: map.get($colors, red, 500);
+    font-size: $text-md;
 }
 </style>

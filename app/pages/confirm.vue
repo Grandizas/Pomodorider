@@ -39,13 +39,19 @@ watch(
 
 // Stuck-state fallback: if there's no session and no error after a few seconds,
 // the link is stale or invalid — send the user to login rather than spin forever.
+let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+
 onMounted(() => {
-    setTimeout(() => {
+    fallbackTimer = setTimeout(() => {
         if (!user.value && !error.value) {
             router.push('/login');
         }
     }, 5000);
 });
+
+// Cancel the timer if the user navigates away first — otherwise it fires after
+// unmount and force-redirects them to /login from whatever page they moved to.
+onUnmounted(() => clearTimeout(fallbackTimer));
 </script>
 
 <style scoped lang="scss">

@@ -27,7 +27,14 @@ export default defineNuxtConfig({
         redirect: false,
     },
 
-    css: ['~/assets/styles/main.scss', '~/assets/styles/_fonts.scss'],
+    css: [
+        // Font Awesome's base styles. The fontawesome plugin sets
+        // `config.autoAddCss = false`, so we must include this ourselves or
+        // icons render unstyled / flash oversized (FOUC) before hydration.
+        '@fortawesome/fontawesome-svg-core/styles.css',
+        '~/assets/styles/main.scss',
+        '~/assets/styles/_fonts.scss',
+    ],
 
     vite: {
         css: {

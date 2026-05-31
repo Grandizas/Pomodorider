@@ -1,0 +1,76 @@
+@use '../../abstracts/colors' as *;
+@use '../../abstracts/variables' as *;
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/typography' as *;
+@use 'sass:map';
+
+.input-field {
+    display: flex;
+    gap: spacing(1);
+    flex-direction: column;
+
+    label {
+        font-weight: 500;
+        font-size: $text-md;
+        color: map.get(map.get($colors, neutral), 300);
+    }
+
+    &__input {
+        position: relative;
+
+        $horizontal-padding: 12px;
+        $vertical-padding: 8px;
+        $icon-width: 13px;
+
+        &--left-icon,
+        &--icons .icon {
+            width: rem($icon-width);
+            height: rem($icon-width);
+            color: map.get(map.get($colors, neutral), 400);
+        }
+
+        &--left-icon,
+        &--icons {
+            top: 50%;
+            position: absolute;
+            transform: translateY(-50%);
+        }
+
+        &--left-icon {
+            left: $horizontal-padding;
+        }
+
+        &--icons {
+            right: $horizontal-padding;
+        }
+
+        input {
+            width: 100%;
+            border-radius: $radius-md;
+            background-color: transparent;
+            color: map.get(map.get($colors, neutral), 100);
+            box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid map.get(map.get($colors, neutral), 700);
+            padding: 10px $horizontal-padding 10px
+                rem(calc($icon-width + 12px * 1.6)); // 12 is padding
+
+            &:focus {
+                outline: none;
+                border-color: map.get(map.get($colors, brand), 500);
+            }
+
+            &--error {
+                border-color: map.get(map.get($colors, red), 500);
+
+                &:focus {
+                    border-color: map.get(map.get($colors, red), 500);
+                }
+            }
+        }
+    }
+
+    &__error {
+        font-size: $text-sm;
+        color: map.get(map.get($colors, red), 400);
+    }
+}

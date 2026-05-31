@@ -120,12 +120,14 @@ onMounted(() => {
 
     // Fallback if the plugin missed the arrival pattern. Two cases:
     //   - Implicit flow: `type=recovery` in the hash.
-    //   - PKCE flow: `?code=…` in the query, before supabase-js strips it.
-    // We're on /reset-password, so a code here can only have come from a
-    // recovery email's redirect_to.
+    //   - PKCE flow: a `code` query param, before supabase-js strips it.
+    // Match the exact `code` param — a substring check (`includes('code=')`)
+    // would also match the `error_code` param on a PKCE error redirect and
+    // wrongly show the form for a dead link. We're on /reset-password, so a
+    // code here can only have come from a recovery email's redirect_to.
     if (
         hash.includes('type=recovery') ||
-        window.location.search.includes('code=')
+        new URLSearchParams(window.location.search).has('code')
     ) {
         isRecovery.value = true;
         return;

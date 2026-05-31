@@ -1,0 +1,2 @@
+# ignore specific file
+app/assets/styles/utils/_typography.scss

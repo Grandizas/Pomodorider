@@ -33,7 +33,7 @@ function selectTheme(theme: ThemeKey) {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/breakpoints' as *;
+@use '@/assets/styles/abstracts/breakpoints' as *;
 
 .theme-list {
     margin: 0;
@@ -44,7 +44,7 @@ function selectTheme(theme: ThemeKey) {
     align-items: center;
     flex-direction: column;
 
-    @include tablet {
+    @include respond-to(tablet) {
         flex-direction: row;
     }
 

@@ -1,6 +1,6 @@
-@use '../_variables.scss' as *;
-@use '../_functions.scss' as *;
-@use '../breakpoints' as *;
+@use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
+@use '../abstracts/breakpoints' as *;
 
 .timer-display {
     flex: 1;
@@ -9,14 +9,6 @@
     padding: spacing(6);
     flex-direction: column;
     margin-left: -$picker-width;
-
-    &__header {
-        opacity: 0.8;
-        display: flex;
-        gap: spacing(2);
-        align-items: center;
-        justify-content: center;
-    }
 
     &.large {
         align-items: center;
@@ -35,13 +27,13 @@
         padding: spacing(4);
         align-items: center;
         flex-direction: column;
-        border-radius: $border-radius-md;
+        border-radius: $radius-md;
 
         .timer-mode {
             display: flex;
             gap: $spacing-sm;
             padding: $spacing-xs;
-            border-radius: $border-radius-lg;
+            border-radius: $radius-lg;
         }
 
         .mode-button {
@@ -95,7 +87,7 @@
     }
 }
 
-@include tablet {
+@include respond-to(tablet) {
     .timer-display {
         padding-right: 0;
         gap: $spacing-lg;

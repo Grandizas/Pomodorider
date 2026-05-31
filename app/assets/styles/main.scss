@@ -1,4 +1,8 @@
+@use 'abstracts/colors' as *;
+@use 'abstracts/variables' as *;
 @use './utils/spaces';
+@use './utils/typography';
+@use 'sass:map';
 
 * {
     margin: 0;
@@ -11,7 +15,7 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     background-color: #000000;
-    font-family: 'Helvetica Neue', sans-serif;
+    font-family: 'Geist', 'Helvetica Neue', sans-serif;
 }
 
 html {
@@ -29,6 +33,15 @@ h4,
 h5,
 h6 {
     font-weight: 700;
+}
+
+a:not(.custom) {
+    text-decoration: none;
+    color: map.get(map.get($colors, neutral), 600);
+
+    &:hover {
+        color: map.get(map.get($colors, neutral), 500);
+    }
 }
 
 // Utility classes

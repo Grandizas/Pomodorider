@@ -1,0 +1,8 @@
+@awesome.me:registry=https://npm.fontawesome.com/
+@fortawesome:registry=https://npm.fontawesome.com/
+
+# Set FONT_AWESOME_TOKEN variable name under Environment Variables
+# For example:
+# Windows: windows search -> environment variables -> User variables -> [FONT_AWESOME_TOKEN | abcdef-ghijkl...]
+# As for now in use "pro-solid-svg-icons" as you can see in `plugins/fontawesome.ts`
+//npm.fontawesome.com/:_authToken=${FONT_AWESOME_TOKEN}

@@ -46,7 +46,7 @@ function onMute() {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/breakpoints' as *;
+@use '@/assets/styles/abstracts/breakpoints' as *;
 
 .pick-list {
     z-index: 2;
@@ -59,7 +59,7 @@ function onMute() {
     flex-direction: column;
     justify-content: center;
 
-    @include tablet {
+    @include respond-to(tablet) {
         width: 100%;
         flex-direction: row;
         margin-top: spacing(6);

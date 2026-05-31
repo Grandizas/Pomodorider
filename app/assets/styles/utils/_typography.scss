@@ -1,0 +1,30 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/functions' as *;
+
+$font-title: rem(32px);
+$font-heading: rem(24px);
+$font-subheading: rem(18px);
+$font-body: 1rem;
+$font-sm: rem(14px);
+$font-xs: rem(12px);
+
+
+// Font sizes
+.text-title      { font-size: $font-title;      font-weight: 700; line-height: 1.2; }
+.text-heading    { font-size: $font-heading;    font-weight: 700; line-height: 1.3; }
+.text-subheading { font-size: $font-subheading; font-weight: 700; line-height: 1.4; }
+.text-body       { font-size: $font-body;       font-weight: 400; line-height: 1.5; }
+.text-sm         { font-size: $font-sm;                           line-height: 1.5; }
+.text-xs         { font-size: $font-xs;                           line-height: 1.5; }
+
+// Colors
+.text-secondary { color: $text-secondary; }
+
+// Font weights (Helvetica Neue supports 100–900)
+.font-thin   { font-weight: 100; }
+.font-light  { font-weight: 200; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-bold   { font-weight: 700; }
+.font-heavy  { font-weight: 800; }
+.font-black  { font-weight: 900; }

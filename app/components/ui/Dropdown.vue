@@ -38,7 +38,7 @@ onClickOutside(dropdownRef, () => {
         color: rgb(var(--color-text));
         background-color: transparent;
         padding: spacing(1) spacing(2);
-        border-radius: $border-radius-sm;
+        border-radius: $radius-sm;
         border: 2px solid $button-background-color;
     }
 
@@ -51,7 +51,7 @@ onClickOutside(dropdownRef, () => {
         width: max-content;
         padding: spacing(1);
         max-width: rem(300px);
-        border-radius: $border-radius-sm;
+        border-radius: $radius-sm;
         background-color: $button-background-color;
     }
 }

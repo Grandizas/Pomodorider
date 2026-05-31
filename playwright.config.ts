@@ -10,10 +10,6 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
     testDir: './tests',
-    // Warm the Vite dev server (one-time optimizeDeps) before tests interact
-    // with it — otherwise the first navigation's reload aborts client modules
-    // and pages never hydrate. See tests/global-setup.ts.
-    globalSetup: './tests/global-setup.ts',
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
@@ -37,13 +33,22 @@ export default defineConfig({
     ],
 
     webServer: {
-        command: 'npm run dev',
+        // Run E2E against a production build, NOT `nuxt dev`. Vite's dev server
+        // lazily pre-bundles dependencies and pushes a full-page reload when it
+        // does, which aborts in-flight client modules mid-test and breaks
+        // hydration — non-deterministically, and worse on CI's cold cache. The
+        // production build has no optimizeDeps step, so there are no surprise
+        // reloads: tests are deterministic locally and in CI.
+        command: 'npm run build && npm run preview',
         url: 'http://localhost:3001',
-        // Do NOT reuse an existing server — a `nuxt dev` you started by hand
-        // is loaded with prod .env, which would point tests at your real DB.
-        // Stop your dev server before running `npm test`.
+        // `nuxt preview` runs the Nitro server, which honours PORT/NITRO_PORT
+        // (it would default to 3000 otherwise). baseURL above expects 3001.
+        env: { PORT: '3001', NITRO_PORT: '3001' },
+        // Do NOT reuse an existing server — a server you started by hand may be
+        // loaded with prod env, which would point tests at your real DB.
         reuseExistingServer: false,
-        timeout: 120_000,
+        // Generous: a cold `nuxt build` + server start can take a while on CI.
+        timeout: 180_000,
         stdout: 'pipe',
         stderr: 'pipe',
     },

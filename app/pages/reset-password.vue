@@ -24,7 +24,7 @@
                         type="password"
                         :min-length="8"
                         :disabled="loading"
-                        placeholder="••••••••"
+                        placeholder="••••••••••••••••"
                         :leftIcon="['far', 'shield-keyhole']"
                         :error="errors.password"
                     />
@@ -139,7 +139,7 @@ onMounted(() => {
     });
     unsubscribe = () => data.subscription.unsubscribe();
 
-    // If nothing has signalled a recovery shortly after mount, the user
+    // If nothing has signaled a recovery shortly after mount, the user
     // arrived here without a valid recovery link. 3s gives the PKCE code-exchange
     // round-trip enough headroom on slow networks before we declare the link dead.
     setTimeout(() => {

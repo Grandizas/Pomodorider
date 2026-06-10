@@ -102,6 +102,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 definePageMeta({ layout: false, middleware: 'guest' });
 
+const config = useRuntimeConfig();
 const supabase = useSupabaseClient();
 
 const email = ref('');
@@ -127,6 +128,9 @@ async function handleSignup() {
     const { data, error: authError } = await supabase.auth.signUp({
         email: email.value,
         password: password.value,
+        options: {
+            emailRedirectTo: `${config.public.appUrl}/signup`,
+        },
     });
 
     loading.value = false;

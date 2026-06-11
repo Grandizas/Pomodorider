@@ -4,7 +4,7 @@
             <ui-button variant="icon" class="mb-4" @click="$router.back()">
                 <Icon icon="heroicons:chevron-left" width="18" />
             </ui-button>
-            <NuxtPage />
+            <slot />
         </div>
     </main>
 </template>

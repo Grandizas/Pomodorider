@@ -21,7 +21,7 @@ export default defineNuxtConfig({
         },
     },
 
-    modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/supabase'],
+    modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/supabase', '@vercel/analytics'],
 
     supabase: {
         redirect: false,

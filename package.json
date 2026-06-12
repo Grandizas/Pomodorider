@@ -8,6 +8,7 @@
         "build": "nuxt build",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
+        "typecheck": "nuxt typecheck",
         "postinstall": "nuxt prepare",
         "test": "dotenv -e .env.test -- playwright test",
         "test:ui": "dotenv -e .env.test -- playwright test --ui"
@@ -38,6 +39,7 @@
         "@types/howler": "^2.2.12",
         "@types/node": "^25.2.1",
         "dotenv-cli": "^11.0.0",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "vue-tsc": "^3.3.4"
     }
 }

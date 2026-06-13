@@ -31,6 +31,12 @@ export const useTimerStore = defineStore('timer', {
         sessionsCompleted: 0,
         totalWorkTime: 0, // in seconds
 
+        // Monotonic counter of *genuinely finished* work sessions (timer ran to
+        // 0 — skips don't count). The streak layer watches this and records one
+        // timer_sessions row per increment. Never reset, so a watcher can rely
+        // on it only ever going up.
+        completedWorkSessions: 0,
+
         // Settings
         settings: {
             workDuration: 25,
@@ -166,6 +172,10 @@ export const useTimerStore = defineStore('timer', {
             this.completeSession(true);
         },
 
+        // Note: `completeSession`'s parameter is named `skipped` — it's true only
+        // when reached via skip(), so it doubles as "don't play the end sound"
+        // and "don't count toward the streak".
+
         tick() {
             if (this.intervalId !== null) {
                 clearInterval(this.intervalId);
@@ -186,17 +196,21 @@ export const useTimerStore = defineStore('timer', {
             }, 1000);
         },
 
-        completeSession(silent: boolean = false) {
+        completeSession(skipped: boolean = false) {
             this.pause();
 
-            // Play notification sound
-            if (!silent) {
+            // Play notification sound (not when the user skipped the session)
+            if (!skipped) {
                 this.playSound('end');
             }
 
-            // Update session count
+            // Update session counts
             if (this.mode === 'work') {
                 this.sessionsCompleted++;
+                // Only a session the user actually finished feeds the streak.
+                if (!skipped) {
+                    this.completedWorkSessions++;
+                }
             }
 
             // Switch to next mode

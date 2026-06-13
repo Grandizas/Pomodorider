@@ -5,6 +5,7 @@
              * If authenticated
             -->
             <template v-if="user">
+                <parts-streak-badge />
                 <span class="user-email">{{ user.email }}</span>
                 <ui-button
                     class="logout-btn"

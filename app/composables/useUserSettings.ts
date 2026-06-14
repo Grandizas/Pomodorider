@@ -92,6 +92,7 @@ export function useUserSettings() {
             longBreakInterval: num(t.longBreakInterval, d.longBreakInterval),
             autoStartBreaks: bool(t.autoStartBreaks, d.autoStartBreaks),
             autoStartWork: bool(t.autoStartWork, d.autoStartWork),
+            keepAwake: bool(t.keepAwake, d.keepAwake),
             soundEnabled: bool(t.soundEnabled, d.soundEnabled),
             soundVolume: num(t.soundVolume, d.soundVolume),
             sounds: {

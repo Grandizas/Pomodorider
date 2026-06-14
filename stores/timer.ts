@@ -10,6 +10,7 @@ export interface TimerSettings {
     longBreakInterval: number; // After how many work sessions
     autoStartBreaks: boolean;
     autoStartWork: boolean;
+    keepAwake: boolean; // hold a screen wake lock while the timer runs
     soundEnabled: boolean;
     soundVolume: number;
     sounds: {
@@ -45,6 +46,7 @@ export const useTimerStore = defineStore('timer', {
             longBreakInterval: 4,
             autoStartBreaks: false,
             autoStartWork: false,
+            keepAwake: false,
             soundEnabled: true,
             soundVolume: 0.5,
             sounds: {

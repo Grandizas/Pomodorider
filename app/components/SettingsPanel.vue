@@ -94,6 +94,26 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Display ] ----------------- -->
+                <div class="setting-group">
+                    <h3>Display</h3>
+
+                    <div class="setting-item">
+                        <label for="keep-awake">
+                            <input
+                                id="keep-awake"
+                                type="checkbox"
+                                v-model="localSettings.keepAwake"
+                            />
+                            Keep screen awake while timer runs
+                        </label>
+                        <span class="setting-hint"
+                            >Stops the screen from sleeping while a session is
+                            running. Only works while this tab is open.</span
+                        >
+                    </div>
+                </div>
+
                 <!-- ----------------- [ Sound ] ----------------- -->
                 <div class="setting-group">
                     <h3>Sound</h3>

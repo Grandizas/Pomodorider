@@ -9,7 +9,10 @@
                 timerStore.getDuration(timerStore.mode) * 60
             "
         >
-            <Icon icon="ri:reset-left-fill" width="24" />
+            <FontAwesomeIcon
+                :icon="['far', 'arrow-rotate-left']"
+                class="icon-regular"
+            />
         </button>
 
         <!-- ----------------- [ Play ] ----------------- -->
@@ -18,7 +21,7 @@
             class="control-button start"
             @click="timerStore.start()"
         >
-            <Icon icon="mdi:play" width="24" />
+            <FontAwesomeIcon :icon="['far', 'play']" class="icon-regular" />
         </button>
 
         <!-- ----------------- [ Pause ] ----------------- -->
@@ -27,7 +30,7 @@
             class="control-button pause"
             @click="timerStore.pause()"
         >
-            <Icon icon="heroicons:pause-solid" width="24" />
+            <FontAwesomeIcon :icon="['far', 'pause']" class="icon-regular" />
         </button>
 
         <!-- ----------------- [ Resume / Play ] ----------------- -->
@@ -36,19 +39,19 @@
             class="control-button resume"
             @click="timerStore.resume()"
         >
-            <Icon icon="mdi:play" width="24" />
+            <FontAwesomeIcon :icon="['far', 'play']" class="icon-regular" />
         </button>
 
         <!-- ----------------- [ Skip ] ----------------- -->
         <button class="control-button secondary" @click="timerStore.skip()">
-            <Icon icon="ix:skip-filled" width="24" />
+            <FontAwesomeIcon :icon="['far', 'forward']" class="icon-regular" />
         </button>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const timerStore = useTimerStore();
 </script>

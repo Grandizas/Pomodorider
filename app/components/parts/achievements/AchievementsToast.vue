@@ -2,7 +2,10 @@
     <Transition name="ach-toast">
         <div v-if="current" class="ach-toast" role="status" aria-live="polite">
             <span class="ach-toast__icon">
-                <Icon :icon="current.icon" width="28" />
+                <FontAwesomeIcon
+                    :icon="['fas', current.icon]"
+                    class="icon-regular"
+                />
             </span>
             <div class="ach-toast__body">
                 <p class="ach-toast__label">Achievement unlocked</p>
@@ -14,9 +17,12 @@
 
 <script setup lang="ts">
 import { ref, watch, onBeforeUnmount } from 'vue';
-import { Icon } from '@iconify/vue';
 import { useAchievementsStore } from '~~/stores/achievements';
-import { ACHIEVEMENT_MAP, type AchievementDef } from '~~/constants/achievements';
+import {
+    ACHIEVEMENT_MAP,
+    type AchievementDef,
+} from '~~/constants/achievements';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const DISPLAY_MS = 5000;
 

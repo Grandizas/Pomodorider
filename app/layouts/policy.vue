@@ -2,7 +2,10 @@
     <main class="policy-layout">
         <div class="policy-layout__content">
             <ui-button variant="icon" class="mb-4" @click="$router.back()">
-                <Icon icon="heroicons:chevron-left" width="18" />
+                <FontAwesomeIcon
+                    :icon="['far', 'chevron-left']"
+                    class="icon-regular"
+                />
             </ui-button>
             <slot />
         </div>
@@ -10,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 
 <style scoped lang="scss">

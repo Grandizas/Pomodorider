@@ -129,7 +129,7 @@ async function handleSignup() {
         email: email.value,
         password: password.value,
         options: {
-            emailRedirectTo: `${config.public.appUrl}/signup`,
+            emailRedirectTo: `${config.public.appUrl}/confirm`,
         },
     });
 

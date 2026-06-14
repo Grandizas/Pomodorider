@@ -14,12 +14,17 @@ const router = useRouter();
 const user = useSupabaseUser();
 const error = ref('');
 
-// Parse the hash synchronously during setup so the immediate watch below
+// Parse any error synchronously during setup so the immediate watch below
 // doesn't redirect a logged-in user before we read the link's error state.
+// Email confirmation links return errors in the hash; OAuth (Google) returns
+// them as query params on the callback URL — check both.
 if (import.meta.client) {
     const hash = window.location.hash;
-    if (hash.includes('error_description')) {
-        const params = new URLSearchParams(hash.slice(1));
+    const query = window.location.search;
+    if (hash.includes('error_description') || query.includes('error')) {
+        const params = new URLSearchParams(
+            hash.includes('error_description') ? hash.slice(1) : query.slice(1),
+        );
         error.value =
             params.get('error_description') ??
             'Something went wrong. Please try again.';

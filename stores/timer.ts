@@ -66,6 +66,9 @@ export const useTimerStore = defineStore('timer', {
             pause: '',
             end: '',
         },
+        // Timestamp of the last control sound, used to throttle rapid
+        // play/pause clicks so a fast burst doesn't fire a sound per click.
+        lastSoundAt: 0,
     }),
 
     getters: {
@@ -126,6 +129,15 @@ export const useTimerStore = defineStore('timer', {
                 return;
             }
 
+            // Throttle the rapidly-clickable control sounds (start/pause) so a
+            // fast click burst doesn't fire one sound per click. The end alarm
+            // is exempt — it only ever plays once on completion.
+            if (type !== 'end') {
+                const now = Date.now();
+                if (now - this.lastSoundAt < 150) return;
+                this.lastSoundAt = now;
+            }
+
             if (!this[soundProp] || this.soundSources[type] !== soundFile) {
                 this[soundProp] = new Howl({
                     src: [soundFile],
@@ -134,6 +146,9 @@ export const useTimerStore = defineStore('timer', {
                 this.soundSources[type] = soundFile;
             }
 
+            // Stop any in-flight playback of this sound before replaying, so
+            // rapid play/pause toggling can't stack overlapping instances.
+            this[soundProp]?.stop();
             this[soundProp]?.play();
         },
 

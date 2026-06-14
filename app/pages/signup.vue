@@ -75,6 +75,8 @@
                     <NuxtLink to="/login">Go to login</NuxtLink>
                 </div>
 
+                <ui-google-button v-if="!confirmed" />
+
                 <p v-if="!confirmed" class="auth-switch">
                     Already have an account?
                     <NuxtLink to="/login">Sign in</NuxtLink>

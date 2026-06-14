@@ -62,6 +62,8 @@
                     </ui-button>
                 </form>
 
+                <ui-google-button />
+
                 <p class="auth-switch">
                     Don't have an account?
                     <NuxtLink to="/signup">Sign up</NuxtLink>

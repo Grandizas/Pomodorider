@@ -77,6 +77,9 @@ export function useIsPro() {
         if (currentUserId() !== uid) return; // auth flipped mid-flight
         if (error) {
             console.error('[subscription] failed to fetch status', error);
+            // Settle the store on the last-known/default state so the UI can't
+            // wait on `loaded` forever after a transient failure.
+            store.markLoaded();
             return;
         }
 

@@ -43,6 +43,17 @@ export const useSubscriptionStore = defineStore('subscription', {
             this.loaded = true;
         },
 
+        /**
+         * Mark a load attempt as settled without changing the status. Used when a
+         * fetch fails: we keep the last-known (or default 'free') state rather
+         * than clobbering a good status on a transient blip, but still flip
+         * `loaded` so the UI never waits forever. Failing to 'free' is the safe
+         * default for an entitlement check.
+         */
+        markLoaded() {
+            this.loaded = true;
+        },
+
         /** Clear on logout so one account's plan can't show under another. */
         reset() {
             this.status = 'free';

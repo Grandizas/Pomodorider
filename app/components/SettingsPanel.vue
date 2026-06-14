@@ -5,7 +5,10 @@
             <div class="settings-header">
                 <h2>Settings</h2>
                 <ui-button variant="icon" @click="close">
-                    <Icon icon="heroicons:x-mark" width="24" />
+                    <FontAwesomeIcon
+                        :icon="['far', 'xmark']"
+                        class="icon-regular"
+                    />
                 </ui-button>
             </div>
 
@@ -152,7 +155,10 @@
                     <ui-dropdown>
                         <template #toggle>
                             <span>{{ getSoundLabel('start') }}</span>
-                            <Icon icon="heroicons:chevron-down" width="16" />
+                            <FontAwesomeIcon
+                                :icon="['far', 'chevron-down']"
+                                class="icon-small"
+                            />
                         </template>
 
                         <template #menu>
@@ -172,7 +178,10 @@
                     <ui-dropdown>
                         <template #toggle>
                             <span>{{ getSoundLabel('pause') }}</span>
-                            <Icon icon="heroicons:chevron-down" width="16" />
+                            <FontAwesomeIcon
+                                :icon="['far', 'chevron-down']"
+                                class="icon-small"
+                            />
                         </template>
 
                         <template #menu>
@@ -192,7 +201,10 @@
                     <ui-dropdown>
                         <template #toggle>
                             <span>{{ getSoundLabel('end') }}</span>
-                            <Icon icon="heroicons:chevron-down" width="16" />
+                            <FontAwesomeIcon
+                                :icon="['far', 'chevron-down']"
+                                class="icon-small"
+                            />
                         </template>
 
                         <template #menu>
@@ -225,9 +237,9 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
 import { startSounds, pauseSounds, finishSounds } from '~~/constants/sounds';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const props = defineProps<{
     isOpen: boolean;

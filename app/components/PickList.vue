@@ -10,7 +10,10 @@
             aria-label="Settings"
             @click="emit('open-settings')"
         >
-            <Icon icon="heroicons:cog-6-tooth" width="20" />
+            <FontAwesomeIcon
+                :icon="['far', 'gear-complex']"
+                class="icon-regular"
+            />
         </ui-button>
 
         <!-- ----------------- [ Achievements ] ----------------- -->
@@ -34,16 +37,20 @@
             aria-label="Mute"
             @click="onMute()"
         >
-            <Icon
-                :icon="`heroicons:${timerStore.settings.soundEnabled ? 'speaker-wave' : 'speaker-x-mark'}`"
-                width="20"
+            <FontAwesomeIcon
+                :icon="[
+                    'far',
+                    timerStore.settings.soundEnabled
+                        ? 'volume-high'
+                        : 'volume-xmark',
+                ]"
+                class="icon-regular"
             />
         </ui-button>
     </aside>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 

@@ -14,7 +14,10 @@
                     aria-label="Close achievements"
                     @click="$emit('close')"
                 >
-                    <Icon icon="heroicons:x-mark" width="24" />
+                    <FontAwesomeIcon
+                        :icon="['far', 'xmark']"
+                        class="icon-regular"
+                    />
                 </ui-button>
             </div>
 
@@ -35,13 +38,12 @@
                     "
                 >
                     <span class="ach-card__icon">
-                        <Icon
-                            :icon="
-                                store.isUnlocked(a.key)
-                                    ? a.icon
-                                    : 'heroicons:lock-closed'
-                            "
-                            width="28"
+                        <FontAwesomeIcon
+                            :icon="[
+                                'far',
+                                store.isUnlocked(a.key) ? a.icon : 'lock',
+                            ]"
+                            class="icon-regular"
                         />
                     </span>
                     <span class="ach-card__name">{{ a.name }}</span>
@@ -53,9 +55,9 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 import { useAchievementsStore } from '~~/stores/achievements';
 import { ACHIEVEMENTS } from '~~/constants/achievements';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 defineProps<{ isOpen: boolean }>();
 defineEmits<{ close: [] }>();

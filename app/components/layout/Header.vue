@@ -16,7 +16,18 @@
                 </ui-button>
             </template>
 
-            <ui-button v-else to="/login">Login</ui-button>
+            <template v-else>
+                <ui-button to="/login">Login</ui-button>
+                <ui-tooltip aria-label="Why sign in?">
+                    <p class="signin-hint__title">Sign in to unlock:</p>
+                    <ul class="signin-hint__list">
+                        <li>🔥 Keep your daily streak</li>
+                        <li>🏆 Earn achievements</li>
+                        <li>📊 Sync stats across devices</li>
+                        <li>📅 Never lose your history</li>
+                    </ul>
+                </ui-tooltip>
+            </template>
         </div>
     </header>
 </template>

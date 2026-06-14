@@ -3,7 +3,10 @@
         <layout-header />
 
         <main class="app-main">
-            <PickList @open-settings="settingsOpen = true" />
+            <PickList
+                @open-settings="settingsOpen = true"
+                @open-achievements="achievementsOpen = true"
+            />
             <TimerDisplay />
         </main>
 
@@ -13,6 +16,10 @@
         </footer>
 
         <SettingsPanel :is-open="settingsOpen" @close="settingsOpen = false" />
+        <parts-achievements-modal
+            :is-open="achievementsOpen"
+            @close="achievementsOpen = false"
+        />
     </div>
 </template>
 
@@ -24,6 +31,7 @@ import { useDocumentVisibility, usePageLeave } from '@vueuse/core';
 
 const timerStore = useTimerStore();
 const settingsOpen = ref(false);
+const achievementsOpen = ref(false);
 
 // Dynamic page title with timer
 const pageTitle = computed(() => {

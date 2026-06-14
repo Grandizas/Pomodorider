@@ -1,3 +1,9 @@
-.icon-small {
-    width: 13px;
+.icon {
+    &-small {
+        width: 13px;
+    }
+
+    &-regular {
+        width: 20px;
+    }
 }

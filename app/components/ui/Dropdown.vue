@@ -3,17 +3,21 @@
         <button
             type="button"
             class="dropdown__toggle"
+            :class="{ 'dropdown__toggle--open': openDropdown }"
             @click="openDropdown = !openDropdown"
         >
             <slot name="toggle" />
         </button>
-        <ul
-            v-if="openDropdown"
-            class="dropdown-menu"
-            @click="openDropdown = false"
-        >
-            <slot name="menu" />
-        </ul>
+
+        <transition name="dropdown">
+            <ul
+                v-if="openDropdown"
+                class="dropdown-menu"
+                @click="openDropdown = false"
+            >
+                <slot name="menu" />
+            </ul>
+        </transition>
     </div>
 </template>
 
@@ -29,30 +33,5 @@ onClickOutside(dropdownRef, () => {
 </script>
 
 <style scoped lang="scss">
-.dropdown {
-    position: relative;
-    margin: spacing(2) 0;
-
-    &__toggle {
-        cursor: pointer;
-        color: rgb(var(--color-text));
-        background-color: transparent;
-        padding: spacing(1) spacing(2);
-        border-radius: $radius-sm;
-        border: 2px solid $button-background-color;
-    }
-
-    &-menu {
-        right: 0;
-        z-index: 1000;
-        min-width: 100%;
-        list-style: none;
-        position: absolute;
-        width: max-content;
-        padding: spacing(1);
-        max-width: rem(300px);
-        border-radius: $radius-sm;
-        background-color: $button-background-color;
-    }
-}
+@use '@@/app/assets/styles/components/ui/_dropdown.scss';
 </style>

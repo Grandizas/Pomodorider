@@ -44,6 +44,52 @@
             right: $horizontal-padding;
         }
 
+        &--stepper {
+            top: 1px;
+            right: 1px;
+            bottom: 1px;
+            position: absolute;
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+            border-radius: 0 $radius-md $radius-md 0;
+            border-left: 1px solid map.get(map.get($colors, neutral), 700);
+
+            button {
+                flex: 1;
+                padding: 0;
+                display: flex;
+                cursor: pointer;
+                border: none;
+                width: rem(28px);
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                color: map.get(map.get($colors, neutral), 400);
+                transition: background-color 0.15s ease, color 0.15s ease;
+
+                &:first-child {
+                    border-bottom: 1px solid
+                        map.get(map.get($colors, neutral), 700);
+                }
+
+                &:hover:not(:disabled) {
+                    color: map.get(map.get($colors, neutral), 100);
+                    background-color: map.get(map.get($colors, neutral), 800);
+                }
+
+                &:disabled {
+                    cursor: not-allowed;
+                    color: map.get(map.get($colors, neutral), 700);
+                }
+
+                .icon {
+                    width: rem(10px);
+                    height: rem(10px);
+                }
+            }
+        }
+
         input {
             width: 100%;
             border-radius: $radius-md;
@@ -54,9 +100,22 @@
             padding: 10px $horizontal-padding 10px
                 rem(calc($icon-width + 12px * 1.6)); // 12 is padding
 
+            &[type='number']::-webkit-inner-spin-button,
+            &[type='number']::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            // Hide spinner in Firefox + make room for the custom stepper
+            &[type='number'] {
+                -moz-appearance: textfield;
+                appearance: textfield;
+                padding-right: rem(36px);
+            }
+
             &:focus {
                 outline: none;
-                border-color: map.get(map.get($colors, brand), 500);
+                border-color: map.get(map.get($colors, neutral), 500);
             }
 
             &--error {

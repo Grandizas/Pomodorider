@@ -42,5 +42,5 @@
     padding: spacing(1);
     align-items: center;
     justify-content: center;
-    background-color: $background-color;
+    background-color: map.get(map.get($colors, neutral), 800);
 }

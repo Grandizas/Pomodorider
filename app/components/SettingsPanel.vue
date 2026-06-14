@@ -18,52 +18,59 @@
 
                     <!-- ----------------- [ Work duration ] ----------------- -->
                     <div class="setting-item">
-                        <label for="work-duration">Work Duration</label>
-                        <input
+                        <ui-input
                             id="work-duration"
+                            v-model.number="localSettings.workDuration"
+                            label="Work Duration"
                             type="number"
                             min="1"
                             max="60"
-                            v-model.number="localSettings.workDuration"
+                            placeholder="25"
+                            :leftIcon="['far', 'hourglass-clock']"
                         />
                     </div>
 
                     <!-- ----------------- [ Short break ] ----------------- -->
                     <div class="setting-item">
-                        <label for="short-break">Short Break</label>
-                        <input
+                        <ui-input
                             id="short-break"
+                            v-model.number="localSettings.shortBreakDuration"
+                            label="Short Break"
                             type="number"
                             min="1"
                             max="30"
-                            v-model.number="localSettings.shortBreakDuration"
+                            placeholder="10"
+                            :leftIcon="['far', 'person-meditating']"
                         />
                     </div>
 
                     <!-- ----------------- [ Long break ] ----------------- -->
                     <div class="setting-item">
-                        <label for="long-break">Long Break</label>
-                        <input
+                        <ui-input
                             id="long-break"
+                            v-model.number="localSettings.longBreakDuration"
+                            label="Long Break"
                             type="number"
                             min="1"
                             max="60"
-                            v-model.number="localSettings.longBreakDuration"
+                            placeholder="20"
+                            :leftIcon="['far', 'wave']"
                         />
                     </div>
 
                     <!-- ----------------- [ Long break interval ] ----------------- -->
                     <div class="setting-item">
-                        <label for="long-break-interval"
-                            >Long Break Interval</label
-                        >
-                        <input
+                        <ui-input
                             id="long-break-interval"
+                            v-model.number="localSettings.longBreakInterval"
+                            label="Long Break Interval"
                             type="number"
                             min="2"
                             max="10"
-                            v-model.number="localSettings.longBreakInterval"
+                            placeholder="4"
+                            :leftIcon="['far', 'grid-round-2-plus']"
                         />
+
                         <span class="setting-hint"
                             >After how many work sessions</span
                         >
@@ -75,25 +82,19 @@
                     <h3>Auto Start</h3>
 
                     <div class="setting-item">
-                        <label for="auto-start-breaks">
-                            <input
-                                id="auto-start-breaks"
-                                type="checkbox"
-                                v-model="localSettings.autoStartBreaks"
-                            />
-                            Auto-start breaks
-                        </label>
+                        <ui-checkbox
+                            id="auto-start-breaks"
+                            v-model="localSettings.autoStartBreaks"
+                            text="Auto-start breaks"
+                        />
                     </div>
 
                     <div class="setting-item">
-                        <label for="auto-start-work">
-                            <input
-                                id="auto-start-work"
-                                type="checkbox"
-                                v-model="localSettings.autoStartWork"
-                            />
-                            Auto-start work sessions
-                        </label>
+                        <ui-checkbox
+                            id="auto-start-work"
+                            v-model="localSettings.autoStartWork"
+                            text="Auto-start work sessions"
+                        />
                     </div>
                 </div>
 
@@ -102,14 +103,11 @@
                     <h3>Display</h3>
 
                     <div class="setting-item">
-                        <label for="keep-awake">
-                            <input
-                                id="keep-awake"
-                                type="checkbox"
-                                v-model="localSettings.keepAwake"
-                            />
-                            Keep screen awake while timer runs
-                        </label>
+                        <ui-checkbox
+                            id="keep-awake"
+                            v-model="localSettings.keepAwake"
+                            text="Keep screen awake while timer runs"
+                        />
                         <span class="setting-hint"
                             >Stops the screen from sleeping while a session is
                             running. Only works while this tab is open.</span
@@ -122,32 +120,30 @@
                     <h3>Sound</h3>
 
                     <div class="setting-item">
-                        <label for="sound-enabled">
-                            <input
-                                id="sound-enabled"
-                                type="checkbox"
-                                v-model="localSettings.soundEnabled"
-                            />
-                            Enable sound notifications
-                        </label>
+                        <ui-checkbox
+                            id="sound-enabled"
+                            v-model="localSettings.soundEnabled"
+                            text="Enable sound notifications"
+                        />
                     </div>
 
                     <!-- ----- * Set volume * ----- -->
-                    <div class="setting-item" v-if="localSettings.soundEnabled">
-                        <label for="sound-volume">Volume</label>
-                        <input
+                    <div
+                        class="setting-item sound-volume"
+                        v-if="localSettings.soundEnabled"
+                    >
+                        <label for="sound-volume">
+                            Volume:
+                            {{ Math.round(localSettings.soundVolume * 100) }}%
+                        </label>
+                        <ui-slider
                             id="sound-volume"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            v-model.number="localSettings.soundVolume"
+                            v-model="localSettings.soundVolume"
+                            :min="0"
+                            :max="1"
+                            :step="0.1"
+                            aria-label="Volume"
                         />
-                        <span class="volume-value"
-                            >{{
-                                Math.round(localSettings.soundVolume * 100)
-                            }}%</span
-                        >
                     </div>
 
                     <!-- ----- * Start sounds * ----- -->

@@ -1,0 +1,120 @@
+@use 'sass:map';
+@use '../../abstracts/colors' as *;
+@use '../../abstracts/variables' as *;
+@use '../../abstracts/functions' as *;
+@use '../../abstracts/typography' as *;
+
+.dropdown {
+    position: relative;
+    margin: spacing(1) 0;
+
+    // ----------------- [ Toggle ] ----------------- //
+    &__toggle {
+        display: inline-flex;
+        gap: spacing(1);
+        cursor: pointer;
+        font-weight: 600;
+        align-items: center;
+        font-size: $text-sm;
+        justify-content: center;
+        border-radius: $radius-md;
+        background-color: transparent;
+        padding: spacing(1) spacing(2);
+        color: map.get(map.get($colors, neutral), 100);
+        font-family: 'Geist', 'Helvetica Neue', sans-serif;
+        border: 1px solid map.get(map.get($colors, neutral), 700);
+        transition:
+            border-color $transition-fast,
+            background-color $transition-fast,
+            box-shadow $transition-fast;
+
+        :deep(svg) {
+            transition: transform $transition-fast;
+        }
+
+        &:hover {
+            border-color: map.get(map.get($colors, neutral), 500);
+            background-color: map.get(map.get($colors, neutral), 800);
+        }
+
+        &:focus-visible {
+            outline: none;
+            border-color: map.get(map.get($colors, neutral), 300);
+            box-shadow: 0 0 0 3px
+                rgba(map.get(map.get($colors, neutral), 100), 0.2);
+        }
+
+        &--open {
+            border-color: map.get(map.get($colors, neutral), 400);
+            box-shadow: 0 0 0 3px
+                rgba(map.get(map.get($colors, neutral), 100), 0.2);
+
+            :deep(svg) {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    // ----------------- [ Menu ] ----------------- //
+    &-menu {
+        left: 0;
+        z-index: 1000;
+        margin: spacing(1) 0 0;
+        min-width: rem(200px);
+        list-style: none;
+        position: absolute;
+        width: max-content;
+        padding: spacing(1);
+        max-width: rem(300px);
+        border-radius: $radius-xl;
+        box-shadow: $shadow-2xl;
+        background-color: map.get(map.get($colors, neutral), 800);
+        border: 1px solid map.get(map.get($colors, neutral), 700);
+    }
+
+    // ----------------- [ Menu items (slotted) ] ----------------- //
+    :deep(.dropdown-item) {
+        display: flex;
+        gap: spacing(3);
+        cursor: pointer;
+        align-items: center;
+        justify-content: space-between;
+        font-size: $text-md;
+        padding: spacing(1) spacing(2);
+        border-radius: $radius-sm;
+        color: map.get(map.get($colors, neutral), 100);
+        transition: background-color $transition-fast;
+
+        &:hover {
+            background-color: map.get(map.get($colors, neutral), 700);
+        }
+    }
+
+    // Trailing hint / keyboard shortcut on the right of an item
+    :deep(.dropdown-item__shortcut) {
+        font-size: $text-sm;
+        color: map.get(map.get($colors, neutral), 400);
+    }
+
+    // Separator between groups of items
+    :deep(.dropdown-divider) {
+        height: 1px;
+        list-style: none;
+        margin: spacing(1) 0;
+        background-color: map.get(map.get($colors, neutral), 700);
+    }
+}
+
+// ----------------- [ Open / close transition ] ----------------- //
+.dropdown-enter-active,
+.dropdown-leave-active {
+    transition:
+        opacity $transition-fast,
+        transform $transition-fast;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+}

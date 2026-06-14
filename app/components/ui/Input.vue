@@ -15,6 +15,8 @@
                 :id="id"
                 v-model="modelValue"
                 :type="type"
+                :min="min"
+                :max="max"
                 :required="required"
                 :disabled="disabled"
                 :minlength="minLength"
@@ -26,13 +28,36 @@
             />
 
             <!-- ----- * Right icons * ----- -->
-            <div v-if="rightIcons?.length" class="input-field__input--icons">
+            <div
+                v-if="rightIcons?.length && type !== 'number'"
+                class="input-field__input--icons"
+            >
                 <FontAwesomeIcon
                     v-for="(icon, index) in rightIcons"
                     :key="index"
                     :icon="icon"
                     class="icon"
                 />
+            </div>
+
+            <!-- ----- * Number stepper * ----- -->
+            <div v-if="type === 'number'" class="input-field__input--stepper">
+                <button
+                    type="button"
+                    aria-label="Increase"
+                    :disabled="disabled || atMax"
+                    @click="increment"
+                >
+                    <FontAwesomeIcon :icon="['far', 'plus']" class="icon" />
+                </button>
+                <button
+                    type="button"
+                    aria-label="Decrease"
+                    :disabled="disabled || atMin"
+                    @click="decrement"
+                >
+                    <FontAwesomeIcon :icon="['far', 'minus']" class="icon" />
+                </button>
             </div>
         </div>
 
@@ -48,11 +73,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         id: string;
+        min?: string;
+        max?: string;
+        step?: string;
         type?: string;
         label?: string;
         required?: boolean;
@@ -70,7 +99,32 @@ withDefaults(
     },
 );
 
-const modelValue = defineModel<string>({ required: true });
+const modelValue = defineModel<string | number>({ required: true });
+
+// ----- * Number stepper * ----- //
+const stepSize = computed(() => Number(props.step) || 1);
+const minNum = computed(() =>
+    props.min !== undefined ? Number(props.min) : -Infinity,
+);
+const maxNum = computed(() =>
+    props.max !== undefined ? Number(props.max) : Infinity,
+);
+
+const currentNum = computed(() => {
+    const value = Number(modelValue.value);
+    return Number.isFinite(value) ? value : 0;
+});
+
+const atMin = computed(() => currentNum.value <= minNum.value);
+const atMax = computed(() => currentNum.value >= maxNum.value);
+
+const stepBy = (direction: 1 | -1) => {
+    const next = currentNum.value + direction * stepSize.value;
+    modelValue.value = Math.min(maxNum.value, Math.max(minNum.value, next));
+};
+
+const increment = () => stepBy(1);
+const decrement = () => stepBy(-1);
 </script>
 
 <style scoped lang="scss">

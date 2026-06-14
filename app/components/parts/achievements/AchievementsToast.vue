@@ -24,16 +24,20 @@ const store = useAchievementsStore();
 const current = ref<AchievementDef | null>(null);
 let timer: ReturnType<typeof setTimeout> | null = null;
 
-/** Pull the next queued unlock and show it, chaining once it auto-dismisses. */
+/** Pull the next *known* queued unlock and show it, chaining once it dismisses. */
 function showNext() {
     if (current.value) return; // one at a time
-    const key = store.dequeueToast();
-    if (!key) return;
-    const def = ACHIEVEMENT_MAP[key];
-    if (!def) {
-        showNext(); // unknown key — skip it
-        return;
+
+    // Drain the queue until we hit a key we have a definition for (unknown keys
+    // are skipped iteratively, never via recursion).
+    let def: AchievementDef | undefined;
+    let key: string | undefined;
+    while ((key = store.dequeueToast()) !== undefined) {
+        def = ACHIEVEMENT_MAP[key];
+        if (def) break;
     }
+    if (!def) return; // queue drained, nothing to show
+
     current.value = def;
     timer = setTimeout(() => {
         current.value = null;

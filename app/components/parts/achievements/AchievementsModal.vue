@@ -1,10 +1,19 @@
 <template>
     <div class="ach-modal" v-if="isOpen">
         <div class="ach-overlay" @click="$emit('close')"></div>
-        <div class="ach-content">
+        <div
+            class="ach-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ach-title"
+        >
             <div class="ach-header">
-                <h2>Achievements</h2>
-                <ui-button variant="icon" @click="$emit('close')">
+                <h2 id="ach-title">Achievements</h2>
+                <ui-button
+                    variant="icon"
+                    aria-label="Close achievements"
+                    @click="$emit('close')"
+                >
                     <Icon icon="heroicons:x-mark" width="24" />
                 </ui-button>
             </div>

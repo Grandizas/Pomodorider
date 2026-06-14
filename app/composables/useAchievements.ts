@@ -1,5 +1,12 @@
 import type { Database } from '~/types/database.types';
 import { useAchievementsStore } from '~~/stores/achievements';
+import { ACHIEVEMENT_MAP } from '~~/constants/achievements';
+
+/**
+ * Monotonic counter shared across all callers, so a slow load() whose response
+ * arrives after a newer one started can detect that and bow out.
+ */
+let loadSeq = 0;
 
 /**
  * Achievement data access. The DB does all the *unlocking* (a trigger on the
@@ -29,6 +36,7 @@ export function useAchievements() {
 
         // Capture pre-load state so we can distinguish genuinely-new unlocks
         // from the initial backlog (which we must not toast).
+        const seq = ++loadSeq;
         const wasLoaded = store.loaded;
         const previousKeys = store.unlockedKeys;
 
@@ -38,16 +46,22 @@ export function useAchievements() {
             .eq('user_id', uid)
             .order('unlocked_at', { ascending: true });
 
-        if (currentUserId() !== uid) return; // auth flipped mid-flight
+        // Bow out if a newer load started, or auth flipped, while we awaited —
+        // otherwise a late response could clobber fresher state.
+        if (seq !== loadSeq || currentUserId() !== uid) return;
         if (error) {
             console.error('[achievements] failed to load', error);
             return;
         }
 
-        const rows = (data ?? []).map((r) => ({
-            key: r.achievement_key,
-            unlockedAt: r.unlocked_at,
-        }));
+        // Drop any keys the backend knows but this client doesn't, so the
+        // unlocked count can never exceed the number of defined achievements.
+        const rows = (data ?? [])
+            .filter((r) => Boolean(ACHIEVEMENT_MAP[r.achievement_key]))
+            .map((r) => ({
+                key: r.achievement_key,
+                unlockedAt: r.unlocked_at,
+            }));
 
         if (wasLoaded) {
             for (const row of rows) {

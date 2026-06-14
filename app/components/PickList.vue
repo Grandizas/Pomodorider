@@ -85,6 +85,7 @@ function onMute() {
 
     @include respond-to(tablet) {
         width: 100%;
+        flex-wrap: wrap;
         flex-direction: row;
         margin-top: spacing(6);
     }

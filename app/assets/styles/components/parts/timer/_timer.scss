@@ -1,5 +1,6 @@
 @use '../../../abstracts/variables' as *;
 @use '../../../abstracts/functions' as *;
+@use '../../../abstracts/breakpoints' as *;
 
 .timer-orb {
     /* Sizing */
@@ -148,5 +149,15 @@
             transparent 0%,
             rgba(0, 0, 0, 0.6) 85%
         );
+    }
+}
+
+@include respond-to(mobile) {
+    .timer-orb {
+        width: 300px;
+
+        &-orb__time {
+            font-size: rem(45px);
+        }
     }
 }

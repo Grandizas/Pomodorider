@@ -45,6 +45,7 @@ function selectTheme(theme: ThemeKey) {
     flex-direction: column;
 
     @include respond-to(tablet) {
+        flex-wrap: wrap;
         flex-direction: row;
     }
 

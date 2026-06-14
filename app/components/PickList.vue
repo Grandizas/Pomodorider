@@ -13,6 +13,20 @@
             <Icon icon="heroicons:cog-6-tooth" width="20" />
         </ui-button>
 
+        <!-- ----------------- [ Achievements ] ----------------- -->
+        <ui-button
+            v-if="user"
+            variant="icon"
+            title="Achievements"
+            aria-label="Achievements"
+            @click="emit('open-achievements')"
+        >
+            <FontAwesomeIcon
+                :icon="['far', 'trophy-star']"
+                class="icon-regular"
+            />
+        </ui-button>
+
         <!-- ----------------- [ Mute ] ----------------- -->
         <ui-button
             variant="icon"
@@ -31,11 +45,14 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { useTimerStore } from '~~/stores/timer';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const timerStore = useTimerStore();
+const user = useSupabaseUser();
 
 const emit = defineEmits<{
     (e: 'open-settings'): void;
+    (e: 'open-achievements'): void;
 }>();
 
 function onMute() {

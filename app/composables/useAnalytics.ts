@@ -32,6 +32,20 @@ export interface DailyPoint {
     sessions: number;
 }
 
+export interface HourPoint {
+    /** Local hour of day, 0–23. */
+    hour: number;
+    minutes: number;
+    sessions: number;
+}
+
+/** A single work session, retained for CSV export. */
+interface SessionRow {
+    completedAt: string;
+    day: string;
+    minutes: number;
+}
+
 /** Local calendar day as 'YYYY-MM-DD' (matches the DB `day_bucket`). */
 function localDayBucket(d = new Date()): string {
     const y = d.getFullYear();
@@ -78,6 +92,10 @@ export function useAnalytics() {
     const summary = ref<AnalyticsSummary>({ ...EMPTY_SUMMARY });
     /** Per-day rollup of every work session, ascending by day. */
     const dailyAll = ref<DailyPoint[]>([]);
+    /** Focus split across the 24 hours of the day (local time). */
+    const hourly = ref<HourPoint[]>([]);
+    /** Raw work sessions, newest first, kept only for CSV export. */
+    const rawRows = ref<SessionRow[]>([]);
     const loading = ref(false);
     const loaded = ref(false);
     const error = ref<string | null>(null);
@@ -111,6 +129,8 @@ export function useAnalytics() {
         if (!uid) {
             summary.value = { ...EMPTY_SUMMARY };
             dailyAll.value = [];
+            hourly.value = [];
+            rawRows.value = [];
             loaded.value = true;
             return;
         }
@@ -121,7 +141,7 @@ export function useAnalytics() {
 
         const { data, error: err } = await supabase
             .from('timer_sessions')
-            .select('duration_mins, day_bucket')
+            .select('duration_mins, day_bucket, completed_at')
             .eq('user_id', uid)
             .eq('mode', 'work');
 
@@ -139,8 +159,14 @@ export function useAnalytics() {
         const today = localDayBucket();
         const weekStart = startOfWeekBucket();
 
-        // Roll up per day in one pass, accumulating the totals alongside.
+        // Roll up per day and per hour in one pass, accumulating totals alongside.
         const perDay = new Map<string, DailyPoint>();
+        const perHour: HourPoint[] = Array.from({ length: 24 }, (_, hour) => ({
+            hour,
+            minutes: 0,
+            sessions: 0,
+        }));
+        const sessionRows: SessionRow[] = [];
         let totalMins = 0;
         let todayMins = 0;
         let todaySessions = 0;
@@ -157,6 +183,20 @@ export function useAnalytics() {
             point.sessions += 1;
             perDay.set(day, point);
 
+            // Time-of-day bucket, by the LOCAL hour the session finished.
+            const hour = new Date(r.completed_at).getHours();
+            const slot = perHour[hour];
+            if (slot) {
+                slot.minutes += mins;
+                slot.sessions += 1;
+            }
+
+            sessionRows.push({
+                completedAt: r.completed_at,
+                day,
+                minutes: mins,
+            });
+
             if (day === today) {
                 todayMins += mins;
                 todaySessions += 1;
@@ -166,6 +206,10 @@ export function useAnalytics() {
                 weekSessions += 1;
             }
         }
+
+        sessionRows.sort((a, b) =>
+            a.completedAt < b.completedAt ? 1 : a.completedAt > b.completedAt ? -1 : 0,
+        );
 
         const sorted = [...perDay.values()].sort((a, b) =>
             a.day < b.day ? -1 : a.day > b.day ? 1 : 0,
@@ -179,6 +223,8 @@ export function useAnalytics() {
         );
 
         dailyAll.value = sorted;
+        hourly.value = perHour;
+        rawRows.value = sessionRows;
         summary.value = {
             totalFocusMins: totalMins,
             totalSessions: rows.length,
@@ -192,13 +238,41 @@ export function useAnalytics() {
         loading.value = false;
     }
 
+    /** Build a CSV of every work session (newest first). */
+    function buildCsv(): string {
+        const header = 'completed_at,day,duration_mins';
+        const lines = rawRows.value.map(
+            (r) => `${r.completedAt},${r.day},${r.minutes}`,
+        );
+        return [header, ...lines].join('\n');
+    }
+
+    /**
+     * Trigger a client-side download of the session CSV. Generated entirely in
+     * the browser from the user's own data — no network round-trip. No-ops on
+     * the server or when there's nothing to export.
+     */
+    function exportCsv() {
+        if (!import.meta.client || rawRows.value.length === 0) return;
+        const blob = new Blob([buildCsv()], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `pomodorider-sessions-${localDayBucket()}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
     return {
         summary,
         dailyAll,
+        hourly,
+        rawRows,
         loading,
         loaded,
         error,
         load,
         recentSeries,
+        exportCsv,
     };
 }

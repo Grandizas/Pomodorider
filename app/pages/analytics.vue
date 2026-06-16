@@ -3,7 +3,22 @@
         <layout-header />
 
         <main class="analytics-main">
-            <h1 class="analytics-title">Your stats</h1>
+            <div class="analytics-head">
+                <h1 class="analytics-title">Your stats</h1>
+                <ui-button
+                    v-if="
+                        user &&
+                        loaded &&
+                        summary.totalSessions > 0 &&
+                        can('data_export')
+                    "
+                    variant="secondary"
+                    title="Download your sessions as CSV"
+                    @click="exportCsv"
+                >
+                    Export CSV
+                </ui-button>
+            </div>
 
             <!-- Logged-out: analytics are a signed-in feature, like streaks. -->
             <div v-if="!user" class="analytics-empty">
@@ -92,6 +107,50 @@
                     <parts-analytics-daily-bar-chart :points="series" />
                 </section>
 
+                <!-- Advanced stats (Pro). While gating is off, can() is true for
+                     everyone, so these show unlocked; once on, free users get the
+                     upgrade teaser instead. -->
+                <template v-if="can('advanced_stats')">
+                    <section class="analytics-section">
+                        <div class="analytics-section__head">
+                            <h2>Activity</h2>
+                            <span class="analytics-section__meta">
+                                Last {{ HEATMAP_WEEKS }} weeks
+                            </span>
+                        </div>
+                        <parts-analytics-heatmap :points="heatmapPoints" />
+                    </section>
+
+                    <section class="analytics-section">
+                        <div class="analytics-section__head">
+                            <h2>Time of day</h2>
+                            <span
+                                v-if="peakHourLabel"
+                                class="analytics-section__meta"
+                            >
+                                Most focused around {{ peakHourLabel }}
+                            </span>
+                        </div>
+                        <parts-analytics-hourly-chart :hours="hourly" />
+                    </section>
+                </template>
+
+                <!-- Upgrade teaser. No CTA button yet — the checkout flow isn't
+                     built. This branch is also dormant until PRO_GATING_ENABLED
+                     is flipped on. -->
+                <section v-else class="analytics-section analytics-upsell">
+                    <FontAwesomeIcon
+                        :icon="['far', 'chart-line']"
+                        class="analytics-upsell__icon"
+                    />
+                    <div>
+                        <h2>{{ advancedStats.title }}</h2>
+                        <p class="analytics-upsell__desc">
+                            {{ advancedStats.description }} Available with Pro.
+                        </p>
+                    </div>
+                </section>
+
                 <!-- Achievements -->
                 <section class="analytics-section">
                     <div class="analytics-section__head">
@@ -117,12 +176,16 @@ import { useIsPro } from '~/composables/useIsPro';
 import { useStreakStore } from '~~/stores/streak';
 import { useAchievementsStore } from '~~/stores/achievements';
 import { ACHIEVEMENTS } from '~~/constants/achievements';
+import { PRO_FEATURES } from '~~/constants/proFeatures';
 
 const user = useSupabaseUser();
 const streakStore = useStreakStore();
 const achievementsStore = useAchievementsStore();
-const { limit } = useIsPro();
-const { summary, loading, loaded, error, load, recentSeries } = useAnalytics();
+const { limit, can } = useIsPro();
+const { summary, hourly, loading, loaded, error, load, recentSeries, exportCsv } =
+    useAnalytics();
+
+const advancedStats = PRO_FEATURES.advanced_stats;
 
 // History range is a metered Pro capability: free users are capped at
 // `historyDays` (7), Pro is unlimited. While PRO_GATING_ENABLED is off this is
@@ -143,6 +206,27 @@ function selectRange(days: number) {
 const series = computed(() =>
     recentSeries(Math.min(range.value, historyDays.value)),
 );
+
+// Advanced (Pro) views. History is unlimited for Pro, so the heatmap always
+// shows the full window regardless of the free `historyDays` cap above.
+const HEATMAP_WEEKS = 12;
+const heatmapPoints = computed(() => recentSeries(HEATMAP_WEEKS * 7));
+
+/** Busiest hour as a friendly label, e.g. "2 PM"; null until there's data. */
+const peakHourLabel = computed(() => {
+    let peak = -1;
+    let best = 0;
+    for (const h of hourly.value) {
+        if (h.minutes > best) {
+            best = h.minutes;
+            peak = h.hour;
+        }
+    }
+    if (peak < 0) return null;
+    const period = peak < 12 ? 'AM' : 'PM';
+    const h12 = peak % 12 === 0 ? 12 : peak % 12;
+    return `${h12} ${period}`;
+});
 
 function reload() {
     void load();
@@ -184,10 +268,41 @@ useHead({ title: 'Your stats - Pomodorider' });
     gap: $spacing-lg;
 }
 
+.analytics-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-sm;
+}
+
 .analytics-title {
     font-size: rem(28px);
     font-weight: 700;
     color: $text-color;
+}
+
+.analytics-upsell {
+    flex-direction: row;
+    align-items: center;
+    gap: $spacing-md;
+
+    &__icon {
+        font-size: rem(22px);
+        color: #f59e0b;
+        flex-shrink: 0;
+    }
+
+    h2 {
+        font-size: rem(16px);
+        font-weight: 600;
+        color: $text-color;
+    }
+
+    &__desc {
+        font-size: rem(13px);
+        color: $text-secondary;
+        margin-top: spacing(0.25);
+    }
 }
 
 .analytics-empty {

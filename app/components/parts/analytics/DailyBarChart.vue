@@ -14,6 +14,7 @@
                     :style="{ height: `${bar.pct}%` }"
                 />
             </div>
+            <span class="bar-value">{{ bar.timeLabel }}</span>
             <div class="bar-x">{{ bar.label }}</div>
         </div>
     </div>
@@ -65,6 +66,7 @@ const bars = computed(() => {
             isPeak,
             pct,
             label: labelFor(p.day, i, count),
+            timeLabel: formatMinutes(p.minutes),
             title: `${nice}: ${formatMinutes(p.minutes)} · ${sessions}`,
         };
     });
@@ -72,61 +74,5 @@ const bars = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.bars {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    gap: rem(14px);
-    align-items: end;
-}
-
-.bar-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: rem(12px);
-
-    &.peak .bar-x {
-        color: rgb(var(--color-timerBg));
-        font-weight: 600;
-    }
-}
-
-.bar-track {
-    width: 100%;
-    height: rem(150px);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.025);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-    position: relative;
-}
-
-.bar-fill {
-    width: 100%;
-    border-radius: 12px;
-    min-height: 4px;
-    background: linear-gradient(
-        180deg,
-        rgba(var(--color-timerBg), 0.98) 0%,
-        rgba(var(--color-timerBg), 0.62) 100%
-    );
-    box-shadow:
-        inset 0 2px 8px rgba(255, 255, 255, 0.18),
-        0 -2px 22px rgba(var(--color-timerBg), 0.3);
-    transition: height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-
-    &.peak {
-        box-shadow:
-            inset 0 2px 10px rgba(255, 255, 255, 0.28),
-            0 0 34px rgba(var(--color-timerBg), 0.55);
-    }
-}
-
-.bar-x {
-    font-size: rem(12.8px);
-    color: $text-secondary;
-}
+@use '@@/app/assets/styles/components/parts/analytics/_daily-bar-chart.scss';
 </style>

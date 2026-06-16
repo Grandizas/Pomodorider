@@ -119,12 +119,11 @@ useSeoMeta({
     twitterDescription: description,
 });
 
-// Auto-generated branded social-share image (nuxt-og-image, bundled with
-// @nuxtjs/seo). Renders a 1200×630 card from the built-in template.
-defineOgImage('NuxtSeo', {
+// Branded social-share image rendered from app/components/OgImage/Default.satori.vue
+// by nuxt-og-image (bundled with @nuxtjs/seo).
+defineOgImage('Default', {
     title: 'Pomodorider',
     description: 'Free online Pomodoro timer',
-    theme: '#e07a5f',
 });
 
 // Frequently-asked questions — rendered on the page AND emitted as FAQPage
@@ -161,7 +160,7 @@ useSchemaOrg([
     defineSoftwareApp({
         name: 'Pomodorider',
         description,
-        applicationCategory: 'ProductivityApplication',
+        applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         offers: {
             '@type': 'Offer',

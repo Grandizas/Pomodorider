@@ -1,7 +1,5 @@
 <template>
     <div class="timer-display" :class="`timer-${timerStore.mode}`">
-        <ui-logo-text />
-
         <div class="timer-display__inner">
             <!-- ----------------- [ Switch buttons (Work, Break) ] ----------------- -->
             <!--            <div class="timer-mode">-->

@@ -4,6 +4,18 @@
 @use './utils/typography';
 @use 'sass:map';
 
+:root {
+    // Accent (charts, highlights) follows the active orb theme. The theme store
+    // overrides --color-timerBg on <html> at runtime; this is the pre-hydration
+    // fallback — warm amber, matching the cozy default look.
+    --color-timerBg: 245, 176, 70;
+
+    // The streak "fire" is always warm — semantic, never themeable.
+    --flame-1: #ffc24d;
+    --flame-2: #f5871f;
+    --flame-rgb: 245, 150, 40;
+}
+
 * {
     margin: 0;
     padding: 0;

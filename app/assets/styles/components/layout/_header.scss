@@ -1,23 +1,162 @@
 @use '../../abstracts/variables' as *;
 @use '../../abstracts/functions' as *;
-@use '../../abstracts/typography' as *;
+@use '../../abstracts/breakpoints' as *;
 
 .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    padding: rem(7.5px) rem(10px);
+    justify-content: space-between;
+    padding: rem(18px) rem(28px);
+    backdrop-filter: blur(8px);
+    background: linear-gradient(
+        180deg,
+        rgba(5, 5, 5, 0.85),
+        rgba(5, 5, 5, 0)
+    );
+
+    @include respond-to(tablet) {
+        padding: rem(14px) rem(16px);
+    }
 }
 
-.auth-info {
+.brand {
     display: flex;
-    gap: rem(7.5px);
     align-items: center;
-    font-size: $text-md;
+    gap: rem(12px);
+    opacity: 0.9;
+    color: $text-color;
+    transition: opacity $transition-fast;
+
+    &:hover {
+        opacity: 1;
+        color: $text-color;
+    }
+
+    &__logo {
+        width: rem(26px);
+        height: rem(26px);
+    }
+
+    &__name {
+        font-weight: 700;
+        font-size: rem(17.6px);
+        letter-spacing: 0.2px;
+    }
 }
 
-.user-email {
-    opacity: 0.7;
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: rem(14px);
+}
+
+.streak-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(8px);
+    padding: rem(6px) rem(12px) rem(6px) rem(8px);
+    border-radius: $radius-full;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    &.is-lit {
+        border-color: rgba(var(--flame-rgb), 0.35);
+        box-shadow: 0 0 18px rgba(var(--flame-rgb), 0.18);
+    }
+
+    &__flame {
+        width: rem(16px);
+        font-size: rem(15px);
+        color: #6b7280;
+
+        .is-lit & {
+            color: var(--flame-2);
+        }
+    }
+
+    &__n {
+        font-weight: 700;
+        font-size: rem(15px);
+        color: $text-color;
+    }
+}
+
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(34px);
+    height: rem(34px);
+    border-radius: $radius-full;
+    background: $button-background-color;
+    color: $text-secondary;
+    transition:
+        transform $transition-fast,
+        background $transition-fast,
+        color $transition-fast;
+
+    &:hover {
+        transform: translateY(-1px);
+        background: #444444;
+        color: $text-color;
+    }
+}
+
+.acct {
+    display: inline-flex;
+    align-items: center;
+    gap: rem(10px);
+    padding: rem(6px);
+    border-radius: $radius-full;
+    background: rgba(255, 255, 255, 0.03);
+
+    &__avatar {
+        width: rem(30px);
+        height: rem(30px);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: $button-background-color;
+        color: $text-color;
+        font-size: rem(13px);
+    }
+
+    &__email {
+        font-size: rem(13.6px);
+        color: $text-secondary;
+
+        @include respond-to(tablet) {
+            display: none;
+        }
+    }
+}
+
+.btn-ghost {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: rem(13.6px);
+    padding: rem(8px) rem(16px);
+    border-radius: $radius-full;
+    background: $button-background-color;
+    color: $text-color;
+    transition:
+        transform $transition-fast,
+        background $transition-fast;
+
+    &:hover {
+        transform: translateY(-1px);
+        background: #444444;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+        transform: none;
+    }
 }
 
 .signin-hint {

@@ -41,6 +41,7 @@ import {
     faArrowRotateLeft,
     faShieldKeyhole,
     faChartLine,
+    faArrowDownToLine,
 } from '@fortawesome/pro-regular-svg-icons';
 
 // Prevent auto-adding CSS since Nuxt handles it
@@ -70,6 +71,7 @@ library.add(
     faEnvelope,
     faShieldKeyhole,
     faChartLine,
+    faArrowDownToLine,
     // Achievement icons — registered in both styles (solid toast / regular modal).
     fasFire,
     farFire,

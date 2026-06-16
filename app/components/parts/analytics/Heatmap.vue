@@ -1,56 +1,32 @@
 <template>
-    <div class="heatmap">
-        <svg
-            class="heatmap__svg"
-            :viewBox="`0 0 ${width} ${height}`"
-            role="img"
-            aria-label="Focus minutes per day"
-        >
-            <!-- Month labels along the top -->
-            <text
-                v-for="m in monthLabels"
-                :key="`m-${m.col}`"
-                :x="LEFT + m.col * STEP"
-                :y="11"
-                class="heatmap__month"
-            >
-                {{ m.label }}
-            </text>
+    <div class="heat-wrap">
+        <div class="heat-months">
+            <span v-for="(m, i) in monthLabels" :key="i">{{ m }}</span>
+        </div>
 
-            <!-- Weekday labels (Mon/Wed/Fri) down the left -->
-            <text
-                v-for="w in WEEKDAY_LABELS"
-                :key="`w-${w.row}`"
-                :x="0"
-                :y="TOP + w.row * STEP + CELL - 2"
-                class="heatmap__weekday"
-            >
-                {{ w.label }}
-            </text>
+        <div class="heat-days">
+            <span>Mon</span><span /><span>Wed</span><span /><span>Fri</span>
+            <span /><span />
+        </div>
 
-            <rect
-                v-for="cell in cells"
-                :key="cell.day"
-                :x="cell.x"
-                :y="cell.y"
-                :width="CELL"
-                :height="CELL"
-                :rx="2"
-                class="heatmap__cell"
-                :class="`is-l${cell.level}`"
-            >
-                <title>{{ cell.title }}</title>
-            </rect>
-        </svg>
+        <div class="heat-grid">
+            <div
+                v-for="(cell, i) in cells"
+                :key="i"
+                class="cell"
+                :class="cell.level ? `l${cell.level}` : ''"
+                :title="cell.title"
+            />
+        </div>
 
-        <div class="heatmap__legend">
-            <span>Less</span>
-            <span class="heatmap__swatch is-l0" />
-            <span class="heatmap__swatch is-l1" />
-            <span class="heatmap__swatch is-l2" />
-            <span class="heatmap__swatch is-l3" />
-            <span class="heatmap__swatch is-l4" />
-            <span>More</span>
+        <div class="heat-legend">
+            Less
+            <span class="cell" />
+            <span class="cell l1" />
+            <span class="cell l2" />
+            <span class="cell l3" />
+            <span class="cell l4" />
+            More
         </div>
     </div>
 </template>
@@ -63,20 +39,8 @@ import { formatMinutes } from '~/composables/useAnalytics';
 // `points` must be contiguous days, oldest → newest, ending today.
 const props = defineProps<{ points: DailyPoint[] }>();
 
-const CELL = 13;
-const GAP = 3;
-const STEP = CELL + GAP;
-const TOP = 18; // room for month labels
-const LEFT = 26; // room for weekday labels
-
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const WEEKDAY_LABELS = [
-    { row: 0, label: 'Mon' },
-    { row: 2, label: 'Wed' },
-    { row: 4, label: 'Fri' },
-];
 
-/** Parse 'YYYY-MM-DD' into a local Date with no timezone drift. */
 function parseDay(day: string): Date {
     const [y, m, d] = day.split('-').map(Number);
     return new Date(y!, (m ?? 1) - 1, d ?? 1);
@@ -102,124 +66,121 @@ function levelFor(minutes: number): number {
     return 4;
 }
 
-/** Lead offset so the first column starts on the Monday of that week. */
-const leadOffset = computed(() =>
-    props.points.length ? weekdayIndex(parseDay(props.points[0]!.day)) : 0,
-);
-
-const cells = computed(() =>
-    props.points.map((p, i) => {
-        const pos = leadOffset.value + i;
-        const col = Math.floor(pos / 7);
-        const row = pos % 7;
+/**
+ * Cells in column-major order to match `grid-auto-flow: column` over 7 rows:
+ * lead with blank placeholders so the first real day lands on its weekday row.
+ */
+const cells = computed(() => {
+    const lead = props.points.length
+        ? weekdayIndex(parseDay(props.points[0]!.day))
+        : 0;
+    const placeholders = Array.from({ length: lead }, () => ({
+        level: 0,
+        title: '',
+    }));
+    const days = props.points.map((p) => {
         const nice = parseDay(p.day).toLocaleDateString(undefined, {
             weekday: 'short',
             month: 'short',
             day: 'numeric',
         });
         return {
-            day: p.day,
-            x: LEFT + col * STEP,
-            y: TOP + row * STEP,
             level: levelFor(p.minutes),
             title: `${nice}: ${formatMinutes(p.minutes)}`,
         };
-    }),
-);
-
-const numCols = computed(() =>
-    Math.ceil((leadOffset.value + props.points.length) / 7),
-);
-
-const width = computed(() => LEFT + numCols.value * STEP);
-const height = computed(() => TOP + 7 * STEP);
-
-/** One label per column where the month first appears. */
-const monthLabels = computed(() => {
-    const out: { col: number; label: string }[] = [];
-    let lastMonth = -1;
-    props.points.forEach((p, i) => {
-        if (weekdayIndex(parseDay(p.day)) !== 0) return; // only top-row cells
-        const month = parseDay(p.day).getMonth();
-        if (month !== lastMonth) {
-            const col = Math.floor((leadOffset.value + i) / 7);
-            out.push({ col, label: MONTHS[month]! });
-            lastMonth = month;
-        }
     });
+    return [...placeholders, ...days];
+});
+
+/** Distinct months spanned by the range, in order, spread across the top. */
+const monthLabels = computed(() => {
+    const out: string[] = [];
+    let last = -1;
+    for (const p of props.points) {
+        const month = parseDay(p.day).getMonth();
+        if (month !== last) {
+            out.push(MONTHS[month]!);
+            last = month;
+        }
+    }
     return out;
 });
 </script>
 
 <style scoped lang="scss">
-.heatmap {
-    width: 100%;
+.heat-wrap {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: rem(10px) rem(14px);
+    width: fit-content;
+    margin: rem(4px) auto 0;
+    max-width: 100%;
     overflow-x: auto;
+}
 
-    &__svg {
-        display: block;
-        max-width: 100%;
-        height: auto;
-    }
+.heat-months {
+    grid-column: 2;
+    display: flex;
+    justify-content: space-between;
+    font-size: rem(12.5px);
+    color: $text-secondary;
+    padding-bottom: 2px;
+}
 
-    &__month,
-    &__weekday {
-        fill: $text-secondary;
-        font-size: 9px;
-    }
+.heat-days {
+    grid-column: 1;
+    display: grid;
+    grid-template-rows: repeat(7, 26px);
+    gap: 6px;
+    font-size: rem(11.5px);
+    color: $text-secondary;
+    align-items: center;
+    padding-top: 2px;
+}
 
-    &__cell {
-        stroke: rgba(0, 0, 0, 0.2);
-        stroke-width: 0.5;
-    }
+.heat-grid {
+    grid-column: 2;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 26px);
+    grid-auto-columns: 26px;
+    gap: 6px;
+}
 
-    // Amber intensity scale — shared by cells and the legend swatches.
-    .is-l0 {
-        fill: rgba(255, 255, 255, 0.05);
-    }
-    .is-l1 {
-        fill: rgba(245, 158, 11, 0.28);
-    }
-    .is-l2 {
-        fill: rgba(245, 158, 11, 0.5);
-    }
-    .is-l3 {
-        fill: rgba(245, 158, 11, 0.74);
-    }
-    .is-l4 {
-        fill: #f59e0b;
-    }
+.cell {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.035);
 
-    &__legend {
-        display: flex;
-        align-items: center;
-        gap: spacing(0.5);
-        margin-top: spacing(1);
-        font-size: rem(11px);
-        color: $text-secondary;
+    &.l1 {
+        background: rgba(var(--color-timerBg), 0.28);
     }
+    &.l2 {
+        background: rgba(var(--color-timerBg), 0.5);
+    }
+    &.l3 {
+        background: rgba(var(--color-timerBg), 0.74);
+    }
+    &.l4 {
+        background: rgb(var(--color-timerBg));
+        box-shadow: 0 0 12px rgba(var(--color-timerBg), 0.55);
+    }
+}
 
-    &__swatch {
-        width: rem(12px);
-        height: rem(12px);
-        border-radius: $radius-xss;
-        display: inline-block;
+.heat-legend {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: rem(14px);
+    font-size: rem(12.5px);
+    color: $text-secondary;
 
-        &.is-l0 {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        &.is-l1 {
-            background: rgba(245, 158, 11, 0.28);
-        }
-        &.is-l2 {
-            background: rgba(245, 158, 11, 0.5);
-        }
-        &.is-l3 {
-            background: rgba(245, 158, 11, 0.74);
-        }
-        &.is-l4 {
-            background: #f59e0b;
-        }
+    .cell {
+        width: 14px;
+        height: 14px;
     }
 }
 </style>

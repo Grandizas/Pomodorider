@@ -1,26 +1,25 @@
 <template>
-    <ul class="ach-timeline">
-        <li
+    <div class="ach-list">
+        <div
             v-for="a in ACHIEVEMENTS"
             :key="a.key"
-            class="ach-timeline__item"
-            :class="{ 'is-unlocked': unlockedAt(a.key) }"
+            class="ach"
+            :class="unlockedAt(a.key) ? 'unlocked' : 'locked'"
         >
-            <span class="ach-timeline__icon">
+            <span class="badge">
                 <FontAwesomeIcon
                     :icon="['far', unlockedAt(a.key) ? a.icon : 'lock']"
-                    class="icon-regular"
                 />
             </span>
-            <span class="ach-timeline__body">
-                <span class="ach-timeline__name">{{ a.name }}</span>
-                <span class="ach-timeline__desc">{{ a.description }}</span>
-            </span>
-            <span class="ach-timeline__when">
+            <div class="info">
+                <div class="t">{{ a.name }}</div>
+                <div class="d">{{ a.description }}</div>
+            </div>
+            <div class="status">
                 {{ unlockedAt(a.key) ? formatDate(unlockedAt(a.key)!) : 'Locked' }}
-            </span>
-        </li>
-    </ul>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -31,7 +30,6 @@ import { ACHIEVEMENTS } from '~~/constants/achievements';
 
 const store = useAchievementsStore();
 
-/** key -> ISO unlock timestamp, for the ones this user has earned. */
 const unlockedMap = computed(
     () => new Map(store.unlocked.map((u) => [u.key, u.unlockedAt])),
 );
@@ -50,69 +48,79 @@ function formatDate(iso: string): string {
 </script>
 
 <style scoped lang="scss">
-.ach-timeline {
+.ach-list {
     display: flex;
     flex-direction: column;
-    gap: spacing(1);
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    gap: rem(12px);
+}
 
-    &__item {
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-        padding: $spacing-sm $spacing-md;
-        border-radius: $radius-lg;
-        background: $button-background-color;
+.ach {
+    display: flex;
+    align-items: center;
+    gap: rem(18px);
+    padding: rem(18px) rem(22px);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    outline: 1px solid rgba(255, 255, 255, 0.04);
+
+    &.locked {
         opacity: 0.55;
-        transition: opacity $transition-fast;
-
-        &.is-unlocked {
-            opacity: 1;
-        }
     }
 
-    &__icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: rem(36px);
-        height: rem(36px);
-        flex-shrink: 0;
-        border-radius: $radius-full;
-        background: rgba(255, 255, 255, 0.06);
+    &.unlocked {
+        background: linear-gradient(
+            180deg,
+            rgba(var(--flame-rgb), 0.12),
+            rgba(var(--flame-rgb), 0.04)
+        );
+        outline: 1px solid rgba(var(--flame-rgb), 0.3);
+        box-shadow: 0 0 30px rgba(var(--flame-rgb), 0.12);
+    }
+
+    .badge {
+        width: rem(44px);
+        height: rem(44px);
+        border-radius: 50%;
+        flex: none;
+        display: grid;
+        place-items: center;
+        background: $button-background-color;
         color: $text-secondary;
-        font-size: rem(15px);
-
-        .is-unlocked & {
-            color: #f59e0b;
-        }
+        font-size: rem(18px);
     }
 
-    &__body {
-        display: flex;
-        flex-direction: column;
-        gap: spacing(0.25);
-        flex: 1 1 auto;
+    &.unlocked .badge {
+        background: radial-gradient(circle at 50% 30%, #4a4a4a, #2a2a2a);
+        color: var(--flame-2);
+        box-shadow:
+            0 0 18px rgba(var(--flame-rgb), 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .info {
+        flex: 1;
         min-width: 0;
+
+        .t {
+            font-weight: 700;
+            font-size: rem(16px);
+        }
+
+        .d {
+            font-size: rem(13.6px);
+            color: $text-secondary;
+            margin-top: 3px;
+        }
     }
 
-    &__name {
-        font-weight: 600;
-        color: $text-color;
-    }
-
-    &__desc {
-        font-size: rem(13px);
-        color: $text-secondary;
-    }
-
-    &__when {
-        flex-shrink: 0;
-        font-size: rem(12px);
+    .status {
+        font-size: rem(13.6px);
         color: $text-secondary;
         white-space: nowrap;
+    }
+
+    &.unlocked .status {
+        color: rgb(var(--color-timerBg));
     }
 }
 </style>

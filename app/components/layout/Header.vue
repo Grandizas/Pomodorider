@@ -1,30 +1,53 @@
 <template>
     <header class="app-header">
-        <div class="auth-info">
-            <!--
-             * If authenticated
-            -->
+        <NuxtLink to="/" class="brand">
+            <img src="/images/logo.svg" alt="" class="brand__logo" />
+            <span class="brand__name">Pomodorider</span>
+        </NuxtLink>
+
+        <div class="topbar-right">
             <template v-if="user">
-                <parts-streak-badge />
-                <ui-button
+                <div
+                    v-if="streakStore.loaded"
+                    class="streak-pill"
+                    :class="{ 'is-lit': streakStore.hasStreak }"
+                    :title="`Current streak: ${streakStore.currentStreak} day${
+                        streakStore.currentStreak === 1 ? '' : 's'
+                    } · Longest: ${streakStore.longestStreak}`"
+                >
+                    <FontAwesomeIcon
+                        :icon="['fas', 'fire']"
+                        class="streak-pill__flame"
+                    />
+                    <span class="streak-pill__n">{{
+                        streakStore.currentStreak
+                    }}</span>
+                </div>
+
+                <NuxtLink
+                    v-if="!onAnalytics"
                     to="/analytics"
-                    variant="icon"
+                    class="icon-link"
                     title="Your stats"
                     aria-label="Your stats"
                 >
-                    <FontAwesomeIcon
-                        :icon="['far', 'chart-line']"
-                        class="icon-regular"
-                    />
-                </ui-button>
-                <span class="user-email">{{ user.email }}</span>
-                <ui-button
-                    class="logout-btn"
+                    <FontAwesomeIcon :icon="['far', 'chart-line']" />
+                </NuxtLink>
+
+                <div class="acct">
+                    <span class="acct__avatar">
+                        <FontAwesomeIcon :icon="['fas', 'user']" />
+                    </span>
+                    <span class="acct__email">{{ user.email }}</span>
+                </div>
+
+                <button
+                    class="btn-ghost"
                     :disabled="loggingOut"
                     @click="handleLogout"
                 >
                     {{ loggingOut ? '…' : 'Log out' }}
-                </ui-button>
+                </button>
             </template>
 
             <template v-else>
@@ -44,13 +67,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useStreakStore } from '~~/stores/streak';
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const router = useRouter();
+const route = useRoute();
+const streakStore = useStreakStore();
 
 const loggingOut = ref(false);
+const onAnalytics = computed(() => route.path === '/analytics');
 
 async function handleLogout() {
     loggingOut.value = true;

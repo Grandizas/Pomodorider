@@ -6,6 +6,17 @@
             -->
             <template v-if="user">
                 <parts-streak-badge />
+                <ui-button
+                    to="/analytics"
+                    variant="icon"
+                    title="Your stats"
+                    aria-label="Your stats"
+                >
+                    <FontAwesomeIcon
+                        :icon="['far', 'chart-line']"
+                        class="icon-regular"
+                    />
+                </ui-button>
                 <span class="user-email">{{ user.email }}</span>
                 <ui-button
                     class="logout-btn"
@@ -33,6 +44,8 @@
 </template>
 
 <script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const router = useRouter();

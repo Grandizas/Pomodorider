@@ -40,6 +40,7 @@ import {
     faHourglassClock,
     faArrowRotateLeft,
     faShieldKeyhole,
+    faChartLine,
 } from '@fortawesome/pro-regular-svg-icons';
 
 // Prevent auto-adding CSS since Nuxt handles it
@@ -68,6 +69,7 @@ library.add(
     faArrowLeft,
     faEnvelope,
     faShieldKeyhole,
+    faChartLine,
     // Achievement icons — registered in both styles (solid toast / regular modal).
     fasFire,
     farFire,

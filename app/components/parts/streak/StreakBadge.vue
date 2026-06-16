@@ -11,11 +11,9 @@
             class="streak-badge"
             :title="`Current streak: ${streakStore.currentStreak} day${
                 streakStore.currentStreak === 1 ? '' : 's'
-            } · Longest: ${streakStore.longestStreak} · ${
-                streakStore.weekDaysActive
-            }/7 this week`"
+            } · Longest: ${streakStore.longestStreak}`"
         >
-            <!-- Segmented weekly ring (one segment per weekday) wrapping the flame -->
+            <!-- Segmented ring (one segment per streak day, up to 7) wrapping the flame -->
             <svg class="streak-ring" viewBox="0 0 36 36" aria-hidden="true">
                 <path
                     v-for="(seg, i) in segments"
@@ -67,12 +65,18 @@ function segPath(startDeg: number, endDeg: number): string {
     return `M${x1.toFixed(2)} ${y1.toFixed(2)} A${R} ${R} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
 }
 
+// Light one segment per streak day, capped at a full ring. Past 7 days the
+// ring stays full — a "strong streak" state — and never contradicts the count.
+const litSegments = computed(() =>
+    Math.min(streakStore.currentStreak, SEGMENTS),
+);
+
 const segments = computed(() =>
     Array.from({ length: SEGMENTS }, (_, i) => {
         const start = i * STEP + GAP_DEG / 2;
         return {
             d: segPath(start, start + SEG_DEG),
-            active: i < streakStore.weekDaysActive,
+            active: i < litSegments.value,
         };
     }),
 );

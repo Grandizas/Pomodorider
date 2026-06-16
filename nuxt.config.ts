@@ -3,6 +3,19 @@ export default defineNuxtConfig({
     compatibilityDate: '2024-04-03',
     devtools: { enabled: true },
 
+    app: {
+        head: {
+            meta: [
+                // Google Search Console domain verification (URL-prefix
+                // property for https://pomodorider.com).
+                {
+                    name: 'google-site-verification',
+                    content: '9IvybGLVuPbMMdpNm9idJdZosSyqdf4CDbiKbX0LRdw',
+                },
+            ],
+        },
+    },
+
     devServer: {
         port: 3001,
     },
@@ -26,7 +39,43 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
         '@nuxtjs/supabase',
         '@vercel/speed-insights/nuxt',
+        '@nuxtjs/seo',
     ],
+
+    // Canonical site identity for @nuxtjs/seo (sitemap, robots, canonical
+    // links, OG tags). `url` falls back to the deploy URL at build time.
+    site: {
+        url: process.env.NUXT_PUBLIC_APP_URL || 'https://pomodorider.com',
+        name: 'Pomodorider',
+        description:
+            'A free online Pomodoro timer with cozy themes, ambient sounds, focus streaks, and analytics. Stay focused — no signup required.',
+        defaultLocale: 'en',
+    },
+
+    // Exclude private, auth-gated, and utility routes from the sitemap so
+    // Google only indexes the public-facing pages.
+    sitemap: {
+        exclude: [
+            '/analytics',
+            '/login',
+            '/signup',
+            '/confirm',
+            '/forgot-password',
+            '/reset-password',
+        ],
+    },
+
+    // Keep auth/account pages out of the index entirely.
+    robots: {
+        disallow: [
+            '/analytics',
+            '/login',
+            '/signup',
+            '/confirm',
+            '/forgot-password',
+            '/reset-password',
+        ],
+    },
 
     supabase: {
         redirect: false,

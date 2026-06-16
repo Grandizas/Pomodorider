@@ -1,7 +1,7 @@
 <template>
     <div class="logo-text">
         <ui-svg-logo width="32" height="32" />
-        <h1>Pomodorider</h1>
+        <span class="logo-text__name">Pomodorider</span>
     </div>
 </template>
 
@@ -15,7 +15,9 @@
     align-items: center;
     justify-content: center;
 
-    h1 {
+    &__name {
+        font-size: 1.5rem;
+        font-weight: 700;
         color: $text-color;
     }
 }

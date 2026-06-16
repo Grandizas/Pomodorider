@@ -22,7 +22,9 @@
             <h2>How the Pomodoro Technique works</h2>
             <ol>
                 <li>Choose a task you want to focus on.</li>
-                <li>Start the timer and work for 25 minutes — one "pomodoro."</li>
+                <li>
+                    Start the timer and work for 25 minutes — one "pomodoro."
+                </li>
                 <li>Take a short 5-minute break when the timer rings.</li>
                 <li>
                     After four pomodoros, take a longer 15–30 minute break to
@@ -74,7 +76,13 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { useHead, useSeoMeta, useSchemaOrg, defineWebSite, defineSoftwareApp } from '#imports';
+import {
+    useHead,
+    useSeoMeta,
+    useSchemaOrg,
+    defineWebSite,
+    defineSoftwareApp,
+} from '#imports';
 import { useTimerStore } from '~~/stores/timer';
 import { useDocumentVisibility, usePageLeave } from '@vueuse/core';
 
@@ -196,7 +204,7 @@ watch(visibility, (current) => {
 
 .seo-content {
     max-width: 720px;
-    margin: $spacing-xl auto 0;
+    margin: 12rem auto 0;
     padding: $spacing-lg;
     color: $text-secondary;
     line-height: 1.65;

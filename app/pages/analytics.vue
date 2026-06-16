@@ -65,13 +65,27 @@
                         <h2>Focus over time</h2>
                         <div class="analytics-range" role="group" aria-label="Range">
                             <button
-                                v-for="opt in RANGES"
+                                v-for="opt in RANGE_OPTIONS"
                                 :key="opt"
                                 class="analytics-range__btn"
-                                :class="{ 'is-active': range === opt }"
-                                @click="range = opt"
+                                :class="{
+                                    'is-active': range === opt,
+                                    'is-locked': rangeLocked(opt),
+                                }"
+                                :disabled="rangeLocked(opt)"
+                                :title="
+                                    rangeLocked(opt)
+                                        ? 'Upgrade to Pro to see more history'
+                                        : undefined
+                                "
+                                @click="selectRange(opt)"
                             >
                                 {{ opt }}d
+                                <FontAwesomeIcon
+                                    v-if="rangeLocked(opt)"
+                                    :icon="['far', 'lock']"
+                                    class="analytics-range__lock"
+                                />
                             </button>
                         </div>
                     </div>
@@ -97,7 +111,9 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
 import { useHead } from '#imports';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAnalytics, formatMinutes } from '~/composables/useAnalytics';
+import { useIsPro } from '~/composables/useIsPro';
 import { useStreakStore } from '~~/stores/streak';
 import { useAchievementsStore } from '~~/stores/achievements';
 import { ACHIEVEMENTS } from '~~/constants/achievements';
@@ -105,11 +121,28 @@ import { ACHIEVEMENTS } from '~~/constants/achievements';
 const user = useSupabaseUser();
 const streakStore = useStreakStore();
 const achievementsStore = useAchievementsStore();
+const { limit } = useIsPro();
 const { summary, loading, loaded, error, load, recentSeries } = useAnalytics();
 
-const RANGES = [7, 30] as const;
-const range = ref<(typeof RANGES)[number]>(7);
-const series = computed(() => recentSeries(range.value));
+// History range is a metered Pro capability: free users are capped at
+// `historyDays` (7), Pro is unlimited. While PRO_GATING_ENABLED is off this is
+// Infinity for everyone, so every range is unlocked and nothing changes yet.
+const RANGE_OPTIONS = [7, 30] as const;
+const historyDays = computed(() => limit('historyDays'));
+const range = ref<number>(7);
+
+function rangeLocked(days: number): boolean {
+    return days > historyDays.value;
+}
+function selectRange(days: number) {
+    if (!rangeLocked(days)) range.value = days;
+}
+
+// Never plot more than the user is entitled to, even if a stale selection
+// outlives an entitlement change (e.g. logout). min(n, Infinity) === n.
+const series = computed(() =>
+    recentSeries(Math.min(range.value, historyDays.value)),
+);
 
 function reload() {
     void load();
@@ -222,6 +255,16 @@ useHead({ title: 'Your stats - Pomodorider' });
             background: #f59e0b;
             color: #1a1a1a;
         }
+
+        &.is-locked {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    }
+
+    &__lock {
+        margin-left: spacing(0.5);
+        font-size: rem(10px);
     }
 }
 

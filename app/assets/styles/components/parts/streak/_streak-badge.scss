@@ -1,0 +1,60 @@
+@use '../../../abstracts/variables' as *;
+@use '../../../abstracts/functions' as *;
+
+.streak-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(38px);
+    height: rem(38px);
+    flex-shrink: 0;
+}
+
+.streak-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    &__seg {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.14);
+        stroke-width: 3;
+        stroke-linecap: round;
+        transition: stroke $transition-fast;
+
+        &.is-active {
+            stroke: #f59e0b; // warm amber — the "lit" days this week
+        }
+    }
+}
+
+.streak-badge__center {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    color: $text-secondary;
+    transition: color $transition-fast;
+
+    &.is-lit {
+        color: $text-color;
+    }
+}
+
+.streak-badge__flame {
+    font-size: rem(11px);
+    color: #6b7280; // muted when no active streak
+
+    .is-lit & {
+        color: #f97316; // ember orange when the streak is alive
+    }
+}
+
+.streak-badge__count {
+    font-size: rem(11px);
+    font-weight: 700;
+    margin-top: rem(1px);
+}

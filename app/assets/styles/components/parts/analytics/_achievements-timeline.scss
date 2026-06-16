@@ -1,0 +1,78 @@
+@use '../../../abstracts/functions' as *;
+@use '../../../abstracts/variables' as *;
+
+.ach-list {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12px);
+}
+
+.ach {
+    display: flex;
+    align-items: center;
+    gap: rem(18px);
+    padding: rem(18px) rem(22px);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    outline: 1px solid rgba(255, 255, 255, 0.04);
+
+    &.locked {
+        opacity: 0.55;
+    }
+
+    &.unlocked {
+        background: linear-gradient(
+            180deg,
+            rgba(var(--flame-rgb), 0.12),
+            rgba(var(--flame-rgb), 0.04)
+        );
+        outline: 1px solid rgba(var(--flame-rgb), 0.3);
+        box-shadow: 0 0 30px rgba(var(--flame-rgb), 0.12);
+    }
+
+    .badge {
+        width: rem(44px);
+        height: rem(44px);
+        border-radius: 50%;
+        flex: none;
+        display: grid;
+        place-items: center;
+        background: $button-background-color;
+        color: $text-secondary;
+        font-size: rem(18px);
+    }
+
+    &.unlocked .badge {
+        background: radial-gradient(circle at 50% 30%, #4a4a4a, #2a2a2a);
+        color: var(--flame-2);
+        box-shadow:
+            0 0 18px rgba(var(--flame-rgb), 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .info {
+        flex: 1;
+        min-width: 0;
+
+        .t {
+            font-weight: 700;
+            font-size: rem(16px);
+        }
+
+        .d {
+            font-size: rem(13.6px);
+            color: $text-secondary;
+            margin-top: 3px;
+        }
+    }
+
+    .status {
+        font-size: rem(13.6px);
+        color: $text-secondary;
+        white-space: nowrap;
+    }
+
+    &.unlocked .status {
+        color: rgb(var(--color-timerBg));
+    }
+}

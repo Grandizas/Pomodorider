@@ -11,11 +11,9 @@
             class="streak-badge"
             :title="`Current streak: ${streakStore.currentStreak} day${
                 streakStore.currentStreak === 1 ? '' : 's'
-            } · Longest: ${streakStore.longestStreak} · ${
-                streakStore.weekDaysActive
-            }/7 this week`"
+            } · Longest: ${streakStore.longestStreak}`"
         >
-            <!-- Segmented weekly ring (one segment per weekday) wrapping the flame -->
+            <!-- Segmented ring (one segment per streak day, up to 7) wrapping the flame -->
             <svg class="streak-ring" viewBox="0 0 36 36" aria-hidden="true">
                 <path
                     v-for="(seg, i) in segments"
@@ -67,73 +65,23 @@ function segPath(startDeg: number, endDeg: number): string {
     return `M${x1.toFixed(2)} ${y1.toFixed(2)} A${R} ${R} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
 }
 
+// Light one segment per streak day, capped at a full ring. Past 7 days the
+// ring stays full — a "strong streak" state — and never contradicts the count.
+const litSegments = computed(() =>
+    Math.min(streakStore.currentStreak, SEGMENTS),
+);
+
 const segments = computed(() =>
     Array.from({ length: SEGMENTS }, (_, i) => {
         const start = i * STEP + GAP_DEG / 2;
         return {
             d: segPath(start, start + SEG_DEG),
-            active: i < streakStore.weekDaysActive,
+            active: i < litSegments.value,
         };
     }),
 );
 </script>
 
 <style scoped lang="scss">
-.streak-badge {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: rem(38px);
-    height: rem(38px);
-    flex-shrink: 0;
-}
-
-.streak-ring {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-
-    &__seg {
-        fill: none;
-        stroke: rgba(255, 255, 255, 0.14);
-        stroke-width: 3;
-        stroke-linecap: round;
-        transition: stroke $transition-fast;
-
-        &.is-active {
-            stroke: #f59e0b; // warm amber — the "lit" days this week
-        }
-    }
-}
-
-.streak-badge__center {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    color: $text-secondary;
-    transition: color $transition-fast;
-
-    &.is-lit {
-        color: $text-color;
-    }
-}
-
-.streak-badge__flame {
-    font-size: rem(11px);
-    color: #6b7280; // muted when no active streak
-
-    .is-lit & {
-        color: #f97316; // ember orange when the streak is alive
-    }
-}
-
-.streak-badge__count {
-    font-size: rem(11px);
-    font-weight: 700;
-    margin-top: rem(1px);
-}
+@use '@@/app/assets/styles/components/parts/streak/_streak-badge.scss';
 </style>

@@ -131,6 +131,8 @@ export function useAnalytics() {
             dailyAll.value = [];
             hourly.value = [];
             rawRows.value = [];
+            loading.value = false;
+            error.value = null;
             loaded.value = true;
             return;
         }
@@ -145,8 +147,15 @@ export function useAnalytics() {
             .eq('user_id', uid)
             .eq('mode', 'work');
 
-        // Bow out if a newer load started or auth flipped while awaiting.
-        if (seq !== loadSeq || currentUserId() !== uid) return;
+        // A newer load started while we awaited: it now owns the loading flag,
+        // so bow out WITHOUT touching it (the latest load always settles it).
+        if (seq !== loadSeq) return;
+        // Auth flipped but we're still the latest load: clear loading ourselves
+        // so the UI can't get stuck spinning after a logout mid-flight.
+        if (currentUserId() !== uid) {
+            loading.value = false;
+            return;
+        }
 
         if (err) {
             console.error('[analytics] failed to load sessions', err);

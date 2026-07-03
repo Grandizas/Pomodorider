@@ -21,15 +21,9 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
-        stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-        stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
         supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
         public: {
-            stripePublishableKey:
-                process.env.NUXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
             appUrl: process.env.NUXT_PUBLIC_APP_URL || 'http://localhost:3001',
-            stripePriceIdMonthly: process.env.STRIPE_PRICE_ID_MONTHLY,
-            stripePriceIdYearly: process.env.STRIPE_PRICE_ID_YEARLY,
             // mediaBaseUrl: process.env.NUXT_PUBLIC_MEDIA_BASE_URL,
         },
     },

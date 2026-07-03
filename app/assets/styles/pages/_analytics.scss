@@ -280,37 +280,6 @@
             );
             box-shadow: 0 0 16px rgba(var(--color-timerBg), 0.3);
         }
-
-        &.locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    }
-}
-
-// ---------------- Upsell ----------------
-.upsell {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: $spacing-md;
-
-    &__icon {
-        font-size: rem(22px);
-        color: rgb(var(--color-timerBg));
-        flex-shrink: 0;
-    }
-
-    h2 {
-        font-size: rem(16px);
-        font-weight: 700;
-        margin: 0;
-    }
-
-    &__desc {
-        font-size: rem(13.6px);
-        color: $text-secondary;
-        margin-top: 4px;
     }
 }
 

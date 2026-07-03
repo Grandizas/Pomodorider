@@ -12,12 +12,7 @@
                     </div>
                 </div>
                 <button
-                    v-if="
-                        user &&
-                        loaded &&
-                        summary.totalSessions > 0 &&
-                        can('data_export')
-                    "
+                    v-if="user && loaded && summary.totalSessions > 0"
                     class="btn-export"
                     title="Download your sessions as CSV"
                     @click="exportCsv"
@@ -173,16 +168,7 @@
                             <button
                                 v-for="opt in RANGE_OPTIONS"
                                 :key="opt"
-                                :class="{
-                                    on: range === opt,
-                                    locked: rangeLocked(opt),
-                                }"
-                                :disabled="rangeLocked(opt)"
-                                :title="
-                                    rangeLocked(opt)
-                                        ? 'Upgrade to Pro to see more history'
-                                        : undefined
-                                "
+                                :class="{ on: range === opt }"
                                 @click="selectRange(opt)"
                             >
                                 {{ opt }}d
@@ -192,41 +178,24 @@
                     <parts-analytics-daily-bar-chart :points="series" />
                 </section>
 
-                <!-- Advanced (Pro): heatmap + time of day -->
-                <template v-if="can('advanced_stats')">
-                    <section class="card card-pad">
-                        <div class="card-head">
-                            <h2>Activity</h2>
-                            <div class="meta">
-                                Last {{ HEATMAP_WEEKS }} weeks
-                            </div>
-                        </div>
-                        <parts-analytics-heatmap :points="heatmapPoints" />
-                    </section>
-
-                    <section class="card card-pad">
-                        <div class="card-head">
-                            <h2>Time of day</h2>
-                            <div v-if="peakHourLabel" class="meta">
-                                Most focused around
-                                <b>{{ peakHourLabel }}</b>
-                            </div>
-                        </div>
-                        <parts-analytics-hourly-chart :hours="hourly" />
-                    </section>
-                </template>
-
-                <section v-else class="card card-pad upsell">
-                    <FontAwesomeIcon
-                        :icon="['far', 'chart-line']"
-                        class="upsell__icon"
-                    />
-                    <div>
-                        <h2>{{ advancedStats.title }}</h2>
-                        <p class="upsell__desc">
-                            {{ advancedStats.description }} Available with Pro.
-                        </p>
+                <!-- Activity heatmap + time of day -->
+                <section class="card card-pad">
+                    <div class="card-head">
+                        <h2>Activity</h2>
+                        <div class="meta">Last {{ HEATMAP_WEEKS }} weeks</div>
                     </div>
+                    <parts-analytics-heatmap :points="heatmapPoints" />
+                </section>
+
+                <section class="card card-pad">
+                    <div class="card-head">
+                        <h2>Time of day</h2>
+                        <div v-if="peakHourLabel" class="meta">
+                            Most focused around
+                            <b>{{ peakHourLabel }}</b>
+                        </div>
+                    </div>
+                    <parts-analytics-hourly-chart :hours="hourly" />
                 </section>
 
                 <!-- Achievements -->
@@ -254,16 +223,13 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useHead } from '#imports';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useAnalytics, formatMinutes } from '~/composables/useAnalytics';
-import { useIsPro } from '~/composables/useIsPro';
 import { useStreakStore } from '~~/stores/streak';
 import { useAchievementsStore } from '~~/stores/achievements';
 import { ACHIEVEMENTS, STREAK_ACHIEVEMENTS } from '~~/constants/achievements';
-import { PRO_FEATURES } from '~~/constants/proFeatures';
 
 const user = useSupabaseUser();
 const streakStore = useStreakStore();
 const achievementsStore = useAchievementsStore();
-const { limit, can } = useIsPro();
 const {
     summary,
     hourly,
@@ -275,29 +241,15 @@ const {
     exportCsv,
 } = useAnalytics();
 
-const advancedStats = PRO_FEATURES.advanced_stats;
-
-// History range is a metered Pro capability: free users are capped at
-// `historyDays` (7), Pro is unlimited. While PRO_GATING_ENABLED is off this is
-// Infinity for everyone, so every range is unlocked and nothing changes yet.
 const RANGE_OPTIONS = [7, 30] as const;
-const historyDays = computed(() => limit('historyDays'));
 const range = ref<number>(7);
 
-function rangeLocked(days: number): boolean {
-    return days > historyDays.value;
-}
 function selectRange(days: number) {
-    if (!rangeLocked(days)) range.value = days;
+    range.value = days;
 }
 
-// Never plot more than the user is entitled to. min(n, Infinity) === n.
-const series = computed(() =>
-    recentSeries(Math.min(range.value, historyDays.value)),
-);
+const series = computed(() => recentSeries(range.value));
 
-// Advanced (Pro) views — history is unlimited for Pro, so the heatmap shows the
-// full window regardless of the free `historyDays` cap.
 const HEATMAP_WEEKS = 12;
 const heatmapPoints = computed(() => recentSeries(HEATMAP_WEEKS * 7));
 

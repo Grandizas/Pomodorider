@@ -135,7 +135,7 @@ const faqs = [
     },
     {
         q: 'Is Pomodorider free to use?',
-        a: 'Yes. Pomodorider is a free online Pomodoro timer you can use right in your browser with no signup required. An optional Pro plan unlocks extra themes and advanced focus analytics.',
+        a: 'Yes. Pomodorider is a completely free online Pomodoro timer you can use right in your browser with no signup required. Every feature — custom themes, focus streaks, achievements, and advanced analytics — is free, with no paid plans.',
     },
     {
         q: 'Do I need to create an account?',

@@ -13,7 +13,7 @@ It focuses on smooth UX, elegant visuals, and customizable session control — w
 
 https://pomodorider.vercel.app/
 
-<img width="1676" height="952" alt="Screenshot 2026-07-03 173535" src="https://github.com/user-attachments/assets/bc32f06f-990f-42b3-803e-b665557f945b" />
+<img width="1897" height="989" alt="image" src="https://github.com/user-attachments/assets/2d5e8525-2949-42d6-9ab8-d660a04b09f6" />
 
 
 ---

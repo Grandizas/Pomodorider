@@ -7,8 +7,9 @@
 :root {
     // Accent (charts, highlights) follows the active orb theme. The theme store
     // overrides --color-timerBg on <html> at runtime; this is the pre-hydration
-    // fallback — warm amber, matching the cozy default look.
-    --color-timerBg: 245, 176, 70;
+    // fallback — white, matching the default 'white' theme so the orb doesn't
+    // flash a different color before hydration.
+    --color-timerBg: 255, 255, 255;
 
     // The streak "fire" is always warm — semantic, never themeable.
     --flame-1: #ffc24d;

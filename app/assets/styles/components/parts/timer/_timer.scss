@@ -2,6 +2,23 @@
 @use '../../../abstracts/functions' as *;
 @use '../../../abstracts/breakpoints' as *;
 
+// Ring geometry. Static, so keep them as SCSS vars — they resolve to concrete
+// lengths at compile time, which keeps the calc()s in the mask type-checkable
+// (an untyped `var()` inside a gradient stop reads as a syntax mismatch).
+$ring-thickness: 9px;
+$ring-gap: 7px;
+
+// Registering --progress as a typed, animatable number lets the conic ring's
+// gradient stop interpolate — a plain custom property (or a background
+// transition) can't be animated, so the sweep would otherwise step. The tick
+// updates it once a second; the `1s linear` transition on the wrapper carries
+// it smoothly to the next value.
+@property --progress {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+}
+
 .timer-orb {
     /* Sizing */
     width: 400px;
@@ -39,7 +56,44 @@
     outline: 1px solid rgba(var(--color-timerBg), 0.04);
 
     &__wrapper {
+        display: grid;
         position: relative;
+        place-items: center;
+
+        // Animate --progress here (where the tick sets it); the ring inherits
+        // the smoothly changing value. Matches the liquid's height transition
+        // so ring and liquid advance together.
+        transition: --progress 1s linear;
+
+        // Stack the glow, ring and orb in a single centered cell so the ring
+        // sits concentric with the orb.
+        > * {
+            grid-area: 1 / 1;
+        }
+    }
+
+    // Conic progress ring, masked to a thin rim just outside the orb. The sweep
+    // follows --progress (0–100), set on the wrapper alongside --fill-pct.
+    &__ring {
+        width: calc(100% + #{2 * ($ring-thickness + $ring-gap)});
+        height: calc(100% + #{2 * ($ring-thickness + $ring-gap)});
+        border-radius: 50%;
+        pointer-events: none;
+        background: conic-gradient(
+            from -90deg,
+            rgb(var(--color-timerBg)) calc(var(--progress, 0) * 1%),
+            rgba(255, 255, 255, 0.07) 0
+        );
+        -webkit-mask: radial-gradient(
+            farthest-side,
+            transparent calc(100% - #{$ring-thickness}),
+            #000 calc(100% - #{$ring-thickness} + 1px)
+        );
+        mask: radial-gradient(
+            farthest-side,
+            transparent calc(100% - #{$ring-thickness}),
+            #000 calc(100% - #{$ring-thickness} + 1px)
+        );
     }
 
     &::after {
@@ -72,38 +126,47 @@
             inset 0 -20px 60px rgba(0, 0, 0, 0.15);
     }
 
-    /* Vignette + soft edge darkening (makes it “orb-y”) */
+    /* Ambient theme glow behind the orb — the soft "shadow" halo. */
     &__light {
         top: 50%;
         left: 50%;
-        width: 250%;
-        height: 250%;
+        width: 270%;
+        height: 270%;
+        z-index: -1;
         position: absolute;
 
         /* bigger than the orb so it spills outside */
         border-radius: 50%;
+        pointer-events: none;
 
-        /* radial halo — strongest near orb edge, fades out */
+        /* A filled glow like the design: strong near the orb, fading to nothing.
+           --glow-strength scales the whole halo (tune per theme if needed). */
+        --glow-strength: 0.22;
         background: radial-gradient(
             circle,
-            transparent,
-            rgba(var(--color-timerBg), var(--color-timerLightStrength)),
-            transparent,
-            transparent
+            rgba(var(--color-timerBg), var(--glow-strength)) 0%,
+            rgba(var(--color-timerBg), calc(var(--glow-strength) * 0.4)) 40%,
+            transparent 68%
         );
 
         filter: blur(var(--glow-blur));
-        transform: translateZ(0) translate(-50%, -50%); // avoids some blur jitter
-        z-index: -1;
-        pointer-events: none;
+        transform: translate(-50%, -50%);
     }
 }
 
-.timer-orb__time {
+.timer-orb__readout {
     z-index: 3;
+    display: flex;
+    row-gap: spacing(1);
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.timer-orb__time {
     opacity: 0.6;
     font-weight: 700;
-    position: relative;
     color: var(--text);
     filter: blur(0.4px);
     letter-spacing: 5px;
@@ -113,14 +176,25 @@
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
 }
 
+.timer-orb__pct {
+    font-weight: 600;
+    font-size: rem(13px);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
 .timer-orb__liquid {
-    /* For later animation you’ll just change --fill-pct */
+    /* Height follows --fill-pct; the transition glides it between ticks so it
+       rises in step with the ring (see --progress on the wrapper). */
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 2;
     position: absolute;
     height: var(--fill-pct);
+    transition: height 1s linear;
 
     /* Bright “liquid” */
     background: radial-gradient(
@@ -149,6 +223,94 @@
             transparent 0%,
             rgba(0, 0, 0, 0.6) 85%
         );
+    }
+}
+
+/* Lit, wavy highlight sitting on the liquid surface — a lighter tint of the
+   theme colour so it reads as a lit water line on every theme. */
+.timer-orb__surface {
+    top: -6px;
+    left: -6%;
+    width: 112%;
+    height: 14px;
+    z-index: 1;
+    filter: blur(1px);
+    position: absolute;
+    border-radius: 50%;
+    background: color-mix(in srgb, rgb(var(--color-timerBg)), #fff 45%);
+    animation: prSurface 4s ease-in-out infinite;
+}
+
+/* Bubbles rising through the liquid and fading near the surface. */
+.timer-orb__bubble {
+    left: 50%;
+    bottom: 8%;
+    z-index: 1;
+    width: 7px;
+    height: 7px;
+    opacity: 0;
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.4);
+    animation: prBubble 5.5s ease-in infinite;
+
+    &:nth-child(4) {
+        left: 60%;
+        width: 5px;
+        height: 5px;
+        animation-duration: 6.5s;
+        animation-delay: 1.4s;
+    }
+
+    &:nth-child(5) {
+        left: 40%;
+        width: 6px;
+        height: 6px;
+        animation-duration: 6s;
+        animation-delay: 2.6s;
+    }
+}
+
+/* Soft specular sheen near the top-left for a glassy, 3D look. */
+.timer-orb__gloss {
+    top: 14%;
+    left: 18%;
+    z-index: 3;
+    width: 90px;
+    height: 60px;
+    filter: blur(4px);
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.22),
+        rgba(255, 255, 255, 0) 70%
+    );
+}
+
+@keyframes prSurface {
+    0%,
+    100% {
+        transform: translateX(-4%) scaleY(1);
+    }
+    50% {
+        transform: translateX(4%) scaleY(1.25);
+    }
+}
+
+@keyframes prBubble {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(1);
+    }
+    15% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-160px) scale(0.4);
     }
 }
 

@@ -463,7 +463,7 @@ const features = [
     },
     {
         title: 'Ambient & custom sounds',
-        body: 'Gentle cues for start and finish — coffee pouring, a soft clock, a cat purr. Or upload your own.',
+        body: 'Soft glass chimes for every beat — start, pause, resume, and finish. Or upload your own.',
         icon: icon(
             '<path d="M11 5 6 9H2v6h4l5 4V5Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M19 5a9 9 0 0 1 0 14" />',
         ),

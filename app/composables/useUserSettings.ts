@@ -9,7 +9,26 @@ import { type ThemeKey, themes } from '~~/themes/themes';
 import {
     MAX_CUSTOM_SOUNDS,
     MAX_CUSTOM_SOUND_BYTES,
+    startSounds,
+    pauseSounds,
+    resumeSounds,
+    finishSounds,
 } from '~~/constants/sounds';
+
+/**
+ * The built-in file paths that are still valid for each slot. Used to retire
+ * references to sounds we've removed: an older blob (localStorage or the DB)
+ * may point a slot at a file that no longer ships, which would 404 into
+ * silence — so any built-in path not in this set falls back to the default.
+ * `custom:<id>` uploads are exempt; the playback resolver already tolerates a
+ * missing custom sound.
+ */
+const BUILTIN_SOUND_PATHS: Record<'start' | 'pause' | 'resume' | 'end', Set<string>> = {
+    start: new Set(startSounds.map((o) => `/sounds/${o.fileName}`)),
+    pause: new Set(pauseSounds.map((o) => `/sounds/${o.fileName}`)),
+    resume: new Set(resumeSounds.map((o) => `/sounds/${o.fileName}`)),
+    end: new Set(finishSounds.map((o) => `/sounds/${o.fileName}`)),
+};
 
 /**
  * Persisted shape stored both in localStorage (all visitors) and in
@@ -79,8 +98,21 @@ export function useUserSettings() {
         typeof v === 'number' && Number.isFinite(v) ? v : fallback;
     const bool = (v: unknown, fallback: boolean) =>
         typeof v === 'boolean' ? v : fallback;
-    const str = (v: unknown, fallback: string) =>
-        typeof v === 'string' && v ? v : fallback;
+
+    /**
+     * Resolve a stored sound slot: keep custom uploads and still-valid built-in
+     * paths, but drop a reference to a removed built-in file so it falls back to
+     * the current default instead of silently 404-ing.
+     */
+    const soundRef = (
+        v: unknown,
+        slot: 'start' | 'pause' | 'resume' | 'end',
+        fallback: string,
+    ) => {
+        if (typeof v !== 'string' || !v) return fallback;
+        if (v.startsWith('custom:')) return v;
+        return BUILTIN_SOUND_PATHS[slot].has(v) ? v : fallback;
+    };
 
     /**
      * Keep only well-formed custom sounds: a string id, an audio data URI
@@ -141,9 +173,10 @@ export function useUserSettings() {
             soundEnabled: bool(t.soundEnabled, d.soundEnabled),
             soundVolume: num(t.soundVolume, d.soundVolume),
             sounds: {
-                start: str(s.start, d.sounds.start),
-                pause: str(s.pause, d.sounds.pause),
-                end: str(s.end, d.sounds.end),
+                start: soundRef(s.start, 'start', d.sounds.start),
+                pause: soundRef(s.pause, 'pause', d.sounds.pause),
+                resume: soundRef(s.resume, 'resume', d.sounds.resume),
+                end: soundRef(s.end, 'end', d.sounds.end),
             },
             customSounds: normalizeCustomSounds(t.customSounds),
         };

@@ -3,7 +3,7 @@
         <li
             v-for="[themeName, theme] in Object.entries(themes)"
             :style="{
-                background: `radial-gradient(circle at 50% 30%, transparent, rgb(${theme.colors.timerBg}))`,
+                background: `radial-gradient(circle at 50% 30%, rgba(${theme.colors.timerBg}, 0.4), rgb(${theme.colors.timerBg}))`,
             }"
             :aria-label="theme.ariaLabel"
             :class="{ active: themeName === currentTheme }"

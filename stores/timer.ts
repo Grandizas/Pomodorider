@@ -29,6 +29,7 @@ export interface TimerSettings {
     sounds: {
         start: string;
         pause: string;
+        resume: string;
         end: string;
     };
     /** User-uploaded sounds, referenced from the slots above as `custom:<id>`. */
@@ -90,9 +91,10 @@ export const useTimerStore = defineStore('timer', {
             soundEnabled: true,
             soundVolume: 0.5,
             sounds: {
-                start: '/sounds/start.mp3',
-                pause: '/sounds/pause.mp3',
-                end: '/sounds/alarm-1.mp3',
+                start: '/sounds/start/start_glass_1.wav',
+                pause: '/sounds/pause/pause_glass_1.wav',
+                resume: '/sounds/resume/resume_glass_1.wav',
+                end: '/sounds/finish/finish_glass_1.wav',
             },
             customSounds: [],
         } as TimerSettings,
@@ -101,10 +103,12 @@ export const useTimerStore = defineStore('timer', {
         intervalId: null as number | null,
         startSound: null as Howl | null,
         pauseSound: null as Howl | null,
+        resumeSound: null as Howl | null,
         endSound: null as Howl | null,
         soundSources: {
             start: '',
             pause: '',
+            resume: '',
             end: '',
         },
         // Timestamp of the last control sound, used to throttle rapid
@@ -163,7 +167,10 @@ export const useTimerStore = defineStore('timer', {
             return ref;
         },
 
-        playSound(type: 'start' | 'pause' | 'end', forceFile?: string) {
+        playSound(
+            type: 'start' | 'pause' | 'resume' | 'end',
+            forceFile?: string,
+        ) {
             if (!this.settings.soundEnabled && !forceFile) return;
 
             // A slot may reference a built-in path or a `custom:<id>` upload.
@@ -181,6 +188,7 @@ export const useTimerStore = defineStore('timer', {
             const soundProp = `${type}Sound` as
                 | 'startSound'
                 | 'pauseSound'
+                | 'resumeSound'
                 | 'endSound';
 
             // If we're forcing a file (preview), we might want to create a new one or reuse
@@ -245,7 +253,7 @@ export const useTimerStore = defineStore('timer', {
             if (this.isPaused) {
                 this.isPaused = false;
                 this.isRunning = true;
-                this.playSound('start');
+                this.playSound('resume');
                 this.tick();
             }
         },
@@ -339,6 +347,7 @@ export const useTimerStore = defineStore('timer', {
             if (newSettings.soundVolume !== undefined) {
                 this.startSound?.volume(newSettings.soundVolume);
                 this.pauseSound?.volume(newSettings.soundVolume);
+                this.resumeSound?.volume(newSettings.soundVolume);
                 this.endSound?.volume(newSettings.soundVolume);
             }
 

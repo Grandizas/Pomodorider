@@ -14,79 +14,87 @@ export const MAX_CUSTOM_SOUND_BYTES = 512 * 1024; // 512 KB per file
 
 export const startSounds: SoundOption[] = [
     {
-        label: 'Default start',
-        value: 'default_start',
-        fileName: 'start.mp3',
+        label: 'Glass 1',
+        value: 'start_glass_1',
+        fileName: 'start/start_glass_1.wav',
     },
     {
-        label: 'Coffee pouring',
-        value: 'coffee_pouring',
-        fileName: 'coffee-pouring.mp3',
+        label: 'Glass 2',
+        value: 'start_glass_2',
+        fileName: 'start/start_glass_2.wav',
+    },
+    {
+        label: 'Glass 3',
+        value: 'start_glass_3',
+        fileName: 'start/start_glass_3.wav',
+    },
+    {
+        label: 'Glass 4',
+        value: 'start_glass_4',
+        fileName: 'start/start_glass_4.wav',
     },
 ];
 
 export const pauseSounds: SoundOption[] = [
     {
-        label: 'Default pause',
-        value: 'default_pause',
-        fileName: 'pause.mp3',
+        label: 'Glass 1',
+        value: 'pause_glass_1',
+        fileName: 'pause/pause_glass_1.wav',
+    },
+    {
+        label: 'Glass 2',
+        value: 'pause_glass_2',
+        fileName: 'pause/pause_glass_2.wav',
+    },
+    {
+        label: 'Glass 3',
+        value: 'pause_glass_3',
+        fileName: 'pause/pause_glass_3.wav',
+    },
+    {
+        label: 'Glass 4',
+        value: 'pause_glass_4',
+        fileName: 'pause/pause_glass_4.wav',
+    },
+];
+
+export const resumeSounds: SoundOption[] = [
+    {
+        label: 'Glass 1',
+        value: 'resume_glass_1',
+        fileName: 'resume/resume_glass_1.wav',
+    },
+    {
+        label: 'Glass 2',
+        value: 'resume_glass_2',
+        fileName: 'resume/resume_glass_2.wav',
+    },
+    {
+        label: 'Glass 3',
+        value: 'resume_glass_3',
+        fileName: 'resume/resume_glass_3.wav',
     },
 ];
 
 export const finishSounds: SoundOption[] = [
     {
-        label: 'Alarm 1',
-        value: 'alarm1',
-        fileName: 'alarm-1.mp3',
+        label: 'Glass 1',
+        value: 'finish_glass_1',
+        fileName: 'finish/finish_glass_1.wav',
     },
     {
-        label: 'Alarm 2',
-        value: 'alarm2',
-        fileName: 'alarm-2.mp3',
+        label: 'Glass 2',
+        value: 'finish_glass_2',
+        fileName: 'finish/finish_glass_2.wav',
     },
     {
-        label: 'Alarm 3',
-        value: 'alarm3',
-        fileName: 'alarm-3.mp3',
+        label: 'Glass 3',
+        value: 'finish_glass_3',
+        fileName: 'finish/finish_glass_3.wav',
     },
     {
-        label: 'Alarm 4',
-        value: 'alarm4',
-        fileName: 'alarm-4.mp3',
-    },
-    {
-        label: 'Alarm 5',
-        value: 'alarm5',
-        fileName: 'alarm-5.mp3',
-    },
-    {
-        label: 'Alarm 6',
-        value: 'alarm6',
-        fileName: 'alarm-6.mp3',
-    },
-    {
-        label: 'Clock ticking',
-        value: 'clock_ticking',
-        fileName: 'clock-ticking.mp3',
-    },
-    {
-        label: 'Pulsing',
-        value: 'pulsing',
-        fileName: 'pulsing.mp3',
-    },
-    {
-        label: 'War drums',
-        value: 'war-drums',
-        fileName: 'war-drums.mp3',
-    },
-    {
-        label: 'Crows',
-        value: 'crows',
-        fileName: 'crows.mp3',
-    },
-    {
-        label: 'Cat purr',
-        value: 'cat_purr',
-        fileName: 'cat-purr.mp3',
+        label: 'Glass 4',
+        value: 'finish_glass_4',
+        fileName: 'finish/finish_glass_4.wav',
     },
 ];

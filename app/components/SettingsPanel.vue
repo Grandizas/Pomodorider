@@ -161,7 +161,7 @@
                         />
                     </div>
 
-                    <!-- ----- * Sound pickers (start / pause / finish) * ----- -->
+                    <!-- --- * Sound pickers (start / pause / resume / finish) * --- -->
                     <template v-for="slot in soundSlots" :key="slot.type">
                         <p>{{ slot.label }}</p>
                         <ui-dropdown>
@@ -265,6 +265,7 @@ import { useNotifications } from '~/composables/useNotifications';
 import {
     startSounds,
     pauseSounds,
+    resumeSounds,
     finishSounds,
     MAX_CUSTOM_SOUNDS,
     MAX_CUSTOM_SOUND_BYTES,
@@ -272,7 +273,7 @@ import {
 } from '~~/constants/sounds';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-type SoundSlot = 'start' | 'pause' | 'end';
+type SoundSlot = 'start' | 'pause' | 'resume' | 'end';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -353,19 +354,21 @@ const save = () => {
     close();
 };
 
-// The three sound pickers, driven by one loop in the template.
+// The sound pickers, driven by one loop in the template.
 const soundSlots = [
     { type: 'start', label: 'Start sound', options: startSounds },
     { type: 'pause', label: 'Pause sound', options: pauseSounds },
+    { type: 'resume', label: 'Resume sound', options: resumeSounds },
     { type: 'end', label: 'Finish sound', options: finishSounds },
 ] as const;
 
 // Built-in fallback per slot when a referenced custom sound is removed. Mirrors
 // the store's default `settings.sounds`.
 const DEFAULT_SLOT_SOUND: Record<SoundSlot, string> = {
-    start: '/sounds/start.mp3',
-    pause: '/sounds/pause.mp3',
-    end: '/sounds/alarm-1.mp3',
+    start: '/sounds/start/start_glass_1.wav',
+    pause: '/sounds/pause/pause_glass_1.wav',
+    resume: '/sounds/resume/resume_glass_1.wav',
+    end: '/sounds/finish/finish_glass_1.wav',
 };
 
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -383,13 +386,13 @@ const getSoundLabel = (type: SoundSlot) => {
         return found ? found.label : 'Select sound';
     }
 
-    const fileName = value.split('/').pop();
     let options: SoundOption[] = [];
     if (type === 'start') options = startSounds;
     else if (type === 'pause') options = pauseSounds;
+    else if (type === 'resume') options = resumeSounds;
     else if (type === 'end') options = finishSounds;
 
-    const option = options.find((o) => o.fileName === fileName);
+    const option = options.find((o) => `/sounds/${o.fileName}` === value);
     return option ? option.label : 'Select sound';
 };
 
@@ -476,7 +479,7 @@ const removeCustom = (id: string) => {
         (c) => c.id !== id,
     );
     const ref = `custom:${id}`;
-    (['start', 'pause', 'end'] as SoundSlot[]).forEach((slot) => {
+    (['start', 'pause', 'resume', 'end'] as SoundSlot[]).forEach((slot) => {
         if (localSettings.value.sounds[slot] === ref) {
             localSettings.value.sounds[slot] = DEFAULT_SLOT_SOUND[slot];
         }

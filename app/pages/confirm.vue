@@ -36,7 +36,7 @@ watch(
     user,
     (newUser) => {
         if (newUser && !error.value) {
-            router.push('/');
+            router.push('/app');
         }
     },
     { immediate: true },

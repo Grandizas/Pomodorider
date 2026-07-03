@@ -1,8 +1,16 @@
-type SoundOption = {
+export type SoundOption = {
     label: string;
     value: string;
     fileName: string;
 };
+
+/**
+ * Custom sounds live inside the persisted settings blob (localStorage + the
+ * synced `settings_json`), so these caps keep that blob small enough for both
+ * the browser storage quota and a reasonable DB row.
+ */
+export const MAX_CUSTOM_SOUNDS = 5;
+export const MAX_CUSTOM_SOUND_BYTES = 512 * 1024; // 512 KB per file
 
 export const startSounds: SoundOption[] = [
     {

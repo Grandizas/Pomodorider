@@ -46,8 +46,9 @@ test.describe('Email auth', () => {
         await expect(page.getByText(/check your email/i)).toBeVisible();
 
         // ─── Confirm we're actually signed in ───────────────────────────
-        // Header.vue renders the user's email when authenticated.
-        await gotoReady(page, '/');
+        // Header.vue renders the user's email when authenticated (on /app; the
+        // landing page at / has its own nav without the account chip).
+        await gotoReady(page, '/app');
         await expect(page.getByText(email)).toBeVisible();
 
         // ─── Log out ────────────────────────────────────────────────────
@@ -64,8 +65,8 @@ test.describe('Email auth', () => {
         await page.getByLabel('Password').fill(password);
         await page.getByRole('button', { name: /sign in/i }).click();
 
-        // login.vue does router.push('/') on success.
-        await expect(page).toHaveURL('/');
+        // login.vue does router.push('/app') on success.
+        await expect(page).toHaveURL('/app');
         await expect(page.getByText(email)).toBeVisible();
     });
 
@@ -85,8 +86,8 @@ test.describe('Email auth', () => {
         await page.getByRole('button', { name: /sign up/i }).click();
         await expect(page.getByText(/check your email/i)).toBeVisible();
 
-        // Log out the session that signup created.
-        await gotoReady(page, '/');
+        // Log out the session that signup created (from /app, which has the header).
+        await gotoReady(page, '/app');
         await page.getByRole('button', { name: /log out/i }).click();
         await expect(page.getByRole('link', { name: /login/i })).toBeVisible();
 

@@ -11,6 +11,7 @@ export interface TimerSettings {
     autoStartBreaks: boolean;
     autoStartWork: boolean;
     keepAwake: boolean; // hold a screen wake lock while the timer runs
+    notificationsEnabled: boolean; // browser notification when a session ends away from the tab
     soundEnabled: boolean;
     soundVolume: number;
     sounds: {
@@ -38,6 +39,14 @@ export const useTimerStore = defineStore('timer', {
         // on it only ever going up.
         completedWorkSessions: 0,
 
+        // Bumped once per genuinely-finished session — work OR break, skips
+        // excluded — so client-only listeners (e.g. browser notifications) can
+        // react to a session ending without the store itself touching browser
+        // APIs. `lastEndedMode` holds the mode that just finished. See
+        // `notifications.client.ts`.
+        sessionEndCount: 0,
+        lastEndedMode: 'work' as TimerMode,
+
         // Settings
         settings: {
             workDuration: 25,
@@ -47,6 +56,7 @@ export const useTimerStore = defineStore('timer', {
             autoStartBreaks: false,
             autoStartWork: false,
             keepAwake: false,
+            notificationsEnabled: false,
             soundEnabled: true,
             soundVolume: 0.5,
             sounds: {
@@ -214,6 +224,9 @@ export const useTimerStore = defineStore('timer', {
         },
 
         completeSession(skipped: boolean = false) {
+            // Capture before pause()/switchMode() move state on.
+            const endedMode = this.mode;
+
             this.pause();
 
             // Play notification sound (not when the user skipped the session)
@@ -228,6 +241,14 @@ export const useTimerStore = defineStore('timer', {
                 if (!skipped) {
                     this.completedWorkSessions++;
                 }
+            }
+
+            // Signal a genuine completion for client-side listeners (browser
+            // notifications). Mirrors the end sound: only on real completion,
+            // never on a skip.
+            if (!skipped) {
+                this.lastEndedMode = endedMode;
+                this.sessionEndCount++;
             }
 
             // Switch to next mode

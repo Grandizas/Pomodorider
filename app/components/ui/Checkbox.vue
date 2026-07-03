@@ -1,15 +1,29 @@
 <template>
-    <label :for="id" class="checkbox-wrapper">
-        <input v-model="modelValue" :id="id" type="checkbox" class="checkbox" />
+    <label
+        :for="id"
+        class="checkbox-wrapper"
+        :class="{ 'is-disabled': disabled }"
+    >
+        <input
+            v-model="modelValue"
+            :id="id"
+            type="checkbox"
+            class="checkbox"
+            :disabled="disabled"
+        />
         <span class="checkbox-label">{{ text }}</span>
     </label>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-    id: string;
-    text: string;
-}>();
+withDefaults(
+    defineProps<{
+        id: string;
+        text: string;
+        disabled?: boolean;
+    }>(),
+    { disabled: false },
+);
 
 const modelValue = defineModel<boolean>('modelValue', { default: false });
 </script>
@@ -22,6 +36,15 @@ const modelValue = defineModel<boolean>('modelValue', { default: false });
     gap: spacing(1);
     cursor: pointer;
     align-items: center;
+
+    &.is-disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        input[type='checkbox'] {
+            cursor: not-allowed;
+        }
+    }
 }
 
 input[type='checkbox'] {

@@ -33,6 +33,10 @@ https://pomodorider.vercel.app/
   - Session completion sounds
   - Adjustable sound preferences
 
+- 🔔 **Browser Notifications**
+  - Desktop alert when a session ends while you're on another tab
+  - Opt-in, permission-gated
+
 - ⚙️ **Flexible Settings**
   - Custom session durations
   - Auto-start controls

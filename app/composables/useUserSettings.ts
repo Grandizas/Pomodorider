@@ -93,6 +93,10 @@ export function useUserSettings() {
             autoStartBreaks: bool(t.autoStartBreaks, d.autoStartBreaks),
             autoStartWork: bool(t.autoStartWork, d.autoStartWork),
             keepAwake: bool(t.keepAwake, d.keepAwake),
+            notificationsEnabled: bool(
+                t.notificationsEnabled,
+                d.notificationsEnabled,
+            ),
             soundEnabled: bool(t.soundEnabled, d.soundEnabled),
             soundVolume: num(t.soundVolume, d.soundVolume),
             sounds: {

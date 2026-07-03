@@ -115,6 +115,21 @@
                     </div>
                 </div>
 
+                <!-- ----------------- [ Notifications ] ----------------- -->
+                <div class="setting-group">
+                    <h3>Notifications</h3>
+
+                    <div class="setting-item">
+                        <ui-checkbox
+                            id="notifications-enabled"
+                            v-model="localSettings.notificationsEnabled"
+                            :disabled="notificationsBlocked"
+                            text="Notify me when a session ends"
+                        />
+                        <span class="setting-hint">{{ notificationHint }}</span>
+                    </div>
+                </div>
+
                 <!-- ----------------- [ Sound ] ----------------- -->
                 <div class="setting-group">
                     <h3>Sound</h3>
@@ -232,8 +247,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useTimerStore } from '~~/stores/timer';
+import { useNotifications } from '~/composables/useNotifications';
 import { startSounds, pauseSounds, finishSounds } from '~~/constants/sounds';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -248,6 +264,44 @@ const emit = defineEmits<{
 const timerStore = useTimerStore();
 
 const localSettings = ref({ ...timerStore.settings });
+
+const {
+    supported: notificationsSupported,
+    permission: notificationPermission,
+    requestPermission: requestNotificationPermission,
+} = useNotifications();
+
+// The checkbox is disabled when notifications can't work at all (unsupported or
+// blocked by the browser), so the only way to switch it on is from a usable
+// 'default'/'granted' state.
+const notificationsBlocked = computed(
+    () => !notificationsSupported || notificationPermission.value === 'denied',
+);
+
+// Turning the toggle on prompts for browser permission on the spot (this runs
+// from the checkbox click, a valid user gesture). If the user dismisses or
+// blocks the prompt, flip the toggle back so the setting can never claim to be
+// on while notifications can't actually fire.
+watch(
+    () => localSettings.value.notificationsEnabled,
+    async (enabled) => {
+        if (!enabled || notificationPermission.value === 'granted') return;
+        const result = await requestNotificationPermission();
+        if (result !== 'granted') {
+            localSettings.value.notificationsEnabled = false;
+        }
+    },
+);
+
+const notificationHint = computed(() => {
+    if (!notificationsSupported) {
+        return 'Your browser does not support notifications.';
+    }
+    if (notificationPermission.value === 'denied') {
+        return 'Notifications are blocked — re-enable them in your browser site settings.';
+    }
+    return 'Get a desktop alert when a session ends while this tab is in the background.';
+});
 
 watch(
     () => props.isOpen,

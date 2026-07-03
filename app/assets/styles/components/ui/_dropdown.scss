@@ -103,6 +103,42 @@
         margin: spacing(1) 0;
         background-color: map.get(map.get($colors, neutral), 700);
     }
+
+    // "Upload custom sound" action: icon + label sit together on the left,
+    // overriding the base item's space-between.
+    :deep(.dropdown-item--upload) {
+        justify-content: flex-start;
+        color: map.get(map.get($colors, neutral), 400);
+    }
+
+    // A custom sound row: truncating label on the left, remove button on the
+    // right (kept apart by the base item's space-between).
+    :deep(.dropdown-item__label) {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    :deep(.dropdown-item__remove) {
+        flex-shrink: 0;
+        border: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: spacing(1);
+        border-radius: $radius-sm;
+        background: transparent;
+        color: map.get(map.get($colors, neutral), 400);
+        transition:
+            color $transition-fast,
+            background-color $transition-fast;
+
+        &:hover {
+            color: map.get(map.get($colors, neutral), 100);
+            background-color: map.get(map.get($colors, neutral), 600);
+        }
+    }
 }
 
 // ----------------- [ Open / close transition ] ----------------- //

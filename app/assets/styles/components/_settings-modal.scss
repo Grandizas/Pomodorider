@@ -102,6 +102,19 @@
     margin-top: spacing(1);
 }
 
+// Hidden file picker for custom sound uploads; triggered from the dropdown.
+.sound-file-input {
+    display: none;
+}
+
+// Higher specificity than the generic `.settings-panel p` so the error reads
+// clearly instead of as muted body text.
+.settings-panel p.sound-upload-error {
+    color: #f87171;
+    font-size: 0.8rem;
+    margin-top: spacing(1);
+}
+
 .settings-footer {
     padding: $spacing-lg;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

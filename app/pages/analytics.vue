@@ -42,7 +42,7 @@
                 class="card card-pad state"
             >
                 <p>No focus sessions yet — finish a Pomodoro to get started!</p>
-                <ui-button to="/">Start a timer</ui-button>
+                <ui-button to="/app">Start a timer</ui-button>
             </section>
 
             <div v-else class="stack">

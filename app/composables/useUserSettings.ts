@@ -1,7 +1,15 @@
 import type { Json, Database } from '~/types/database.types';
-import { useTimerStore, type TimerSettings } from '~~/stores/timer';
+import {
+    useTimerStore,
+    type TimerSettings,
+    type CustomSound,
+} from '~~/stores/timer';
 import { useThemeStore } from '~~/stores/theme';
 import { type ThemeKey, themes } from '~~/themes/themes';
+import {
+    MAX_CUSTOM_SOUNDS,
+    MAX_CUSTOM_SOUND_BYTES,
+} from '~~/constants/sounds';
 
 /**
  * Persisted shape stored both in localStorage (all visitors) and in
@@ -57,6 +65,9 @@ export function useUserSettings() {
             timer: {
                 ...timerStore.settings,
                 sounds: { ...timerStore.settings.sounds },
+                customSounds: timerStore.settings.customSounds.map((c) => ({
+                    ...c,
+                })),
             },
             theme: themeStore.activeTheme,
         };
@@ -70,6 +81,36 @@ export function useUserSettings() {
         typeof v === 'boolean' ? v : fallback;
     const str = (v: unknown, fallback: string) =>
         typeof v === 'string' && v ? v : fallback;
+
+    /**
+     * Keep only well-formed custom sounds: a string id, an audio data URI
+     * within the size cap, and at most `MAX_CUSTOM_SOUNDS` of them. Guards
+     * against a corrupt/oversized blob bloating storage or breaking playback.
+     */
+    function normalizeCustomSounds(raw: unknown): CustomSound[] {
+        if (!Array.isArray(raw)) return [];
+        const out: CustomSound[] = [];
+        for (const item of raw) {
+            if (out.length >= MAX_CUSTOM_SOUNDS) break;
+            if (!item || typeof item !== 'object') continue;
+            const { id, label, data } = item as Record<string, unknown>;
+            if (typeof id !== 'string' || !id) continue;
+            if (typeof data !== 'string' || !/^data:audio\//i.test(data)) {
+                continue;
+            }
+            // base64 inflates ~4/3; allow a little headroom over the raw cap.
+            if (data.length > MAX_CUSTOM_SOUND_BYTES * 2) continue;
+            out.push({
+                id,
+                label:
+                    typeof label === 'string' && label
+                        ? label.slice(0, 60)
+                        : 'Custom sound',
+                data,
+            });
+        }
+        return out;
+    }
 
     /**
      * Rebuild a TimerSettings object field-by-field from a known-good default,
@@ -104,6 +145,7 @@ export function useUserSettings() {
                 pause: str(s.pause, d.sounds.pause),
                 end: str(s.end, d.sounds.end),
             },
+            customSounds: normalizeCustomSounds(t.customSounds),
         };
     }
 

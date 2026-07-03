@@ -3,6 +3,18 @@ import { Howl } from 'howler';
 
 export type TimerMode = 'work' | 'shortBreak' | 'longBreak';
 
+/**
+ * A user-uploaded sound. `data` is a self-describing `data:audio/…;base64,…`
+ * URI, so it plays directly through Howler (which reads the format from the
+ * mime type) and persists inside the settings blob with no extra storage. Slots
+ * reference one by `custom:<id>`; see `resolveSoundSrc`.
+ */
+export interface CustomSound {
+    id: string;
+    label: string;
+    data: string;
+}
+
 export interface TimerSettings {
     workDuration: number; // in minutes
     shortBreakDuration: number;
@@ -19,6 +31,24 @@ export interface TimerSettings {
         pause: string;
         end: string;
     };
+    /** User-uploaded sounds, referenced from the slots above as `custom:<id>`. */
+    customSounds: CustomSound[];
+}
+
+/**
+ * Howler can't infer a codec from an extension-less `data:` URI, so derive a
+ * `format` hint from its mime subtype (e.g. `data:audio/mpeg` → 'mp3'). Returns
+ * undefined for regular file paths, which Howler handles on its own.
+ */
+function formatFromSrc(src: string): string[] | undefined {
+    const match = /^data:audio\/([^;,]+)/i.exec(src);
+    if (!match) return undefined;
+    let ext = match[1]!.toLowerCase();
+    if (ext === 'mpeg') ext = 'mp3';
+    else if (ext === 'wave' || ext === 'x-wav' || ext === 'x-pn-wav')
+        ext = 'wav';
+    else if (ext === 'x-m4a') ext = 'm4a';
+    return [ext];
 }
 
 export const useTimerStore = defineStore('timer', {
@@ -64,6 +94,7 @@ export const useTimerStore = defineStore('timer', {
                 pause: '/sounds/pause.mp3',
                 end: '/sounds/alarm-1.mp3',
             },
+            customSounds: [],
         } as TimerSettings,
 
         // Internal
@@ -115,11 +146,36 @@ export const useTimerStore = defineStore('timer', {
             }
         },
 
+        /**
+         * Turn a slot value into a concrete source Howler can load. A
+         * `custom:<id>` ref resolves to its stored data URI; a missing custom
+         * (removed, or not synced to this device) yields '' so the caller skips
+         * it instead of erroring. Anything else is a path, returned as-is.
+         */
+        resolveSoundSrc(ref: string): string {
+            if (ref.startsWith('custom:')) {
+                const id = ref.slice('custom:'.length);
+                return (
+                    this.settings.customSounds.find((c) => c.id === id)?.data ??
+                    ''
+                );
+            }
+            return ref;
+        },
+
         playSound(type: 'start' | 'pause' | 'end', forceFile?: string) {
             if (!this.settings.soundEnabled && !forceFile) return;
 
-            const soundFile = forceFile || this.settings.sounds[type];
-            if (!soundFile) return;
+            // A slot may reference a built-in path or a `custom:<id>` upload.
+            // `forceFile` (preview) is already a concrete src, so it passes
+            // through the resolver untouched.
+            const ref = forceFile || this.settings.sounds[type];
+            if (!ref) return;
+
+            const src = this.resolveSoundSrc(ref);
+            if (!src) return;
+
+            const format = formatFromSrc(src);
 
             // Use a specific property based on type
             const soundProp = `${type}Sound` as
@@ -130,8 +186,9 @@ export const useTimerStore = defineStore('timer', {
             // If we're forcing a file (preview), we might want to create a new one or reuse
             if (forceFile) {
                 const tempSound = new Howl({
-                    src: [forceFile],
+                    src: [src],
                     volume: this.settings.soundVolume,
+                    ...(format ? { format } : {}),
                 });
                 tempSound.once('end', () => tempSound.unload());
                 tempSound.once('loaderror', () => tempSound.unload());
@@ -148,12 +205,15 @@ export const useTimerStore = defineStore('timer', {
                 this.lastSoundAt = now;
             }
 
-            if (!this[soundProp] || this.soundSources[type] !== soundFile) {
+            // Cache by the slot ref (not the resolved src) so we never key the
+            // map on a huge data URI, and so swapping a custom sound busts it.
+            if (!this[soundProp] || this.soundSources[type] !== ref) {
                 this[soundProp] = new Howl({
-                    src: [soundFile],
+                    src: [src],
                     volume: this.settings.soundVolume,
+                    ...(format ? { format } : {}),
                 });
-                this.soundSources[type] = soundFile;
+                this.soundSources[type] = ref;
             }
 
             // Stop any in-flight playback of this sound before replaying, so

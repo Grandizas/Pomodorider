@@ -178,7 +178,7 @@ async function handleSubmit() {
     }
 
     sessionStorage.removeItem(RECOVERY_FLAG);
-    await router.push('/');
+    await router.push('/app');
 }
 </script>
 

@@ -161,74 +161,82 @@
                         />
                     </div>
 
-                    <!-- ----- * Start sounds * ----- -->
-                    <p>Start sound</p>
-                    <ui-dropdown>
-                        <template #toggle>
-                            <span>{{ getSoundLabel('start') }}</span>
-                            <FontAwesomeIcon
-                                :icon="['far', 'chevron-down']"
-                                class="icon-small"
-                            />
-                        </template>
+                    <!-- ----- * Sound pickers (start / pause / finish) * ----- -->
+                    <template v-for="slot in soundSlots" :key="slot.type">
+                        <p>{{ slot.label }}</p>
+                        <ui-dropdown>
+                            <template #toggle>
+                                <span>{{ getSoundLabel(slot.type) }}</span>
+                                <FontAwesomeIcon
+                                    :icon="['far', 'chevron-down']"
+                                    class="icon-small"
+                                />
+                            </template>
 
-                        <template #menu>
-                            <li
-                                v-for="(item, index) in startSounds"
-                                :key="index"
-                                class="dropdown-item"
-                                @click="updateSound('start', item)"
-                            >
-                                {{ item.label }}
-                            </li>
-                        </template>
-                    </ui-dropdown>
+                            <template #menu>
+                                <li
+                                    v-for="(item, index) in slot.options"
+                                    :key="'builtin-' + index"
+                                    class="dropdown-item"
+                                    @click="updateSound(slot.type, item)"
+                                >
+                                    {{ item.label }}
+                                </li>
 
-                    <!-- ----- * Pause sounds * ----- -->
-                    <p>Pause sound</p>
-                    <ui-dropdown>
-                        <template #toggle>
-                            <span>{{ getSoundLabel('pause') }}</span>
-                            <FontAwesomeIcon
-                                :icon="['far', 'chevron-down']"
-                                class="icon-small"
-                            />
-                        </template>
+                                <li
+                                    v-if="localSettings.customSounds.length"
+                                    class="dropdown-divider"
+                                    role="separator"
+                                ></li>
 
-                        <template #menu>
-                            <li
-                                v-for="(item, index) in pauseSounds"
-                                :key="index"
-                                class="dropdown-item"
-                                @click="updateSound('pause', item)"
-                            >
-                                {{ item.label }}
-                            </li>
-                        </template>
-                    </ui-dropdown>
+                                <li
+                                    v-for="sound in localSettings.customSounds"
+                                    :key="sound.id"
+                                    class="dropdown-item dropdown-item--custom"
+                                    @click="selectCustom(slot.type, sound)"
+                                >
+                                    <span class="dropdown-item__label">{{
+                                        sound.label
+                                    }}</span>
+                                    <button
+                                        type="button"
+                                        class="dropdown-item__remove"
+                                        title="Remove sound"
+                                        aria-label="Remove sound"
+                                        @click.stop="removeCustom(sound.id)"
+                                    >
+                                        <FontAwesomeIcon
+                                            :icon="['far', 'xmark']"
+                                        />
+                                    </button>
+                                </li>
 
-                    <!-- ----- * Finish sounds * ----- -->
-                    <p>Finish sound</p>
-                    <ui-dropdown>
-                        <template #toggle>
-                            <span>{{ getSoundLabel('end') }}</span>
-                            <FontAwesomeIcon
-                                :icon="['far', 'chevron-down']"
-                                class="icon-small"
-                            />
-                        </template>
+                                <li
+                                    class="dropdown-item dropdown-item--upload"
+                                    @click="triggerUpload(slot.type)"
+                                >
+                                    <FontAwesomeIcon
+                                        :icon="['far', 'arrow-up-from-bracket']"
+                                        class="icon-small"
+                                    />
+                                    Upload custom sound
+                                </li>
+                            </template>
+                        </ui-dropdown>
+                    </template>
 
-                        <template #menu>
-                            <li
-                                v-for="(item, index) in finishSounds"
-                                :key="index"
-                                class="dropdown-item"
-                                @click="updateSound('end', item)"
-                            >
-                                {{ item.label }}
-                            </li>
-                        </template>
-                    </ui-dropdown>
+                    <!-- Shared hidden input; the slot to fill is tracked in JS. -->
+                    <input
+                        ref="fileInput"
+                        type="file"
+                        accept="audio/*"
+                        class="sound-file-input"
+                        @change="onFileSelected"
+                    />
+
+                    <p v-if="uploadError" class="sound-upload-error">
+                        {{ uploadError }}
+                    </p>
                 </div>
 
                 <div class="setting-group">
@@ -248,10 +256,23 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { useTimerStore } from '~~/stores/timer';
+import {
+    useTimerStore,
+    type TimerSettings,
+    type CustomSound,
+} from '~~/stores/timer';
 import { useNotifications } from '~/composables/useNotifications';
-import { startSounds, pauseSounds, finishSounds } from '~~/constants/sounds';
+import {
+    startSounds,
+    pauseSounds,
+    finishSounds,
+    MAX_CUSTOM_SOUNDS,
+    MAX_CUSTOM_SOUND_BYTES,
+    type SoundOption,
+} from '~~/constants/sounds';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+type SoundSlot = 'start' | 'pause' | 'end';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -263,7 +284,17 @@ const emit = defineEmits<{
 
 const timerStore = useTimerStore();
 
-const localSettings = ref({ ...timerStore.settings });
+// A deep-enough draft of the store settings: the nested `sounds` and
+// `customSounds` are cloned so edits (incl. uploads) stay local until "Save".
+function cloneSettings(): TimerSettings {
+    return {
+        ...timerStore.settings,
+        sounds: { ...timerStore.settings.sounds },
+        customSounds: timerStore.settings.customSounds.map((c) => ({ ...c })),
+    };
+}
+
+const localSettings = ref<TimerSettings>(cloneSettings());
 
 const {
     supported: notificationsSupported,
@@ -307,7 +338,8 @@ watch(
     () => props.isOpen,
     (isOpen) => {
         if (isOpen) {
-            localSettings.value = { ...timerStore.settings };
+            localSettings.value = cloneSettings();
+            uploadError.value = '';
         }
     },
 );
@@ -321,11 +353,38 @@ const save = () => {
     close();
 };
 
-const getSoundLabel = (type: 'start' | 'pause' | 'end') => {
-    const value = localSettings.value.sounds[type];
-    const fileName = value.split('/').pop();
+// The three sound pickers, driven by one loop in the template.
+const soundSlots = [
+    { type: 'start', label: 'Start sound', options: startSounds },
+    { type: 'pause', label: 'Pause sound', options: pauseSounds },
+    { type: 'end', label: 'Finish sound', options: finishSounds },
+] as const;
 
-    let options: any[] = [];
+// Built-in fallback per slot when a referenced custom sound is removed. Mirrors
+// the store's default `settings.sounds`.
+const DEFAULT_SLOT_SOUND: Record<SoundSlot, string> = {
+    start: '/sounds/start.mp3',
+    pause: '/sounds/pause.mp3',
+    end: '/sounds/alarm-1.mp3',
+};
+
+const fileInput = ref<HTMLInputElement | null>(null);
+const pendingSlot = ref<SoundSlot>('start');
+const uploadError = ref('');
+
+const getSoundLabel = (type: SoundSlot) => {
+    const value = localSettings.value.sounds[type];
+
+    if (value.startsWith('custom:')) {
+        const id = value.slice('custom:'.length);
+        const found = localSettings.value.customSounds.find(
+            (c) => c.id === id,
+        );
+        return found ? found.label : 'Select sound';
+    }
+
+    const fileName = value.split('/').pop();
+    let options: SoundOption[] = [];
     if (type === 'start') options = startSounds;
     else if (type === 'pause') options = pauseSounds;
     else if (type === 'end') options = finishSounds;
@@ -334,12 +393,94 @@ const getSoundLabel = (type: 'start' | 'pause' | 'end') => {
     return option ? option.label : 'Select sound';
 };
 
-const updateSound = (type: 'start' | 'pause' | 'end', item: any) => {
+const updateSound = (type: SoundSlot, item: SoundOption) => {
     const path = `/sounds/${item.fileName}`;
     localSettings.value.sounds[type] = path;
 
     // Preview sound
     timerStore.playSound(type, path);
+};
+
+/** Point a slot at an existing custom sound and preview it. */
+const selectCustom = (type: SoundSlot, sound: CustomSound) => {
+    localSettings.value.sounds[type] = `custom:${sound.id}`;
+    timerStore.playSound(type, sound.data);
+};
+
+const triggerUpload = (type: SoundSlot) => {
+    pendingSlot.value = type;
+    uploadError.value = '';
+    fileInput.value?.click();
+};
+
+const readAsDataURL = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+
+/** File name without its extension, trimmed to a sane label length. */
+const fileLabel = (name: string) => {
+    const base = name.replace(/\.[^.]+$/, '').trim() || 'Custom sound';
+    return base.length > 40 ? `${base.slice(0, 40)}…` : base;
+};
+
+const onFileSelected = async (e: Event) => {
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = ''; // let the same file be re-picked later
+    if (!file) return;
+
+    if (!file.type.startsWith('audio/')) {
+        uploadError.value = 'Please choose an audio file.';
+        return;
+    }
+    if (file.size > MAX_CUSTOM_SOUND_BYTES) {
+        const kb = Math.round(MAX_CUSTOM_SOUND_BYTES / 1024);
+        uploadError.value = `That file is too large (max ${kb} KB).`;
+        return;
+    }
+    if (localSettings.value.customSounds.length >= MAX_CUSTOM_SOUNDS) {
+        uploadError.value = `You can keep up to ${MAX_CUSTOM_SOUNDS} custom sounds — remove one first.`;
+        return;
+    }
+
+    let data: string;
+    try {
+        data = await readAsDataURL(file);
+    } catch {
+        uploadError.value = 'Could not read that file. Try another.';
+        return;
+    }
+    if (!data.startsWith('data:audio/')) {
+        uploadError.value = 'That file is not a supported audio format.';
+        return;
+    }
+
+    const id =
+        globalThis.crypto?.randomUUID?.() ??
+        `cs_${Date.now()}_${Math.round(Math.random() * 1e6)}`;
+    const slot = pendingSlot.value;
+    localSettings.value.customSounds.push({ id, label: fileLabel(file.name), data });
+    localSettings.value.sounds[slot] = `custom:${id}`;
+    uploadError.value = '';
+
+    timerStore.playSound(slot, data); // preview
+};
+
+/** Delete a custom sound and reset any slot that was using it. */
+const removeCustom = (id: string) => {
+    localSettings.value.customSounds = localSettings.value.customSounds.filter(
+        (c) => c.id !== id,
+    );
+    const ref = `custom:${id}`;
+    (['start', 'pause', 'end'] as SoundSlot[]).forEach((slot) => {
+        if (localSettings.value.sounds[slot] === ref) {
+            localSettings.value.sounds[slot] = DEFAULT_SLOT_SOUND[slot];
+        }
+    });
 };
 
 const resetStats = () => {

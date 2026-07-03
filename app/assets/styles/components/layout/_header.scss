@@ -50,14 +50,14 @@
 .topbar-right {
     display: flex;
     align-items: center;
-    gap: rem(14px);
+    gap: rem(12px);
 }
 
 .streak-pill {
     display: inline-flex;
     align-items: center;
-    gap: rem(8px);
-    padding: rem(6px) rem(12px) rem(6px) rem(8px);
+    gap: rem(6px);
+    padding: rem(6px) rem(12px);
     border-radius: $radius-full;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -91,7 +91,7 @@
     width: rem(34px);
     height: rem(34px);
     border-radius: $radius-full;
-    background: $button-background-color;
+    background: #222222;
     color: $text-secondary;
     transition:
         transform $transition-fast,
@@ -100,7 +100,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        background: #444444;
+        background: #2c2c2c;
         color: $text-color;
     }
 }
@@ -108,25 +108,29 @@
 .acct {
     display: inline-flex;
     align-items: center;
-    gap: rem(10px);
-    padding: rem(6px);
+    gap: rem(8px);
+    padding: rem(5px) rem(12px) rem(5px) rem(6px);
     border-radius: $radius-full;
-    background: rgba(255, 255, 255, 0.03);
+    background: #1a1a1a;
 
     &__avatar {
-        width: rem(30px);
-        height: rem(30px);
+        width: rem(24px);
+        height: rem(24px);
         border-radius: 50%;
         display: grid;
         place-items: center;
-        background: $button-background-color;
-        color: $text-color;
-        font-size: rem(13px);
+        background: #2c2c2c;
+        color: $text-secondary;
+        font-size: rem(12px);
     }
 
     &__email {
-        font-size: rem(13.6px);
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: rem(13px);
         color: $text-secondary;
+        max-width: rem(150px);
+        text-overflow: ellipsis;
 
         @include respond-to(tablet) {
             display: none;
@@ -138,10 +142,10 @@
     border: 0;
     cursor: pointer;
     font-family: inherit;
-    font-size: rem(13.6px);
-    padding: rem(8px) rem(16px);
+    font-size: rem(13px);
+    padding: rem(7px) rem(15px);
     border-radius: $radius-full;
-    background: $button-background-color;
+    background: #1a1a1a;
     color: $text-color;
     transition:
         transform $transition-fast,
@@ -149,7 +153,7 @@
 
     &:hover {
         transform: translateY(-1px);
-        background: #444444;
+        background: #2c2c2c;
     }
 
     &:disabled {

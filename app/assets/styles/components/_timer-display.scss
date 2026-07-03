@@ -6,7 +6,7 @@
     flex: 1;
     display: flex;
     position: relative;
-    padding: spacing(6);
+    padding: spacing(3) spacing(6);
     flex-direction: column;
     margin-left: -$picker-width;
 
@@ -30,51 +30,86 @@
         border-radius: $radius-md;
 
         .timer-mode {
+            gap: rem(6px);
             display: flex;
-            gap: $spacing-sm;
-            padding: $spacing-xs;
-            border-radius: $radius-lg;
+            padding: rem(5px);
+            border-radius: 50rem;
+            margin-bottom: spacing(2);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .mode-button {
+            border: none;
             outline: none;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
+            background: none;
+            font-size: rem(13px);
+            color: $text-secondary;
             border-radius: 50rem;
-            background: $background-color;
-            padding: spacing(1) spacing(2);
-            color: rgb(var(--color-timerText));
+            padding: rem(9px) rem(22px);
             transition: all $transition-normal;
 
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
+            &:hover:not(:disabled):not(.active) {
+                color: $text-color;
             }
 
-            &:hover {
-                color: $text-color;
+            &.active {
+                font-weight: 700;
+                // Themed pill is a light colour, so the label needs a dark tint
+                // (a very dark shade of the theme) to read — matches the design.
+                background: rgba(var(--color-timerBg), 0.9);
+                color: color-mix(in srgb, rgb(var(--color-timerBg)) 15%, #000);
+            }
+
+            &:disabled {
+                cursor: not-allowed;
+
+                &:not(.active) {
+                    opacity: 0.5;
+                }
             }
         }
 
         .timer-stats {
             display: flex;
-            gap: $spacing-xl;
-            margin-top: 5rem;
+            margin-top: 3rem;
+            overflow: hidden;
+            align-items: stretch;
+            border-radius: $radius-3xl;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .stat {
+            gap: spacing(0.25);
+            display: flex;
             text-align: center;
+            align-items: center;
+            flex-direction: column;
+            padding: spacing(1.75) spacing(3.5);
+
+            &__divider {
+                width: 1px;
+                align-self: stretch;
+                background: rgba(255, 255, 255, 0.07);
+            }
         }
 
         .stat-value {
-            font-size: 2rem;
             font-weight: 700;
+            font-size: rem(26px);
+            color: $text-color;
+
+            &--accent {
+                color: rgb(var(--color-timerBg));
+            }
         }
 
         .stat-label {
-            font-size: 0.9rem;
             letter-spacing: 1px;
+            font-size: rem(11px);
             color: $text-secondary;
             text-transform: uppercase;
         }

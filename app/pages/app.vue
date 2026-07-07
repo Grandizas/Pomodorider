@@ -24,13 +24,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useHead, useSeoMeta } from '#imports';
 import { useTimerStore } from '~~/stores/timer';
 
 const timerStore = useTimerStore();
 const settingsOpen = ref(false);
 const achievementsOpen = ref(false);
+
+// Keyboard shortcuts, advertised on the landing page and in the README:
+//   Space — start / pause / resume     R — reset     S — skip
+function onKeydown(event: KeyboardEvent) {
+    const isSpace = event.code === 'Space' || event.key === ' ';
+    const key = event.key.toLowerCase();
+    if (!isSpace && key !== 'r' && key !== 's') return;
+
+    // Don't hijack keys while typing, when a modal is open, or when they're
+    // meant to activate a focused control (button/checkbox/link).
+    if (settingsOpen.value || achievementsOpen.value) return;
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+    const target = event.target as HTMLElement | null;
+    if (target) {
+        const tag = target.tagName;
+        if (
+            tag === 'INPUT' ||
+            tag === 'TEXTAREA' ||
+            tag === 'SELECT' ||
+            tag === 'BUTTON' ||
+            tag === 'A' ||
+            target.isContentEditable
+        ) {
+            return;
+        }
+    }
+
+    // Space would otherwise scroll the page; the others are safe to consume.
+    event.preventDefault();
+
+    if (isSpace) {
+        if (timerStore.isRunning) {
+            timerStore.pause();
+        } else if (timerStore.isPaused) {
+            timerStore.resume();
+        } else {
+            timerStore.start();
+        }
+    } else if (key === 'r') {
+        timerStore.reset();
+    } else if (key === 's') {
+        timerStore.skip();
+    }
+}
+
+onMounted(() => {
+    window.addEventListener('keydown', onKeydown);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('keydown', onKeydown);
+});
 
 // While a session runs, the countdown takes over the browser-tab title; idle
 // falls back to a plain app title. (The keyword-rich SEO title lives on `/`.)

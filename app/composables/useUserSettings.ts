@@ -23,8 +23,13 @@ import {
  * `custom:<id>` uploads are exempt; the playback resolver already tolerates a
  * missing custom sound.
  */
-const BUILTIN_SOUND_PATHS: Record<'start' | 'pause' | 'resume' | 'end', Set<string>> = {
+const BUILTIN_SOUND_PATHS: Record<
+    'start' | 'breakStart' | 'pause' | 'resume' | 'end',
+    Set<string>
+> = {
     start: new Set(startSounds.map((o) => `/sounds/${o.fileName}`)),
+    // Break-start reuses the start tones as its pickable built-ins.
+    breakStart: new Set(startSounds.map((o) => `/sounds/${o.fileName}`)),
     pause: new Set(pauseSounds.map((o) => `/sounds/${o.fileName}`)),
     resume: new Set(resumeSounds.map((o) => `/sounds/${o.fileName}`)),
     end: new Set(finishSounds.map((o) => `/sounds/${o.fileName}`)),
@@ -106,7 +111,7 @@ export function useUserSettings() {
      */
     const soundRef = (
         v: unknown,
-        slot: 'start' | 'pause' | 'resume' | 'end',
+        slot: 'start' | 'breakStart' | 'pause' | 'resume' | 'end',
         fallback: string,
     ) => {
         if (typeof v !== 'string' || !v) return fallback;
@@ -174,6 +179,11 @@ export function useUserSettings() {
             soundVolume: num(t.soundVolume, d.soundVolume),
             sounds: {
                 start: soundRef(s.start, 'start', d.sounds.start),
+                breakStart: soundRef(
+                    s.breakStart,
+                    'breakStart',
+                    d.sounds.breakStart,
+                ),
                 pause: soundRef(s.pause, 'pause', d.sounds.pause),
                 resume: soundRef(s.resume, 'resume', d.sounds.resume),
                 end: soundRef(s.end, 'end', d.sounds.end),

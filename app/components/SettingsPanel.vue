@@ -273,7 +273,7 @@ import {
 } from '~~/constants/sounds';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-type SoundSlot = 'start' | 'pause' | 'resume' | 'end';
+type SoundSlot = 'start' | 'breakStart' | 'pause' | 'resume' | 'end';
 
 const props = defineProps<{
     isOpen: boolean;
@@ -357,6 +357,7 @@ const save = () => {
 // The sound pickers, driven by one loop in the template.
 const soundSlots = [
     { type: 'start', label: 'Start sound', options: startSounds },
+    { type: 'breakStart', label: 'Break start sound', options: startSounds },
     { type: 'pause', label: 'Pause sound', options: pauseSounds },
     { type: 'resume', label: 'Resume sound', options: resumeSounds },
     { type: 'end', label: 'Finish sound', options: finishSounds },
@@ -366,6 +367,7 @@ const soundSlots = [
 // the store's default `settings.sounds`.
 const DEFAULT_SLOT_SOUND: Record<SoundSlot, string> = {
     start: '/sounds/start/start_glass_1.wav',
+    breakStart: '/sounds/start/start_glass_3.wav',
     pause: '/sounds/pause/pause_glass_1.wav',
     resume: '/sounds/resume/resume_glass_1.wav',
     end: '/sounds/finish/finish_glass_1.wav',
@@ -387,7 +389,7 @@ const getSoundLabel = (type: SoundSlot) => {
     }
 
     let options: SoundOption[] = [];
-    if (type === 'start') options = startSounds;
+    if (type === 'start' || type === 'breakStart') options = startSounds;
     else if (type === 'pause') options = pauseSounds;
     else if (type === 'resume') options = resumeSounds;
     else if (type === 'end') options = finishSounds;
@@ -479,7 +481,7 @@ const removeCustom = (id: string) => {
         (c) => c.id !== id,
     );
     const ref = `custom:${id}`;
-    (['start', 'pause', 'resume', 'end'] as SoundSlot[]).forEach((slot) => {
+    (['start', 'breakStart', 'pause', 'resume', 'end'] as SoundSlot[]).forEach((slot) => {
         if (localSettings.value.sounds[slot] === ref) {
             localSettings.value.sounds[slot] = DEFAULT_SLOT_SOUND[slot];
         }

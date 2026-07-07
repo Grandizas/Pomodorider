@@ -28,6 +28,7 @@ export interface TimerSettings {
     soundVolume: number;
     sounds: {
         start: string;
+        breakStart: string; // played when a break session starts (vs. work)
         pause: string;
         resume: string;
         end: string;
@@ -92,6 +93,7 @@ export const useTimerStore = defineStore('timer', {
             soundVolume: 0.5,
             sounds: {
                 start: '/sounds/start/start_glass_1.wav',
+                breakStart: '/sounds/start/start_glass_3.wav',
                 pause: '/sounds/pause/pause_glass_1.wav',
                 resume: '/sounds/resume/resume_glass_1.wav',
                 end: '/sounds/finish/finish_glass_1.wav',
@@ -102,11 +104,13 @@ export const useTimerStore = defineStore('timer', {
         // Internal
         intervalId: null as number | null,
         startSound: null as Howl | null,
+        breakStartSound: null as Howl | null,
         pauseSound: null as Howl | null,
         resumeSound: null as Howl | null,
         endSound: null as Howl | null,
         soundSources: {
             start: '',
+            breakStart: '',
             pause: '',
             resume: '',
             end: '',
@@ -168,7 +172,7 @@ export const useTimerStore = defineStore('timer', {
         },
 
         playSound(
-            type: 'start' | 'pause' | 'resume' | 'end',
+            type: 'start' | 'breakStart' | 'pause' | 'resume' | 'end',
             forceFile?: string,
         ) {
             if (!this.settings.soundEnabled && !forceFile) return;
@@ -187,6 +191,7 @@ export const useTimerStore = defineStore('timer', {
             // Use a specific property based on type
             const soundProp = `${type}Sound` as
                 | 'startSound'
+                | 'breakStartSound'
                 | 'pauseSound'
                 | 'resumeSound'
                 | 'endSound';
@@ -234,7 +239,8 @@ export const useTimerStore = defineStore('timer', {
             if (!this.isRunning) {
                 this.isRunning = true;
                 this.isPaused = false;
-                this.playSound('start');
+                // Breaks get their own start cue; work uses the plain start.
+                this.playSound(this.mode === 'work' ? 'start' : 'breakStart');
                 this.tick();
             }
         },
@@ -346,6 +352,7 @@ export const useTimerStore = defineStore('timer', {
             // Update sound volume if changed
             if (newSettings.soundVolume !== undefined) {
                 this.startSound?.volume(newSettings.soundVolume);
+                this.breakStartSound?.volume(newSettings.soundVolume);
                 this.pauseSound?.volume(newSettings.soundVolume);
                 this.resumeSound?.volume(newSettings.soundVolume);
                 this.endSound?.volume(newSettings.soundVolume);
